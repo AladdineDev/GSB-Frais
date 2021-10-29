@@ -1,0 +1,19 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+se_connecter:
+   path: /se_connecter
+   controller: App\Controller\SeConnecterController::seConnecter
+
+gerer_frais:
+   path: /gerer_frais
+   controller: App\Controller\GererFraisController::index
+
+gerer_frais_valider:
+   path: /gerer_frais/valider
+   controller: App\Controller\GererFraisController::valider
+   
+gerer_frais_suivre:
+   path: /gerer_frais/suivre
+   controller: App\Controller\GererFraisController::suivre
