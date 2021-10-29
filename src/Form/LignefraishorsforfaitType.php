@@ -4,24 +4,28 @@ namespace App\Form;
 
 use App\Entity\Lignefraishorsforfait;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LignefraishorsforfaitType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('idvisiteur')
-            // ->add('mois')
             ->add('libelle')
-            ->add('date')
-            ->add('montant')
-            ->add('ajouter', SubmitType::class)
-            // ->add('idfichefrais');
-        ;
+            ->add('date', DateType::class, [
+                'widget' => 'choice',
+                'years' => range(date('Y') - 1, date('Y'))
+            ])
+            ->add('montant', NumberType::class, [
+                'attr' => [
+                    'placeholder' => 0,
+                ]
+            ])
+            ->add('ajouter', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

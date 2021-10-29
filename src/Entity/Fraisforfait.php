@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Lignefraisforfait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Fraisforfait
@@ -40,6 +41,7 @@ class Fraisforfait
 
     /**
      * @ORM\OneToMany(targetEntity=Lignefraisforfait::class, mappedBy="fraisForfait")
+     * @Assert\Valid
      */
     private $lignefraisforfaits;
 

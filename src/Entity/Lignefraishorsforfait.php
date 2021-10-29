@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Lignefraishorsforfait
@@ -39,6 +40,7 @@ class Lignefraishorsforfait
      * @var string|null
      *
      * @ORM\Column(name="libelle", type="string", length=100, nullable=true, options={"default"="NULL"})
+     * @Assert\NotBlank(message = "Le champ libelle doit être renseigné")
      */
     private $libelle;
 
@@ -46,6 +48,13 @@ class Lignefraishorsforfait
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="date", nullable=true, options={"default"="0000-00-00"})
+     * @Assert\NotBlank(message = "Le champ date doit être renseigné")
+     * @Assert\Range(
+     *      min = "-1 years",
+     *      max = "now",
+     *      minMessage = "La date d'engagement doit se situer dans l'année écoulée",
+     *      maxMessage = "La date d'engagement ne peut être postérieure à la date du jour"
+     * )
      */
     private $date;
 
@@ -53,6 +62,8 @@ class Lignefraishorsforfait
      * @var float
      *
      * @ORM\Column(name="montant", type="decimal", precision=10, scale=2, nullable=true, options={"default"=0.0})
+     * @Assert\NotBlank(message = "Le champ montant doit être renseigné")
+     * @Assert\Positive(message = "Valeur numérique positive attendue")
      */
     private $montant;
 

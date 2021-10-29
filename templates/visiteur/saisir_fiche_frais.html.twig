@@ -10,9 +10,7 @@
 	<h3>Frais au forfait</h3>
 	<div class="table-responsive">
 		<table class="table table-bordered table-active table-hover table-striped table-responsive">
-			<thead
-				class="thead-dark">
-			</thead>
+			<thead class="thead-dark"></thead>
 			<tr class="table-secondary">
 				<th>Frais forfait</th>
 				<th>Forfait Etape</th>
@@ -62,7 +60,8 @@
 
 	{{form_start(formFraisForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
 	)}}
-		<div class="col-md-3"> <label for="fraisForfait" class="form-label">Forfait Etape</label>
+	<div class="col-md-3">
+		<label for="fraisForfait" class="form-label">Forfait Etape</label>
 		{{form_widget(formFraisForfait.lignefraisforfaits.ETP.quantite)}}
 	</div>
 	<div class="col-md-3">
@@ -86,9 +85,7 @@
 	<h3>Frais hors forfait</h3>
 	<div class="table-responsive">
 		<table class="table table-bordered table-active table-hover table-striped">
-			<thead
-				class="thead-dark">{# Saisie des fiches de frais #}
-			</thead>
+			<thead class="thead-dark"></thead>
 			<tr class="table-secondary">
 				<th>Date</th>
 				<th>Libelle</th>
@@ -133,7 +130,7 @@
 	{{form_end(formFraisHorsForfait)}}
 	<br/>
 
-	<h3>Hors classfication</h3>
-	{{form_row(formFichefrais.nbjustificatifs)}}
-	{{form_row(formFichefrais.montantvalide)}}
+	{# <h3>Hors classfication</h3>
+		{{form_row(formFichefrais.nbjustificatifs)}}
+		{{form_row(formFichefrais.montantvalide)}} #}
 {% endblock %}

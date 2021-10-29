@@ -56,14 +56,11 @@ class LignefraisforfaitRepository extends ServiceEntityRepository
                 WITH Fichefrais = Lff.ficheFrais
                 JOIN App:Fraisforfait Fraisforfait
                 WITH Fraisforfait = Lff.fraisForfait
-                -- JOIN App:Lignefraishorsforfait Lfhf
-                -- WITH Fichefrais = Lfhf.idfichefrais
                 WHERE Fichefrais.idvisiteur = :idvisiteur';
 
         $query = $this->_em->createQuery($dql);
         $query->setParameter('idvisiteur', $idvisiteur);
 
-        // dd($query->getResult());
         return $query->getResult();
     }
 }

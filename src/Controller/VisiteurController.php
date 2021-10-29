@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-
 class VisiteurController extends AbstractController
 {
     public function index(Request $request): Response

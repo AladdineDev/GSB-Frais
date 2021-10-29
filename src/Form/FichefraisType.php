@@ -13,15 +13,9 @@ class FichefraisType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('mois', DateType::class, array(
-                // 'format' => 'dd-MM-yyyy',
-            ))
+            ->add('mois', DateType::class)
             ->add('nbjustificatifs')
-            ->add('montantvalide')
-            // ->add('datemodif')
-            // ->add('idetat')
-            // ->add('idvisiteur')
-        ;
+            ->add('montantvalide');
     }
 
     public function configureOptions(OptionsResolver $resolver)

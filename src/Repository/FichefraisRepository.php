@@ -49,60 +49,10 @@ class FichefraisRepository extends ServiceEntityRepository
     }
     */
 
-    // -- SELECTION DE LA FICHE DU MOIS COURANT
-    // -- DU VISITEUR COURANT
-    // SELECT *
-    // FROM FicheFrais
-    //     INNER JOIN LigneFraisForfait AS LFF ON FicheFrais.id = LFF.fiche_frais_id
-    //     INNER JOIN FraisForfait ON FraisForfait.id = LFF.frais_forfait_id
-    //     INNER JOIN LigneFraisHorsForfait AS LFHF ON FicheFrais.id = LFHF.idFicheFrais
-    // WHERE FicheFrais.mois = MONTH('2021-08-00')
-    //     AND FicheFrais.idVisiteur = 3;
-
-    // --------------------------------------------------
-
-    // public function findFichefraisCourante0($visiteur)
-    // {
-    // $dql = 'SELECT Fichefrais, Lff, Fraisforfait, Lfhf
-    //             FROM App:Fichefrais Fichefrais
-    //             JOIN App:Lignefraisforfait Lff
-    //             WITH Fichefrais = Lff.ficheFrais
-    //             JOIN App:Fraisforfait Fraisforfait
-    //             WITH Fraisforfait = Lff.fraisForfait
-    //             JOIN App:Lignefraishorsforfait Lfhf
-    //             WITH Fichefrais = Lfhf.idfichefrais
-    //             WHERE Fichefrais.idvisiteur = :idvisiteur';
-
-    //     $query = $this->_em->createQuery($dql);
-    //     $query->setParameter('visiteur', $visiteur);
-
-    //     return $query->getOneOrNullResult();
-    //     return $query->getResult();
-    // }
-
-    // public function findOneFichefraisCourante($idvisiteur)
-    // {
-    //     $dql = 'SELECT Fichefrais
-    //             FROM App:Fichefrais Fichefrais
-    //             WHERE Fichefrais.idvisiteur = :idvisiteur';
-
-    //     $query = $this->_em->createQuery($dql);
-    //     $query->setParameter('idvisiteur', $idvisiteur);
-
-    //     // dd($query->getResult());
-    //     return $query->getResult();
-    // }
-
     public function findFichefraisCourante($idvisiteur)
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                -- JOIN App:Lignefraisforfait Lff
-                -- WITH Fichefrais = Lff.ficheFrais
-                -- JOIN App:Fraisforfait Fraisforfait
-                -- WITH Fraisforfait = Lff.fraisForfait
-                -- JOIN App:Lignefraishorsforfait Lfhf
-                -- WITH Fichefrais = Lfhf.idfichefrais
                 WHERE Fichefrais.idvisiteur = :idvisiteur
                 AND Fichefrais.mois BETWEEN :moisDebut AND :moisFin';
 
@@ -113,26 +63,6 @@ class FichefraisRepository extends ServiceEntityRepository
             'moisFin' => (new DateTime())->format('Y-m-t')
         ]);
 
-        // dd($query->getResult());
         return $query->getOneOrNullResult();
     }
-
-    // public function findFichefraisCourante($idvisiteur)
-    // {
-    //     $dql = 'SELECT Fichefrais
-    //             FROM App:Fichefrais Fichefrais
-    //             JOIN App:Lignefraisforfait Lff
-    //             WITH Fichefrais = Lff.ficheFrais
-    //             JOIN App:Fraisforfait Fraisforfait
-    //             WITH Fraisforfait = Lff.fraisForfait
-    //             JOIN App:Lignefraishorsforfait Lfhf
-    //             WITH Fichefrais = Lfhf.idfichefrais
-    //             WHERE Fichefrais.idvisiteur = :idvisiteur';
-
-    //     $query = $this->_em->createQuery($dql);
-    //     $query->setParameter('idvisiteur', $idvisiteur);
-
-    //     // dd($query->getResult());
-    //     return $query->getOneOrNullResult();
-    // }
 }

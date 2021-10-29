@@ -2,12 +2,10 @@
 
 namespace App\Form;
 
-use App\Entity\Fraisforfait;
 use App\Entity\Lignefraisforfait;
-use App\Repository\FraisforfaitRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LignefraisforfaitType extends AbstractType
@@ -15,10 +13,12 @@ class LignefraisforfaitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('quantite')
-            // ->add('ficheFrais')
-            // ->add('fraisForfait')
-        ;
+            ->add('quantite', IntegerType::class, [
+                'attr' => [
+                    'placeholder' => 0,
+                    'min' => '0'
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

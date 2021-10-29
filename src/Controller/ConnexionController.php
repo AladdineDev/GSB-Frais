@@ -51,8 +51,6 @@ class ConnexionController extends AbstractController
                         $session = new Session();
                         $session->getFlashBag()->add('connexionOk', 'Bienvenue ' . $utilisateur['nom'] . " " . $utilisateur['prenom'] .
                             ' ! Vous êtes maintenant connecté en tant que ' . $typeUtilisateur . " !");
-                        // dd($session);
-                        // dd($utilisateur);
                         if ($typeUtilisateur == "Comptable") {
                             return $this->redirectToRoute('comptable');
                         } else {

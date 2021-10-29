@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\LignefraisforfaitRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="LigneFraisForfait")
@@ -20,6 +20,8 @@ class Lignefraisforfait
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\NotBlank
+     * @Assert\PositiveOrZero(message = "Valeur numérique positive ou égale à zéro attendue")
      */
     private $quantite;
 
