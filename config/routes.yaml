@@ -2,18 +2,41 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+accueil:
+   path: /
+   controller: App\Controller\ConnexionController::index
+
 se_connecter:
-   path: /se_connecter
-   controller: App\Controller\SeConnecterController::seConnecter
+   path: /se_connecter/{echec}
+   controller: App\Controller\ConnexionController::seConnecter
+   defaults:
+      echec: false
 
-gerer_frais:
-   path: /gerer_frais
-   controller: App\Controller\GererFraisController::index
+se_deconnecter:
+   path: /se_deconnecter
+   controller: App\Controller\ConnexionController::seDeconnecter
 
-gerer_frais_valider:
-   path: /gerer_frais/valider
-   controller: App\Controller\GererFraisController::valider
+visiteur:
+   path: /visiteur
+   controller: App\Controller\VisiteurController::index
+
+saisir_fiche_frais:
+   path: /visiteur/saisir_fiche_frais
+   controller: App\Controller\VisiteurController::saisirFicheFrais
    
-gerer_frais_suivre:
-   path: /gerer_frais/suivre
-   controller: App\Controller\GererFraisController::suivre
+consulter_fiche_frais:
+   path: /visiteur/consulter_fiche_frais
+   controller: App\Controller\VisiteurController::consulterFicheFrais
+
+comptable:
+   path: /comptable
+   controller: App\Controller\ComptableController::index
+
+valider_fiche_frais:
+   path: /comptable/valider_fiche_frais
+   controller: App\Controller\ComptableController::validerFicheFrais
+   
+suivre_fiche_frais:
+   path: /comptable/suivre_fiche_frais
+   controller: App\Controller\ComptableController::SuivreFicheFrais
+

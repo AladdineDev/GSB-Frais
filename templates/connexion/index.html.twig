@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+	<div class="container center" style="width:20%">
+		<h1 class="h3 mb-5 font-weight-normal" style="margin-left:17%">Connexion</h1>
+		<form method="post" class="row" action="{{path('se_connecter')}}">
+
+			{# {% if app.user %}
+									                <div class="col s12 m6 l6 offset-m3 offset-l3">
+									                    Tu es actuellement connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Déconnecte-toi</a>
+									                </div>
+									            {% endif %} #}
+
+			<div style="width: 600px; border: 1px solid #fff; margin-bottom:10px">
+				{# <fieldset>
+					<label>
+						<b>Se connecter en tant que :</b>
+					</label><br>
+					<label for="Visiteur">
+						<input name="typeUtilisateur" type="radio" id="Visiteur" value="Visiteur" checked>
+						Visiteur</label>
+					<label for="Comptable">
+						<input name="typeUtilisateur" type="radio" id="Comptable" value="Comptable">
+						Comptable</label>
+				</fieldset> #}
+			
+			<div class="input-field" style="padding:10px">
+				<div class="form-group" style="margin-bottom:10px">
+					<input type="login" name="login" id="inputLogin" class="form-control" required autofocus placeholder="Login" style="margin-bottom:5px;">
+					<input type="password" name="mdp" id="inputMdp" class="form-control" required autofocus placeholder="Mot de passe" style="margin-bottom:5px;">
+				</div>
+				<input type="submit" class="btn btn-primary form-control" value="Me connecter">
+
+			</div>
+			
+			<div class="input-field col s12"></div></div>
+			{% if app.request.attributes.get('echec') %}
+                <div class="alert alert-danger" role="alert">
+                    Identifiants incorrects.
+                </div>
+			{% endif %}
+		</form>
+	</div>
+{% endblock %}
+
