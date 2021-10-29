@@ -40,21 +40,21 @@ class Lignefraishorsforfait
      *
      * @ORM\Column(name="libelle", type="string", length=100, nullable=true, options={"default"="NULL"})
      */
-    private $libelle;
+    private $libelle = 'NULL';
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="date", nullable=true, options={"default"="0000-00-00"})
      */
-    private $date;
+    private $date = '0000-00-00';
 
     /**
      * @var float
      *
      * @ORM\Column(name="montant", type="decimal", precision=10, scale=2, nullable=true, options={"default"=0.0})
      */
-    private $montant;
+    private $montant = 0.0;
 
     /**
      * @var Fichefrais
@@ -65,11 +65,6 @@ class Lignefraishorsforfait
      * })
      */
     private $idfichefrais;
-
-    public function __construct()
-    {
-        $this->date = new \DateTime();
-    }
 
     public function getId(): ?int
     {

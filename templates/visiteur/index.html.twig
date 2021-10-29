@@ -1,35 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion Frais
-{% endblock %}
+{% block title %}Gestion Frais{% endblock %}
 
 {% block enteteConnecte %}
-
-
-	<div class="container-fluid" style="z-index: 2">
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div>
-			<label for="utilisateur" style="align:center" class="h3 mb-1 font-weight-normal">
-			{% if app.session.get('typeUtilisateur') == "Visiteur" %}
+	<div for="utilisateur" style="align:center" class="h3 mb-1 font-weight-normal">
+		{% if app.session.get('typeUtilisateur') == "Visiteur" %}
 			{{ app.session.get('typeUtilisateur') ~ " médical" }}
-			{% else %}
+		{% else %}
 			{{app.session.get('typeUtilisateur')}}
-			{% endif %}
-			</label>
-		</div>
-		<ul class="nav navbar-nav navbar-right">
-			<li class="nav-item">
-				<a class="nav-link" href="#">
-					{{app.session.get('utilisateur')['nom'] ~ ' ' ~ app.session.get('utilisateur')['prenom']}}
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{ path('se_deconnecter') }}">Se déconnecter...</a>
-			</li>
-		</ul>
-
+		{% endif %}
+	</div>
+	<div>
+	<ul class="nav navbar-nav navbar-right">
+		<li class="nav-item">
+			<a class="nav-link" href="#">
+				{{app.session.get('utilisateur')['nom'] ~ ' ' ~ app.session.get('utilisateur')['prenom']}}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ path('se_deconnecter') }}">Se déconnecter...</a>
+		</li>
+	</ul>
 	</div>
 {% endblock %}
 
@@ -37,25 +28,29 @@
 
 {% block sidebarVisiteur %}
 
-<div class="container-fluid flex-container">
-	<div class="row">
-		<div class="col-sm-3 col-md-2 sidebar" style="position: fixed; top: 90px; bottom: 0; left: 0; z-index: 1;
-		display: block; padding: 0px; overflow-x: hidden; overflow-y: auto; background-color: #375a7f; border-right: 1px solid #eee;">
-		<ul class="nav-sidebar">
-			<li><a href="{{path('visiteur')}}">Accueil</a></li>
-			<li><a href="{{path('saisir_fiche_frais')}}">Renseigner fiche de frais</a></li>
-			<li><a href="{{path('consulter_fiche_frais')}}">Consulter mes fiches de frais</a></li>
-		</ul>
-		</div>
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<div class="container-fluid h-100">
+		<div class="row h-100 py-4">
+			<div class="col-sm-2">
+				<div class="card mb-3">
+					<ul class="nav flex-sm-column justify-content-center">
+						<li>
+							<a class="nav-link" href="{{path('visiteur')}}">Accueil</a>
+						</li>
+						<li>
+							<a class="nav-link" href="{{path('saisir_fiche_frais')}}">Renseigner fiche de frais</a>
+						</li>
+						<li>
+							<a class="nav-link" href="{{path('consulter_fiche_frais')}}">Consulter mes fiches de frais</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col">
+				{% block contenuPage %}{% endblock %}
+			</div>
 		</div>
 	</div>
-</div>
 
 {% endblock %}
-
-<div class="flex-container" style="{#border:1px solid black;#}margin-left:auto;margin-right:auto;width:800px;margin-top:100px";>
-{% block contenuPage %}{% endblock %}
-</div>
 
 {% endblock %}

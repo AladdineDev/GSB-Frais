@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Fichefrais[]    findAll()
  * @method Fichefrais[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FicheFraisRepository extends ServiceEntityRepository
+class FichefraisRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

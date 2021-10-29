@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Lignefraishorsforfait[]    findAll()
  * @method Lignefraishorsforfait[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LigneFraisHorsForfaitRepository extends ServiceEntityRepository
+class LignefraishorsforfaitRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

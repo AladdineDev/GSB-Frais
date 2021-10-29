@@ -2,44 +2,41 @@
 
 {% block contenuPage %}
 
-
-    {# {{ dump(ficheFrais) }} #}
-
-    <div class="example-wrapper">
-
-    <table class="table table-striped">
-        <thead>
-            Saisie des fiches de frais
-        </thead>
-        <tr>
-            <th>idVisiteur</th>
-            <th>mois</th>
-            <th>nbJustificatifs</th>
-            <th>montantValide</th>
-            <th>dateModif</th>
-            <th>idEtat</th>
-        </tr>
-        <tbody>
-            {% for uneFicheFrais in fichesFrais %}
-            <tr>
-                {% for elemFicheFrais in uneFicheFrais %}
-                    <td>{{elemFicheFrais}}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-
+	{# {{ dump(fichesFrais) }} #}
+	<div class="container-fluid h-100">
+		<div class="row h-100">
+			<div class="pt-3 card mb-3">
+				<div class="example-wrapper">
+				{# {{dump(fichesFrais[0])}} #}
+					<table class="table table-bordered">
+						<thead
+							class="thead-dark">{# Saisie des fiches de frais #}
+						</thead>
+						<tr>
+							<th>idVisiteur</th>
+							{# <th>mois</th> #}
+							<th>nbJustificatifs</th>
+							<th>montantValide</th>
+							<th>dateModif</th>
+							<th>idEtat</th>
+						</tr>
+						<tbody>
+						
+							{% for uneFicheFrais in fichesFrais %}
+							<tr>
+								<td>{{uneFicheFrais.id}}</td>
+								{# <td>{{uneFicheFrais.mois}}</td> #}
+								<td>{{uneFicheFrais.nbJustificatifs}}</td>
+								<td>{{uneFicheFrais.montantValide}}</td>
+								<td>{{uneFicheFrais.dateModif | date('m/Y')}}</td>
+								<td>{{uneFicheFrais.idetat.id}}</td>
+								</tr>
+							{% endfor %}
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
-
-			{# <tbody>
-				{% set nbElemAtelier = (ateliers[0]|length / 2) - 1 %}
-				{% for unAtelier in ateliers %}
-					<tr>
-						{% for i in range(0, nbElemAtelier) %}
-							<td>{{unAtelier[i]}}</td>
-						{% endfor %}
-					</tr>
-				{% endfor %}
-			</tbody> #}

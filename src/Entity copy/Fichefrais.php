@@ -24,7 +24,7 @@ class Fichefrais
     private $id;
 
     /**
-     * @var \DateTime
+     * @var string
      *
      * @ORM\Column(name="mois", type="string", length=6, nullable=false, options={"fixed"=true})
      */
