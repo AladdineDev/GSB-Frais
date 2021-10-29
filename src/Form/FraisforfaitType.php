@@ -16,10 +16,12 @@ class FraisforfaitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle')
-            ->add('montant')
-            // ->add('lignefraisforfaits')
-        ;
+            // ->add('libelle')
+            // ->add('montant')
+            ->add('lignefraisforfaits', CollectionType::class, [
+                'entry_type' => LignefraisforfaitType::class,
+                'entry_options' => ['label' => 'false'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

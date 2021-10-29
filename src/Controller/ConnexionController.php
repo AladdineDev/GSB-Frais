@@ -6,6 +6,7 @@ use PDO;
 use PDOException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ConnexionController extends AbstractController
@@ -43,8 +44,15 @@ class ConnexionController extends AbstractController
                         // dd($session);
                         $session->set('connexionOk', $connexionOk);
                         $session->set('utilisateur', $utilisateur);
+                        if ($typeUtilisateur == 'Visiteur') {
+                            $typeUtilisateur = 'Visiteur médical';
+                        }
                         $session->set('typeUtilisateur', $typeUtilisateur);
+                        $session = new Session();
+                        $session->getFlashBag()->add('connexionOk', 'Bienvenue ' . $utilisateur['nom'] . " " . $utilisateur['prenom'] .
+                            ' ! Vous êtes maintenant connecté en tant que ' . $typeUtilisateur . " !");
                         // dd($session);
+                        // dd($utilisateur);
                         if ($typeUtilisateur == "Comptable") {
                             return $this->redirectToRoute('comptable');
                         } else {
@@ -67,6 +75,7 @@ class ConnexionController extends AbstractController
     public function seDeconnecter(Request $request): Response
     {
         $session = $request->getSession();
+        $session->clear();
         $session->invalidate();
         return $this->render('connexion/index.html.twig');
     }

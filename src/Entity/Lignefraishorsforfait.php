@@ -29,9 +29,9 @@ class Lignefraishorsforfait
     private $idvisiteur;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="mois", type="string", length=6, nullable=false, options={"fixed"=true})
+     * @ORM\Column(name="mois", type="date", nullable=false, options={"default"="0000-00-00"})
      */
     private $mois;
 
@@ -61,7 +61,7 @@ class Lignefraishorsforfait
      *
      * @ORM\ManyToOne(targetEntity="Fichefrais")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idFicheFrais", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idFicheFrais", referencedColumnName="id", nullable=false)
      * })
      */
     private $idfichefrais;
@@ -88,12 +88,12 @@ class Lignefraishorsforfait
         return $this;
     }
 
-    public function getMois(): ?string
+    public function getMois(): ?\DateTimeInterface
     {
         return $this->mois;
     }
 
-    public function setMois(string $mois): self
+    public function setMois(\DateTimeInterface $mois): self
     {
         $this->mois = $mois;
 

@@ -26,7 +26,7 @@ class Fichefrais
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="mois", type="string", length=6, nullable=false, options={"fixed"=true})
+     * @ORM\Column(name="mois", type="date", nullable=false, options={"default"="0000-00-00"})
      */
     private $mois;
 
@@ -49,7 +49,7 @@ class Fichefrais
      *
      * @ORM\Column(name="dateModif", type="date", nullable=true, options={"default"="0000-00-00"})
      */
-    private $datemodif = '0000-00-00';
+    private $datemodif;
 
     /**
      * @var Etat
@@ -82,6 +82,7 @@ class Fichefrais
     public function __construct()
     {
         $this->lignefraisforfaits = new ArrayCollection();
+        $this->setMois(new \DateTime());
     }
 
     /**
@@ -119,12 +120,12 @@ class Fichefrais
         return $this->id;
     }
 
-    public function getMois(): ?string
+    public function getMois(): ?\DateTimeInterface
     {
         return $this->mois;
     }
 
-    public function setMois(string $mois): self
+    public function setMois(\DateTimeInterface $mois): self
     {
         $this->mois = $mois;
 

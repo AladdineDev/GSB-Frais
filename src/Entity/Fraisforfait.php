@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Lignefraisforfait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Fraisforfait
@@ -48,6 +49,10 @@ class Fraisforfait
     public function __construct()
     {
         $this->lignefraisforfaits = new ArrayCollection();
+        $this->lignefraisforfaits->set('ETP', new Lignefraisforfait());
+        $this->lignefraisforfaits->set('KM', new Lignefraisforfait());
+        $this->lignefraisforfaits->set('NUI', new Lignefraisforfait());
+        $this->lignefraisforfaits->set('REP', new Lignefraisforfait());
     }
 
     /**

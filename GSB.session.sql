@@ -1,6 +1,16 @@
-INSERT INTO LigneFraisForfait (fiche_frais_id, frais_forfait_id, quantite)
+INSERT INTO FicheFrais (
+        mois,
+        nbJustificatifs,
+        montantValide,
+        dateModif,
+        idEtat,
+        idVisiteur
+    )
 VALUES (
-        fiche_frais_id :3,
-        'frais_forfait_id:char',
-        quantite :int
+        '2021-11-00',
+        3,
+        '3',
+        '2021-11-05',
+        'CR',
+        '7'
     );

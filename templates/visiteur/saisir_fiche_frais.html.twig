@@ -2,149 +2,138 @@
 
 {% block contenuPage %}
 
-	{# {{ dump(formFichefrais) }} #}
-	<div class="container-fluid h-100">
-		<div class="row h-100">
-			<div class="pt-3 card mb-3">
-				<div class="example-wrapper">
+	<h1>Saisie</h1>
+	<h3>Période d'engagement</h3>
+	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
+	<br/>
 
-					<h1>Saisie</h1>
+	<h3>Frais au forfait</h3>
+	<div class="table-responsive">
+		<table class="table table-bordered table-active table-hover table-striped table-responsive">
+			<thead
+				class="thead-dark">
+			</thead>
+			<tr class="table-secondary">
+				<th>Frais forfait</th>
+				<th>Forfait Etape</th>
+				<th>Frais Kilométrique</th>
+				<th>Nuitée Hôtel</th>
+				<th>Repas Restaurant</th>
+			</tr>
+			<tbody>
+				<tr>
+					<td>Montant</td>
+					{% for unFraisForfait in fraisForfaits %}
+						<td>{{unFraisForfait.montant}}</td>
+					{% endfor %}
+				</tr>
+				<tr>
+					<td>Quantité</td>
+					{% for unFraisForfait in fraisForfaits %}
+						{# {% set quantite = 0 %} #}
+						<td>
+							{% for ligneFraisForfait in ligneFraisForfaits %}
 
-					<h3>Période d'engagement</h3>
-					<fieldset class="mb-3">
-						<legend class="col-form-label required">Date</legend>
-						<div class="input-group">
-							{{form_widget(formFichefrais.mois.month)}}
-							<span class="input-group-addon">-</span>
-							{{form_widget(formFichefrais.mois.year)}}
-						</div>
-					</fieldset>
+								{% if unFraisForfait == ligneFraisForfait.fraisForfait %}
+									{{ligneFraisForfait.quantite }}
+								{% endif %}
 
-					<br/>
-					<h3>Frais au forfait</h3>
-
-					{# {{dump(fraisForfait)}} #}
-
-					<table class="table table-bordered">
-						<thead
-							class="thead-dark">{# Saisie des fiches de frais #}
-						</thead>
-						<tr>
-							<th>Frais forfait</th>
-							<th>Forfait Etape</th>
-							<th>Frais Kilométrique</th>
-							<th>Nuitée Hôtel</th>
-							<th>Repas Restaurant</th>
-						</tr>
-						<tbody>
-							<tr>
-								<td>Montant</td>
-								{% for unFraisForfait in fraisForfait %}
-									<td>{{unFraisForfait.montant}}</td>
-								{% endfor %}
-							</tr>
-							<tr>
-								<td>Quantité</td>
-								{% for unFraisForfait in fraisForfait %}
-									<td>
-									0
-										{# <td>{{form_row(formLigneFraisForfait.quantite)}}</td> #}
-									</td>
-								{% endfor %}
-							</tr>
-							<tr>
-								<td>Total</td>
-								{% for unFraisForfait in fraisForfait %}
-									<td>
-										0
-									</td>
-								{% endfor %}
-							</tr>
-						</tbody>
-					</table>
-
-					<form class="row g-3">
-						<div class="col-md-3">
-							<label for="fraisForfait" class="form-label">Forfait Etape</label>
-							<input type="number" class="form-control" id="fraisForfaitETP" placeholder="0">
-						</div>
-						<div class="col-md-3">
-							<label for="fraisForfait" class="form-label">Frais Kilométrique</label>
-							<input type="number" class="form-control" id="fraisForfaitKM" placeholder="0">
-						</div>
-						<div class="col-md-3">
-							<label for="fraisForfait" class="form-label">Nuitée Hôtel</label>
-							<input type="number" class="form-control" id="fraisForfaitNUI" placeholder="0">
-						</div>
-						<div class="col-md-3">
-							<label for="fraisForfait" class="form-label">Repas Restaurant</label>
-							<input type="number" class="form-control" id="fraisForfaitREP" placeholder="0">
-						</div>
-						<div class="col-12">
-							<button type="submit" class="btn btn-primary">Valider</button>
-						</div>
-					</form>
-
-					<br/>
-					<h3>Frais hors forfait</h3>
-
-					<table class="table table-bordered">
-						<thead
-							class="thead-dark">{# Saisie des fiches de frais #}
-						</thead>
-						<tr>
-							<th>Date</th>
-							<th>Libelle</th>
-							<th>Montant</th>
-						</tr>
-						<tbody>
-							{% for unFraisHorsForfait in fraisHorsForfait %}
-								<tr>
-									<td>{{unFraisHorsForfait.montant}}</td>
-								</tr>
-								<tr>
-
-									<td>
-										0
-									</td>
-
-								</tr>
-								<tr>
-									<td>Total</td>
-									<td>
-										0
-									</td>
-								</tr>
 							{% endfor %}
-						</tbody>
-					</table>
+						</td>
+					{% endfor %}
+				</tr>
+				<tr>
+					<td>Total</td>
+					{% for unFraisForfait in fraisForfaits %}
+						<td>
+							{% for ligneFraisForfait in ligneFraisForfaits %}
 
-					<form class="row g-3">
-						<div class="col-md-4">
-							<label for="fraisHorForfait" class="form-label">Date</label>
-							{{form_widget(formFraisHorsForfait.date)}}
-						</div>
-						<div class="col-md-4">
-							<label for="fraisHorForfait" class="form-label">Libelle</label>
-							{{form_widget(formFraisHorsForfait.libelle)}}
-						</div>
-						<div class="col-md-4">
-							<label for="fraisHorForfait" class="form-label">Montant</label>
-							{{form_widget(formFraisHorsForfait.montant)}}
-						</div>
-						<div class="col-12">
-							{{form_row(formFraisHorsForfait.ajouter)}}
-						</div>
-					</form>
-					{# {{dump(formFraisHorsForfait)}} #}
+								{% if unFraisForfait == ligneFraisForfait.fraisForfait %}
+									{{unFraisForfait.montant * ligneFraisForfait.quantite}}
+								{% endif %}
 
-
-					<br/>
-					<h3>Hors classfication</h3>
-					{{form_row(formFichefrais.nbjustificatifs)}}
-					{{form_row(formFichefrais.montantvalide)}}
-				</div>
-			</div>
-		</div>
+							{% endfor %}
+						</td>
+					{% endfor %}
+				</tr>
+			</tbody>
+		</table>
 	</div>
+
+	{{form_start(formFraisForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
+	)}}
+		<div class="col-md-3"> <label for="fraisForfait" class="form-label">Forfait Etape</label>
+		{{form_widget(formFraisForfait.lignefraisforfaits.ETP.quantite)}}
+	</div>
+	<div class="col-md-3">
+		<label for="fraisForfait" class="form-label">Frais Kilométrique</label>
+		{{form_widget(formFraisForfait.lignefraisforfaits.KM.quantite)}}
+	</div>
+	<div class="col-md-3">
+		<label for="fraisForfait" class="form-label">Nuitée Hôtel</label>
+		{{form_widget(formFraisForfait.lignefraisforfaits.NUI.quantite)}}
+	</div>
+	<div class="col-md-3">
+		<label for="fraisForfait" class="form-label">Repas Restaurant</label>
+		{{form_widget(formFraisForfait.lignefraisforfaits.REP.quantite)}}
+	</div>
+	<div class="col-12">
+		<button type="submit" class="btn btn-primary">Valider</button>
+	</div>
+	{{form_end(formFraisForfait)}}
+	<br/>
+
+	<h3>Frais hors forfait</h3>
+	<div class="table-responsive">
+		<table class="table table-bordered table-active table-hover table-striped">
+			<thead
+				class="thead-dark">{# Saisie des fiches de frais #}
+			</thead>
+			<tr class="table-secondary">
+				<th>Date</th>
+				<th>Libelle</th>
+				<th>Montant</th>
+				<th>Action</th>
+			</tr>
+			<tbody>
+				{% for unFraisHorsForfait in fraisHorsForfaits %}
+					<tr>
+						{# {{dump(fraisHorsForfaits)}} #}
+						<td class="align-middle">{{unFraisHorsForfait.date | date('d/m/Y')}}</td>
+						<td class="align-middle">{{unFraisHorsForfait.libelle}}</td>
+						<td class="align-middle">{{unFraisHorsForfait.montant}}</td>
+						<td class="col-md-1">
+							<form method="post" action="{{ path('supprimer_fraishorsforfait', {'id': unFraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
+								<input type="hidden" name="supprimer_fraishorsforfait_token" value="{{ csrf_token('delete' ~ unFraisHorsForfait.id) }}">
+								<button class="btn btn-primary btn-sm">Supprimer</button>
+							</form>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	{{form_start(formFraisHorsForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous ajouter un nouveau frais non forfaitisé ?');"}})}}
+	<div class="col-md-4">
+		<label for="fraisHorForfait" class="form-label">Date</label>
+		{{form_widget(formFraisHorsForfait.date)}}
+	</div>
+	<div class="col-md-4">
+		<label for="fraisHorForfait" class="form-label">Libelle</label>
+		{{form_widget(formFraisHorsForfait.libelle)}}
+	</div>
+	<div class="col-md-4">
+		<label for="fraisHorForfait" class="form-label">Montant</label>
+		{{form_widget(formFraisHorsForfait.montant)}}
+	</div>
+	<div class="col-12">
+		{{form_row(formFraisHorsForfait.ajouter)}}
+	</div>
+	{{form_end(formFraisHorsForfait)}}
+	<br/>
+
+	<h3>Hors classfication</h3>
+	{{form_row(formFichefrais.nbjustificatifs)}}
+	{{form_row(formFichefrais.montantvalide)}}
 {% endblock %}

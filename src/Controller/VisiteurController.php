@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-
+use App\Entity\Etat;
 use App\Entity\Fichefrais;
 use App\Entity\Fraisforfait;
 use App\Entity\Lignefraisforfait;
 use App\Entity\Lignefraishorsforfait;
+use App\Entity\Visiteur;
 use App\Form\FichefraisType;
 use App\Form\FraisforfaitType;
 use App\Form\LignefraisforfaitType;
@@ -17,9 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
+
 class VisiteurController extends AbstractController
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
         return $this->render('visiteur/index.html.twig', [
             'controller_name' => 'VisiteurController',
@@ -30,9 +32,15 @@ class VisiteurController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
 
+        $session = $request->getSession();
+        $session->start();
+        $idvisiteur = $session->get('utilisateur')['id'];
 
-        $fraisForfait = $entityManager->getRepository(Fraisforfait::class)->findAll();
-        $fraisHorsForfait = $entityManager->getRepository(Lignefraishorsforfait::class)->findAll();
+        $visiteur = $entityManager->getRepository(Visiteur::class)->find($idvisiteur);
+        $fraisForfaits = $entityManager->getRepository(Fraisforfait::class)->findAll();
+        $ficheFrais = $entityManager->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
+        $ligneFraisForfaits = $entityManager->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur);
+        $fraisHorsForfaits = $entityManager->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur);
 
         $ficheFraisInstance = new Fichefrais();
         $formFichefrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
@@ -50,19 +58,35 @@ class VisiteurController extends AbstractController
         $formFraisForfait = $this->createForm(FraisforfaitType::class, $fraisForfaitInstance);
         $formFraisForfait->handleRequest($request);
 
-        // dd($formFraisForfait);
-        // dd($ligneFraisForfaitInstance);
+        if (!$ficheFrais) {
+            $ficheFrais = $this->creerFichefrais($ficheFrais, $visiteur);
+        }
+
+        if (!$ligneFraisForfaits) {
+            $ligneFraisForfaits = $this->creerLignefraisforfaits($ligneFraisForfaits, $ficheFrais, $fraisForfaits);
+        }
+
+        if ($formFraisForfait->isSubmitted() && $formFraisForfait->isValid()) {
+            $i = 0;
+            foreach ($formFraisForfait->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
+                $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
+                $entityManager->persist($ligneFraisForfaits[$i]);
+                $i++;
+            }
+            $entityManager->flush();
+
+            return $this->redirectToRoute('saisir_fiche_frais');
+        }
 
         if ($formFraisHorsForfait->isSubmitted() && $formFraisHorsForfait->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            $task = $formFraisHorsForfait->getData();
-            $entityManager->persist($task);
+            $fraisHorsForfaitInstance->setIdvisiteur($ficheFrais->getIdvisiteur()->getId());
+            $fraisHorsForfaitInstance->setMois($ficheFrais->getMois());
+            $fraisHorsForfaitInstance->setIdfichefrais($ficheFrais);
+            $entityManager->persist($formFraisHorsForfait->getData());
             $entityManager->flush();
+
+            return $this->redirectToRoute('saisir_fiche_frais');
         }
-        // dd($formFichefrais);
-        // dd($formFraisHorsForfait);
-        // dd($fraisForfait);
 
         return $this->render('visiteur/saisir_fiche_frais.html.twig', [
             'controller_name' => 'VisiteurController',
@@ -70,20 +94,64 @@ class VisiteurController extends AbstractController
             'formLigneFraisForfait' => $formLigneFraisForfait->createView(),
             'formFraisHorsForfait' => $formFraisHorsForfait->createView(),
             'formFraisForfait' => $formFraisForfait->createView(),
-            'fraisForfait' => $fraisForfait,
-            'fraisHorsForfait' => $fraisHorsForfait
+            'ficheFrais' => $ficheFrais,
+            'ligneFraisForfaits' => $ligneFraisForfaits,
+            'fraisHorsForfaits' => $fraisHorsForfaits,
+            'fraisForfaits' => $fraisForfaits
         ]);
     }
 
-    public function consulterFicheFrais(FichefraisRepository $ficheFraisRepository): Response
+    public function consulterFicheFrais(Request $request, FichefraisRepository $ficheFraisRepository): Response
     {
-
         $fichesFrais = $ficheFraisRepository->findAll();
 
+        $ficheFraisInstance = new Fichefrais();
+        $formFichefrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
+        $formFichefrais->handleRequest($request);
 
         return $this->render('visiteur/consulter_fiche_frais.html.twig', [
             'controller_name' => 'VisiteurController',
+            'formFichefrais' => $formFichefrais->createView(),
             'fichesFrais' => $fichesFrais
         ]);
+    }
+
+    private function creerLignefraisforfaits($ligneFraisForfaits, $ficheFrais, $fraisForfaits)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        for ($i = 0; $i < 4; $i++) {
+            // dd($ligneFraisForfaits);
+            array_push($ligneFraisForfaits, new Lignefraisforfait);
+            $ligneFraisForfaits[$i]->setFicheFrais($ficheFrais);
+            $ligneFraisForfaits[$i]->setFraisForfait($fraisForfaits[$i]);
+            $ligneFraisForfaits[$i]->setQuantite(0);
+            $entityManager->persist($ligneFraisForfaits[$i]);
+        }
+        $entityManager->flush();
+
+        return $ligneFraisForfaits;
+    }
+
+    private function creerFichefrais($ficheFrais, $visiteur)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $ficheFrais = new ficheFrais();
+        $ficheFrais->setIdvisiteur($visiteur);
+        $ficheFrais->setIdetat($entityManager->getRepository(Etat::class)->find('CR'));
+        $entityManager->persist($ficheFrais);
+        $entityManager->flush();
+
+        return $ficheFrais;
+    }
+
+    public function supprimerFraisHorsForfait(Request $request, Lignefraishorsforfait $lignefraishorsforfait): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $lignefraishorsforfait->getId(), $request->request->get('supprimer_fraishorsforfait_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($lignefraishorsforfait);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('saisir_fiche_frais', [], Response::HTTP_SEE_OTHER);
     }
 }
