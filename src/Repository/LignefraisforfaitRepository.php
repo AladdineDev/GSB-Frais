@@ -56,7 +56,8 @@ class LignefraisforfaitRepository extends ServiceEntityRepository
                 WITH Fichefrais = Lff.ficheFrais
                 JOIN App:Fraisforfait Fraisforfait
                 WITH Fraisforfait = Lff.fraisForfait
-                WHERE Fichefrais.idvisiteur = :idvisiteur';
+                WHERE Fichefrais.idvisiteur = :idvisiteur
+                ORDER BY Lff.id ASC';
 
         $query = $this->_em->createQuery($dql);
         $query->setParameter('idvisiteur', $idvisiteur);

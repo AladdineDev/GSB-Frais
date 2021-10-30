@@ -3,10 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Fraisforfait;
-use App\Entity\Lignefraisforfait;
+use App\Form\LignefraisforfaitType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class FraisforfaitType extends AbstractType
@@ -17,7 +18,8 @@ class FraisforfaitType extends AbstractType
             ->add('lignefraisforfaits', CollectionType::class, [
                 'entry_type' => LignefraisforfaitType::class,
                 'entry_options' => ['label' => 'false'],
-            ]);
+            ])
+            ->add('valider', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

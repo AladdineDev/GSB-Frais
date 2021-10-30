@@ -13,6 +13,7 @@ use App\Form\FraisforfaitType;
 use App\Form\LignefraisforfaitType;
 use App\Form\LignefraishorsforfaitType;
 use App\Repository\FichefraisRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,19 +28,17 @@ class VisiteurController extends AbstractController
         ]);
     }
 
-    public function saisirFicheFrais(Request $request): Response
+    public function saisirFicheFrais(Request $request, EntityManagerInterface $em): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         $session = $request->getSession();
         $session->start();
         $idvisiteur = $session->get('utilisateur')['id'];
 
-        $visiteur = $entityManager->getRepository(Visiteur::class)->find($idvisiteur);
-        $fraisForfaits = $entityManager->getRepository(Fraisforfait::class)->findAll();
-        $ficheFrais = $entityManager->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
-        $ligneFraisForfaits = $entityManager->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur);
-        $fraisHorsForfaits = $entityManager->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur);
+        $visiteur = $em->getRepository(Visiteur::class)->find($idvisiteur);
+        $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
+        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
+        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur);
+        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur);
 
         $ficheFraisInstance = new Fichefrais();
         $formFichefrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
@@ -69,10 +68,10 @@ class VisiteurController extends AbstractController
             $i = 0;
             foreach ($formFraisForfait->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
                 $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
-                $entityManager->persist($ligneFraisForfaits[$i]);
+                $em->persist($ligneFraisForfaits[$i]);
                 $i++;
             }
-            $entityManager->flush();
+            $em->flush();
 
             return $this->redirectToRoute('saisir_fiche_frais');
         }
@@ -81,8 +80,8 @@ class VisiteurController extends AbstractController
             $fraisHorsForfaitInstance->setIdvisiteur($ficheFrais->getIdvisiteur()->getId());
             $fraisHorsForfaitInstance->setMois($ficheFrais->getMois());
             $fraisHorsForfaitInstance->setIdfichefrais($ficheFrais);
-            $entityManager->persist($formFraisHorsForfait->getData());
-            $entityManager->flush();
+            $em->persist($formFraisHorsForfait->getData());
+            $em->flush();
 
             return $this->redirectToRoute('saisir_fiche_frais');
         }
@@ -117,28 +116,28 @@ class VisiteurController extends AbstractController
 
     private function creerLignefraisforfaits($ligneFraisForfaits, $ficheFrais, $fraisForfaits)
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         for ($i = 0; $i < 4; $i++) {
             // dd($ligneFraisForfaits);
             array_push($ligneFraisForfaits, new Lignefraisforfait);
             $ligneFraisForfaits[$i]->setFicheFrais($ficheFrais);
             $ligneFraisForfaits[$i]->setFraisForfait($fraisForfaits[$i]);
             $ligneFraisForfaits[$i]->setQuantite(0);
-            $entityManager->persist($ligneFraisForfaits[$i]);
+            $em->persist($ligneFraisForfaits[$i]);
         }
-        $entityManager->flush();
+        $em->flush();
 
         return $ligneFraisForfaits;
     }
 
     private function creerFichefrais($ficheFrais, $visiteur)
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $ficheFrais = new ficheFrais();
         $ficheFrais->setIdvisiteur($visiteur);
-        $ficheFrais->setIdetat($entityManager->getRepository(Etat::class)->find('CR'));
-        $entityManager->persist($ficheFrais);
-        $entityManager->flush();
+        $ficheFrais->setIdetat($em->getRepository(Etat::class)->find('CR'));
+        $em->persist($ficheFrais);
+        $em->flush();
 
         return $ficheFrais;
     }
@@ -146,9 +145,9 @@ class VisiteurController extends AbstractController
     public function supprimerFraisHorsForfait(Request $request, Lignefraishorsforfait $lignefraishorsforfait): Response
     {
         if ($this->isCsrfTokenValid('delete' . $lignefraishorsforfait->getId(), $request->request->get('supprimer_fraishorsforfait_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($lignefraishorsforfait);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($lignefraishorsforfait);
+            $em->flush();
         }
 
         return $this->redirectToRoute('saisir_fiche_frais', [], Response::HTTP_SEE_OTHER);

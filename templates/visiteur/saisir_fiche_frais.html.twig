@@ -12,46 +12,28 @@
 		<table class="table table-bordered table-active table-hover table-striped table-responsive">
 			<thead class="thead-dark"></thead>
 			<tr class="table-secondary">
-				<th>Frais forfait</th>
-				<th>Forfait Etape</th>
-				<th>Frais Kilométrique</th>
-				<th>Nuitée Hôtel</th>
-				<th>Repas Restaurant</th>
+				<th>Frais forfaitisés</th>
+				{% for fraisForfait in fraisForfaits %}
+					<th>{{fraisForfait.libelle}}</th>
+				{% endfor %}
 			</tr>
 			<tbody>
 				<tr>
 					<td>Montant</td>
-					{% for unFraisForfait in fraisForfaits %}
-						<td>{{unFraisForfait.montant}}</td>
+					{% for fraisForfait in fraisForfaits %}
+						<td>{{fraisForfait.montant}}</td>
 					{% endfor %}
 				</tr>
 				<tr>
 					<td>Quantité</td>
-					{% for unFraisForfait in fraisForfaits %}
-						{# {% set quantite = 0 %} #}
-						<td>
-							{% for ligneFraisForfait in ligneFraisForfaits %}
-
-								{% if unFraisForfait == ligneFraisForfait.fraisForfait %}
-									{{ligneFraisForfait.quantite }}
-								{% endif %}
-
-							{% endfor %}
-						</td>
+					{% for ligneFraisForfait in ligneFraisForfaits %}
+						<td>{{ligneFraisForfait.quantite }}</td>
 					{% endfor %}
 				</tr>
 				<tr>
 					<td>Total</td>
-					{% for unFraisForfait in fraisForfaits %}
-						<td>
-							{% for ligneFraisForfait in ligneFraisForfaits %}
-
-								{% if unFraisForfait == ligneFraisForfait.fraisForfait %}
-									{{unFraisForfait.montant * ligneFraisForfait.quantite}}
-								{% endif %}
-
-							{% endfor %}
-						</td>
+					{% for ligneFraisForfait in ligneFraisForfaits %}
+							<td>{{ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant}}</td>
 					{% endfor %}
 				</tr>
 			</tbody>
@@ -60,24 +42,14 @@
 
 	{{form_start(formFraisForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
 	)}}
-	<div class="col-md-3">
-		<label for="fraisForfait" class="form-label">Forfait Etape</label>
-		{{form_widget(formFraisForfait.lignefraisforfaits.ETP.quantite)}}
-	</div>
-	<div class="col-md-3">
-		<label for="fraisForfait" class="form-label">Frais Kilométrique</label>
-		{{form_widget(formFraisForfait.lignefraisforfaits.KM.quantite)}}
-	</div>
-	<div class="col-md-3">
-		<label for="fraisForfait" class="form-label">Nuitée Hôtel</label>
-		{{form_widget(formFraisForfait.lignefraisforfaits.NUI.quantite)}}
-	</div>
-	<div class="col-md-3">
-		<label for="fraisForfait" class="form-label">Repas Restaurant</label>
-		{{form_widget(formFraisForfait.lignefraisforfaits.REP.quantite)}}
-	</div>
+	{% for ligneFraisForfait in formFraisForfait.lignefraisforfaits %}
+		<div class="col-md-3">
+			<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
+			{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
+		</div>
+	{% endfor %}
 	<div class="col-12">
-		<button type="submit" class="btn btn-primary">Valider</button>
+		{{form_widget(formFraisForfait.valider)}}
 	</div>
 	{{form_end(formFraisForfait)}}
 	<br/>
@@ -95,7 +67,6 @@
 			<tbody>
 				{% for unFraisHorsForfait in fraisHorsForfaits %}
 					<tr>
-						{# {{dump(fraisHorsForfaits)}} #}
 						<td class="align-middle">{{unFraisHorsForfait.date | date('d/m/Y')}}</td>
 						<td class="align-middle">{{unFraisHorsForfait.libelle}}</td>
 						<td class="align-middle">{{unFraisHorsForfait.montant}}</td>
@@ -131,6 +102,6 @@
 	<br/>
 
 	{# <h3>Hors classfication</h3>
-		{{form_row(formFichefrais.nbjustificatifs)}}
-		{{form_row(formFichefrais.montantvalide)}} #}
+			{{form_row(formFichefrais.nbjustificatifs)}}
+			{{form_row(formFichefrais.montantvalide)}} #}
 {% endblock %}
