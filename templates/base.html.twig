@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>
-			{% block title %}Welcome!{% endblock %}
+			{% block title %}GSB Frais{% endblock %}
 		</title>
-		{# Run `composer require symfony/webpack-encore-bundle`
-												           and uncomment the following Encore helpers to start using Symfony UX #}
+
 		<link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
 		<link rel="stylesheet" href="{{asset('css/styles.css')}}">
-		{% block stylesheets %}
-			{#{{ encore_entry_link_tags('app') }}#}
-		{% endblock %}
 
-		{% block javascripts %}
-			{#{{ encore_entry_script_tags('app') }}#}
-		{% endblock %}
+		{% block stylesheets %}{% endblock %}
+		{% block javascripts %}{% endblock %}
 	</head>
 	<body>
+
 		<div>
 			{% block navbar %}
 				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -28,8 +25,11 @@
 				</nav>
 			{% endblock %}
 		</div>
+
 		<div>
 			{% block body %}{% endblock %}
 		</div>
+
+		<script src={{asset('js/bootstrap.bundle.min.js')}}></script>
 	</body>
 </html>

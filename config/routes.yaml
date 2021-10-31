@@ -28,9 +28,13 @@ supprimer_fraishorsforfait:
    path: /visiteur/saisir_fiche_frais/supprimer_fraishorsforfait/{id}
    controller: App\Controller\VisiteurController::supprimerFraisHorsForfait
 
-consulter_fiche_frais:
-   path: /visiteur/consulter_fiche_frais
-   controller: App\Controller\VisiteurController::consulterFicheFrais
+consulter_fiches_frais:
+   path: /visiteur/consulter_fiches_frais
+   controller: App\Controller\VisiteurController::consulterFichesFrais
+
+consulter_detail_fiche_frais:
+   path: /visiteur/consulter_detail_fiche_frais/{id}
+   controller: App\Controller\VisiteurController::consulterDetailFicheFrais
 
 comptable:
    path: /comptable

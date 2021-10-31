@@ -65,4 +65,41 @@ class FichefraisRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
+
+    public function findFichesfrais($idvisiteur)
+    {
+        $dql = 'SELECT Fichefrais
+                FROM App:Fichefrais Fichefrais
+                WHERE Fichefrais.idvisiteur = :idvisiteur
+                AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
+                ORDER BY Fichefrais.mois DESC';
+
+        $query = $this->_em->createQuery($dql);
+        $query->setParameters([
+            'idvisiteur' => $idvisiteur,
+            'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
+            'dernierMois' => (new DateTime())->format('Y-m-t')
+        ]);
+
+        return $query->getResult();
+    }
+
+    public function findFichefrais($id, $idvisiteur)
+    {
+        $dql = 'SELECT Fichefrais
+                FROM App:Fichefrais Fichefrais
+                WHERE Fichefrais.idvisiteur = :idvisiteur
+                AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
+                AND Fichefrais.id = :id';
+
+        $query = $this->_em->createQuery($dql);
+        $query->setParameters([
+            'idvisiteur' => $idvisiteur,
+            'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
+            'dernierMois' => (new DateTime())->format('Y-m-t'),
+            'id' => $id
+        ]);
+
+        return $query->getOneOrNullResult();
+    }
 }

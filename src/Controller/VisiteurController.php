@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Etat;
+use App\Entity\Visiteur;
 use App\Entity\Fichefrais;
 use App\Entity\Fraisforfait;
-use App\Entity\Lignefraisforfait;
-use App\Entity\Lignefraishorsforfait;
-use App\Entity\Visiteur;
 use App\Form\FichefraisType;
 use App\Form\FraisforfaitType;
+use App\Entity\Lignefraisforfait;
 use App\Form\LignefraisforfaitType;
+use App\Entity\Lignefraishorsforfait;
 use App\Form\LignefraishorsforfaitType;
 use App\Repository\FichefraisRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,8 +38,8 @@ class VisiteurController extends AbstractController
         $visiteur = $em->getRepository(Visiteur::class)->find($idvisiteur);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
         $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
-        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur);
-        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur);
+        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
+        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
 
         $ficheFraisInstance = new Fichefrais();
         $formFichefrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
@@ -99,18 +100,91 @@ class VisiteurController extends AbstractController
         ]);
     }
 
-    public function consulterFicheFrais(Request $request, FichefraisRepository $ficheFraisRepository): Response
+    public function consulterFichesFrais(Request $request, FichefraisRepository $ficheFraisRepository, EntityManagerInterface $em): Response
     {
-        $fichesFrais = $ficheFraisRepository->findAll();
+        $session = $request->getSession();
+        $session->start();
+        $idvisiteur = $session->get('utilisateur')['id'];
+
+        $fichesFrais = $ficheFraisRepository->findFichesfrais($idvisiteur);
+        $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
+
+        return $this->render('visiteur/consulter_fiche_frais.html.twig', [
+            'controller_name' => 'VisiteurController',
+            'fichesFrais' => $fichesFrais,
+            'ficheFraisCourante' => $ficheFraisCourante,
+        ]);
+    }
+
+    public function consulterDetailFicheFrais(int $id, Request $request, EntityManagerInterface $em): Response
+    {
+        $session = $request->getSession();
+        $session->start();
+        $idvisiteur = $session->get('utilisateur')['id'];
+
+        $visiteur = $em->getRepository(Visiteur::class)->find($idvisiteur);
+        $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
+        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefrais($id, $idvisiteur);
+        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
+        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
 
         $ficheFraisInstance = new Fichefrais();
         $formFichefrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
         $formFichefrais->handleRequest($request);
 
-        return $this->render('visiteur/consulter_fiche_frais.html.twig', [
+        $ligneFraisForfaitInstance = new Lignefraisforfait();
+        $formLigneFraisForfait = $this->createForm(LignefraisforfaitType::class, $ligneFraisForfaitInstance);
+        $formLigneFraisForfait->handleRequest($request);
+
+        $fraisHorsForfaitInstance = new Lignefraishorsforfait();
+        $formFraisHorsForfait = $this->createForm(LignefraishorsforfaitType::class, $fraisHorsForfaitInstance);
+        $formFraisHorsForfait->handleRequest($request);
+
+        $fraisForfaitInstance = new Fraisforfait();
+        $formFraisForfait = $this->createForm(FraisforfaitType::class, $fraisForfaitInstance);
+        $formFraisForfait->handleRequest($request);
+
+        if (!$ficheFrais) {
+            $ficheFrais = $this->creerFichefrais($ficheFrais, $visiteur);
+        }
+
+        if (!$ligneFraisForfaits /* || $ligneFraisForfaits[0]->getFicheFrais() != $ficheFrais */) {
+            $ligneFraisForfaits = $this->creerLignefraisforfaits($ligneFraisForfaits, $ficheFrais, $fraisForfaits);
+        }
+
+        // if ($formFraisForfait->isSubmitted() && $formFraisForfait->isValid()) {
+        //     $i = 0;
+        //     foreach ($formFraisForfait->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
+        //         $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
+        //         $em->persist($ligneFraisForfaits[$i]);
+        //         $i++;
+        //     }
+        //     $em->flush();
+
+        //     return $this->redirectToRoute('consulter_detail_fiche_frais', compact('id'));
+        // }
+
+        // if ($formFraisHorsForfait->isSubmitted() && $formFraisHorsForfait->isValid()) {
+        //     $fraisHorsForfaitInstance->setIdvisiteur($ficheFrais->getIdvisiteur()->getId());
+        //     $fraisHorsForfaitInstance->setMois($ficheFrais->getMois());
+        //     $fraisHorsForfaitInstance->setIdfichefrais($ficheFrais);
+        //     $em->persist($formFraisHorsForfait->getData());
+        //     $em->flush();
+
+        //     return $this->redirectToRoute('consulter_detail_fiche_frais', compact('id'));
+        // }
+
+        return $this->render('visiteur/consulter_detail_fiche_frais.html.twig', [
             'controller_name' => 'VisiteurController',
             'formFichefrais' => $formFichefrais->createView(),
-            'fichesFrais' => $fichesFrais
+            'formLigneFraisForfait' => $formLigneFraisForfait->createView(),
+            'formFraisHorsForfait' => $formFraisHorsForfait->createView(),
+            'formFraisForfait' => $formFraisForfait->createView(),
+            'ficheFrais' => $ficheFrais,
+            'ligneFraisForfaits' => $ligneFraisForfaits,
+            'fraisHorsForfaits' => $fraisHorsForfaits,
+            'fraisForfaits' => $fraisForfaits,
+            'id' => $id
         ]);
     }
 
