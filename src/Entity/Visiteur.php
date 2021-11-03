@@ -44,6 +44,8 @@ class Visiteur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $login;
 
+    private $typeUtilisateur = 'Visiteur';
+
     /**
      * @ORM\Column(type="json")
      */
@@ -181,6 +183,18 @@ class Visiteur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateembauche(\DateTimeInterface $dateembauche): self
     {
         $this->dateembauche = $dateembauche;
+
+        return $this;
+    }
+
+    public function getTypeUtilisateur(): ?string
+    {
+        return $this->typeUtilisateur;
+    }
+
+    public function setTypeUtilisateur(string $typeUtilisateur): self
+    {
+        $this->typeUtilisateur = $typeUtilisateur;
 
         return $this;
     }

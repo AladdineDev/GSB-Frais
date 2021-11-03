@@ -6,24 +6,24 @@
 {% block body %}
 	<div class="container center" style="width:20%">
 		<h2 class="mb-4 font-weight-normal mt-3" style="margin-left:17%">Connexion</h2>
-		<form method="post" class="row" action="{{path('se_connecter')}}">
+		<form method="post" class="row">
 			<div style="width: 600px; border: 1px solid #fff; margin-bottom:10px">
 				<div class="input-field mt-3">
 					<div class="form-group form-floating mb-2">
-						<input type="login" name="login" class="form-control" id="inputLogin" required autofocus placeholder="Login">
-						<label for="login">Login</label>
+						<input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" placeholder="Login" autocomplete="username" required autofocus>
+						<label for="inputLogin">Login</label>
 					</div>
 					<div class="form-floating mb-3">
-						<input type="password" name="mdp" class="form-control" id="inputMdp" required autofocus placeholder="Mot de passe">
-						<label for="password">Mot de passe</label>
+						<input type="password" name="password" id="inputPassword" class="form-control" placeholder="Mot de passe" autocomplete="current-password" required>
+						<label for="inputPassword">Mot de passe</label>
 					</div>
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 					<input type="submit" class="btn btn-primary form-control mb-3" value="Me connecter">
 				</div>
-				<div class="input-field col s12"></div>
 			</div>
-			{% if app.request.attributes.get('echec') %}
+			{% if error %}
 				<div class="alert alert-danger" role="alert">
-					Identifiants incorrects.
+					<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 				</div>
 			{% endif %}
 		</form>

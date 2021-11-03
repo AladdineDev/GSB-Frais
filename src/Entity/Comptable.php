@@ -44,6 +44,8 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $login;
 
+    private $typeUtilisateur = 'Comptable';
+
     /**
      * @ORM\Column(type="json")
      */
@@ -105,6 +107,18 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMdp(string $mdp): self
     {
         $this->mdp = $mdp;
+
+        return $this;
+    }
+
+    public function getTypeUtilisateur(): ?string
+    {
+        return $this->typeUtilisateur;
+    }
+
+    public function setTypeUtilisateur(string $typeUtilisateur): self
+    {
+        $this->typeUtilisateur = $typeUtilisateur;
 
         return $this;
     }

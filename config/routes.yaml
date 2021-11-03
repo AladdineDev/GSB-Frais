@@ -6,23 +6,13 @@ index:
    path: /
    controller: App\Controller\AccueilController::index
 
-accueil:
-   path: /accueil
-   controller: App\Controller\AccueilController::accueil
+connexion:
+   path: /connexion
+   controller: App\Controller\ConnexionController::connexion
 
-# accueil:
-#    path: /
-#    controller: App\Controller\ConnexionController::index
-
-se_connecter:
-   path: /se_connecter/{echec}
-   controller: App\Controller\ConnexionController::seConnecter
-   defaults:
-      echec: false
-
-se_deconnecter:
-   path: /se_deconnecter
-   controller: App\Controller\ConnexionController::seDeconnecter
+deconnexion:
+   path: /deconnexion
+   controller: App\Controller\ConnexionController::deconnexion
 
 visiteur:
    path: /visiteur

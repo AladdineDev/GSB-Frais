@@ -20,7 +20,7 @@ security:
             entity:
                 class: App\Entity\Visiteur
                 property: login
-        app_user_provider:
+        all_users:
             chain:
                 providers: ['comptable_provider', 'visiteur_provider']
                 
@@ -30,10 +30,12 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            provider: all_users
             custom_authenticator: App\Security\AppAuthenticator
             logout:
-                path: app_logout
+                path: deconnexion
+                # target: index
+
                 # where to redirect after logout
                 # target: app_any_route
 

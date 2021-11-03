@@ -9,13 +9,17 @@ class AccueilController extends AbstractController
 {
     public function index(): Response
     {
-        return $this->redirectToRoute('accueil');
-    }
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('connexion');
+        }
 
-    public function accueil(): Response
-    {
-        return $this->render('accueil/index.html.twig', [
-            'controller_name' => 'AccueilController',
-        ]);
+        $rolesUtilisateur = $this->getUser()->getRoles();
+
+        if (in_array('ROLE_COMPTABLE', $rolesUtilisateur)) {
+            return $this->redirectToRoute('comptable');
+        }
+        if (in_array('ROLE_VISITEUR', $rolesUtilisateur)) {
+            return $this->redirectToRoute('visiteur');
+        }
     }
 }

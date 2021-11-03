@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use DateTime;
 use App\Entity\Etat;
 use App\Entity\Visiteur;
 use App\Entity\Fichefrais;
@@ -22,7 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class VisiteurController extends AbstractController
 {
-    public function index(Request $request): Response
+    public function index(): Response
     {
         return $this->render('visiteur/index.html.twig', [
             'controller_name' => 'VisiteurController',
@@ -31,9 +30,7 @@ class VisiteurController extends AbstractController
 
     public function saisirFicheFrais(Request $request, EntityManagerInterface $em): Response
     {
-        $session = $request->getSession();
-        $session->start();
-        $idvisiteur = $session->get('utilisateur')['id'];
+        $idvisiteur = $this->getUser();
 
         $visiteur = $em->getRepository(Visiteur::class)->find($idvisiteur);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
@@ -100,11 +97,9 @@ class VisiteurController extends AbstractController
         ]);
     }
 
-    public function consulterFichesFrais(Request $request, FichefraisRepository $ficheFraisRepository, EntityManagerInterface $em): Response
+    public function consulterFichesFrais(FichefraisRepository $ficheFraisRepository, EntityManagerInterface $em): Response
     {
-        $session = $request->getSession();
-        $session->start();
-        $idvisiteur = $session->get('utilisateur')['id'];
+        $idvisiteur = $this->getUser();
 
         $fichesFrais = $ficheFraisRepository->findFichesfrais($idvisiteur);
         $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
@@ -118,9 +113,7 @@ class VisiteurController extends AbstractController
 
     public function consulterDetailFicheFrais(int $id, Request $request, EntityManagerInterface $em): Response
     {
-        $session = $request->getSession();
-        $session->start();
-        $idvisiteur = $session->get('utilisateur')['id'];
+        $idvisiteur = $this->getUser();
 
         $visiteur = $em->getRepository(Visiteur::class)->find($idvisiteur);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
