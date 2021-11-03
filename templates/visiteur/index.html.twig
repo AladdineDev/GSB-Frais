@@ -4,13 +4,13 @@
 
 {% block enteteConnecte %}
 	<div for="utilisateur" style="align:center" class="h3 mb-1 font-weight-normal">
-		{{app.session.get('typeUtilisateur')}}
+		{# {{app.session.get('typeUtilisateur')}} #}
 	</div>
 	<div>
 		<ul class="nav navbar-nav navbar-right">
 			<li class="nav-item">
 				<a class="nav-link" href="#">
-					{{app.session.get('utilisateur')['nom'] ~ ' ' ~ app.session.get('utilisateur')['prenom']}}
+					{# {{app.session.get('utilisateur')['nom'] ~ ' ' ~ app.session.get('utilisateur')['prenom']}} #}
 				</a>
 			</li>
 			<li class="nav-item">

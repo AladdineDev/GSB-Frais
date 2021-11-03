@@ -2,9 +2,17 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-accueil:
+index:
    path: /
-   controller: App\Controller\ConnexionController::index
+   controller: App\Controller\AccueilController::index
+
+accueil:
+   path: /accueil
+   controller: App\Controller\AccueilController::accueil
+
+# accueil:
+#    path: /
+#    controller: App\Controller\ConnexionController::index
 
 se_connecter:
    path: /se_connecter/{echec}
