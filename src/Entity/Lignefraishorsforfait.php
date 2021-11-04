@@ -52,8 +52,7 @@ class Lignefraishorsforfait
      * @Assert\Range(
      *      min = "-1 years",
      *      max = "now",
-     *      minMessage = "La date d'engagement doit se situer dans l'année écoulée",
-     *      maxMessage = "La date d'engagement ne peut être postérieure à la date du jour"
+     *      notInRangeMessage = "La date d'engagement doit se situer dans l'année écoulée"
      * )
      */
     private $date;

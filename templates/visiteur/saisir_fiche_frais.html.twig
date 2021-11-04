@@ -46,6 +46,7 @@
 		<div class="col-md-3">
 			<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
 			{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
+			{{form_errors(ligneFraisForfait.quantite)}}
 		</div>
 	{% endfor %}
 	<div class="col-12">
@@ -86,17 +87,20 @@
 	<div class="col-md-4">
 		<label for="fraisHorsForfait" class="form-label">Date</label>
 		{{form_widget(formFraisHorsForfait.date)}}
+		{{form_errors(formFraisHorsForfait.date)}}
 	</div>
 	<div class="col-md-4">
 		<label for="fraisHorsForfait" class="form-label">Libelle</label>
 		{{form_widget(formFraisHorsForfait.libelle)}}
+		{{form_errors(formFraisHorsForfait.libelle)}}
 	</div>
 	<div class="col-md-4">
 		<label for="fraisHorsForfait" class="form-label">Montant</label>
 		{{form_widget(formFraisHorsForfait.montant)}}
+		{{form_errors(formFraisHorsForfait.montant)}}
 	</div>
 	<div class="col-12">
-		{{form_row(formFraisHorsForfait.ajouter)}}
+		{{form_widget(formFraisHorsForfait.ajouter)}}
 	</div>
 	{{form_end(formFraisHorsForfait)}}
 	<br/>
