@@ -13,6 +13,7 @@ connexion:
 deconnexion:
    path: /deconnexion
    controller: App\Controller\ConnexionController::deconnexion
+   methods: GET
 
 visiteur:
    path: /visiteur

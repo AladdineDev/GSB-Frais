@@ -4,10 +4,6 @@ security:
     # https://symfony.com/doc/current/security.html#c-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-        App\Entity\Comptable:
-            algorithm: auto
-        App\Entity\Visiteur:
-            algorithm: auto
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -34,8 +30,6 @@ security:
             custom_authenticator: App\Security\AppAuthenticator
             logout:
                 path: deconnexion
-                # target: index
-
                 # where to redirect after logout
                 # target: app_any_route
 

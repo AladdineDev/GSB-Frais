@@ -16,14 +16,14 @@ class ComptableController extends AbstractController
 
     public function validerFicheFrais(): Response
     {
-        return $this->render('comptable/index.html.twig', [
+        return $this->render('comptable/valider_fiche_frais.html.twig', [
             'controller_name' => 'ComptableController',
         ]);
     }
 
     public function suivreFicheFrais(): Response
     {
-        return $this->render('comptable/index.html.twig', [
+        return $this->render('comptable/suivre_fiche_frais.html.twig', [
             'controller_name' => 'ComptableController',
         ]);
     }

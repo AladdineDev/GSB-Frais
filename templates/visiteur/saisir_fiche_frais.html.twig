@@ -1,5 +1,7 @@
 {% extends 'visiteur/index.html.twig' %}
 
+{% block title %}Saisie fiche frais{% endblock %}
+
 {% block contenuPage %}
 
 	<h1>Saisie</h1>
@@ -54,7 +56,7 @@
 	</div>
 	{{form_end(formFraisForfait)}}
 	<br/>
-	
+
 	<h3>Frais hors forfait</h3>
 	<div class="table-responsive">
 		<table class="table table-bordered table-active table-hover table-striped">
@@ -104,5 +106,5 @@
 	</div>
 	{{form_end(formFraisHorsForfait)}}
 	<br/>
-	
+
 {% endblock %}

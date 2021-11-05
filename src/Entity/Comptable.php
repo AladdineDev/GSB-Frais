@@ -44,6 +44,8 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $login;
 
+    private $typeUtilisateur = 'Comptable';
+
     /**
      * @ORM\Column(type="json")
      */
@@ -52,7 +54,7 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      *
-     * @ORM\Column(name="mdp", type="string", length=60)
+     * @ORM\Column(name="mdp", type="string", length=255)
      */
     private $mdp;
 
@@ -105,6 +107,18 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMdp(string $mdp): self
     {
         $this->mdp = $mdp;
+
+        return $this;
+    }
+
+    public function getTypeUtilisateur(): ?string
+    {
+        return $this->typeUtilisateur;
+    }
+
+    public function setTypeUtilisateur(string $typeUtilisateur): self
+    {
+        $this->typeUtilisateur = $typeUtilisateur;
 
         return $this;
     }

@@ -12,13 +12,10 @@ class AccueilController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('connexion');
         }
-
-        $rolesUtilisateur = $this->getUser()->getRoles();
-
-        if (in_array('ROLE_COMPTABLE', $rolesUtilisateur)) {
+        if ($this->isGranted('ROLE_COMPTABLE')) {
             return $this->redirectToRoute('comptable');
         }
-        if (in_array('ROLE_VISITEUR', $rolesUtilisateur)) {
+        if ($this->isGranted('ROLE_VISITEUR')) {
             return $this->redirectToRoute('visiteur');
         }
     }

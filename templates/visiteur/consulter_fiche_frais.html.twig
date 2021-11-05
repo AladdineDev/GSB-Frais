@@ -1,36 +1,37 @@
 {% extends 'visiteur/index.html.twig' %}
 
+{% block title %}Consultation fiche frais{% endblock %}
+
 {% block contenuPage %}
 	<h1>Consultation des fiches de frais</h1>
 	<br/>
-
 	<div class="table-responsive">
 		<table class="table table-bordered table-active table-hover table-striped table-responsive">
 			<thead class="thead-dark"></thead>
-		<tr class="table-secondary">
-			<th>mois</th>
-			<th>nbJustificatifs</th>
-			<th>montantValide</th>
-			<th>dateModif</th>
-			<th>idEtat</th>
-			<th>Action</th>
-		</tr>
-		<tbody>
-			{% for uneFicheFrais in fichesFrais %}
-				<tr>
-					<td>{{uneFicheFrais.mois | date('m/Y')}}</td>
-					<td>{{uneFicheFrais.nbJustificatifs}}</td>
-					<td>{{uneFicheFrais.montantValide}}</td>
-					<td>{{uneFicheFrais.dateModif | date('d/m/Y')}}</td>
-					<td>{{uneFicheFrais.idetat.id}}</td>
-					{% if uneFicheFrais == ficheFraisCourante %}
-					<td><a href="{{path('saisir_fiche_frais')}}">Saisir</a></td>
-					{% else %}
-					<td><a href="{{path('consulter_detail_fiche_frais', {'id': uneFicheFrais.id})}}">Consulter</a></td>
-					{% endif %}
-				</tr>
-			{% endfor %}
-		</tbody>
+			<tr class="table-secondary">
+				<th>mois</th>
+				<th>nbJustificatifs</th>
+				<th>montantValide</th>
+				<th>dateModif</th>
+				<th>idEtat</th>
+				<th>Action</th>
+			</tr>
+			<tbody>
+				{% for uneFicheFrais in fichesFrais %}
+					<tr>
+						<td>{{uneFicheFrais.mois | date('m/Y')}}</td>
+						<td>{{uneFicheFrais.nbJustificatifs}}</td>
+						<td>{{uneFicheFrais.montantValide}}</td>
+						<td>{{uneFicheFrais.dateModif | date('d/m/Y')}}</td>
+						<td>{{uneFicheFrais.idetat.id}}</td>
+						{% if uneFicheFrais == ficheFraisCourante %}
+							<td><a href="{{path('saisir_fiche_frais')}}">Saisir</a></td>
+						{% else %}
+							<td><a href="{{path('consulter_detail_fiche_frais', {'id': uneFicheFrais.id})}}">Consulter</a></td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
 		</table>
 	</div>
 	<br/>
