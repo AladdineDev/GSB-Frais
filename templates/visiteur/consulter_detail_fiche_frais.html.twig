@@ -41,20 +41,20 @@
 			</tbody>
 		</table>
 	</div>
-	{# <fieldset disabled="disabled">
-		{{form_start(formFraisForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
+	<fieldset disabled="disabled">
+		{{form_start(formFicheFrais, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
 		)}}
-		{% for ligneFraisForfait in formFraisForfait.lignefraisforfaits %}
+		{% for ligneFraisForfait in formFicheFrais.lignefraisforfaits %}
 			<div class="col-md-3">
 				<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
 				{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
 			</div>
 		{% endfor %}
 		<div class="col-12">
-			{{form_widget(formFraisForfait.valider)}}
+			{{form_widget(formFicheFrais.valider)}}
 		</div>
-		{{form_end(formFraisForfait)}}
-	</fieldset> #}
+		{{form_end(formFicheFrais)}}
+	</fieldset>
 	<br/>
 
 	<h3>Frais hors forfait</h3>
@@ -65,7 +65,7 @@
 				<th>Date</th>
 				<th>Libelle</th>
 				<th>Montant</th>
-				{# <th>Action</th> #}
+				<th>Action</th>
 			</tr>
 			<tbody>
 				{% for fraisHorsForfait in fraisHorsForfaits %}
@@ -73,18 +73,20 @@
 						<td class="align-middle">{{fraisHorsForfait.date | date('d/m/Y')}}</td>
 						<td class="align-middle">{{fraisHorsForfait.libelle}}</td>
 						<td class="align-middle">{{fraisHorsForfait.montant}}</td>
-						{# <td class="col-md-1">
-							<form method="post" action="{{ path('supprimer_fraishorsforfait', {'idFicheFrais': fraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
+						<td class="col-md-1">
+						<fieldset disabled="disabled">
+							<form method="post" action="{{ path('supprimer_fraishorsforfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
 								<input type="hidden" name="supprimer_fraishorsforfait_token" value="{{ csrf_token('delete' ~ fraisHorsForfait.id) }}">
 								<button class="btn btn-primary btn-sm">Supprimer</button>
 							</form>
-						</td> #}
+							</fieldset>
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
-	{# <fieldset disabled="disabled">
+	<fieldset disabled="disabled">
 		{{form_start(formFraisHorsForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous ajouter un nouveau frais non forfaitisé ?');"}})}}
 		<div class="col-md-4">
 			<label for="fraisHorsForfait" class="form-label">Date</label>
@@ -99,10 +101,10 @@
 			{{form_widget(formFraisHorsForfait.montant)}}
 		</div>
 		<div class="col-12">
-			{{form_row(formFraisHorsForfait.ajouter)}}
+			{{form_widget(formFraisHorsForfait.ajouter)}}
 		</div>
 		{{form_end(formFraisHorsForfait)}}
-	</fieldset> #}
+	</fieldset>
 	<br/>
 
 {% endblock %}
