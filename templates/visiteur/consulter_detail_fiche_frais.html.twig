@@ -74,7 +74,7 @@
 						<td class="align-middle">{{fraisHorsForfait.libelle}}</td>
 						<td class="align-middle">{{fraisHorsForfait.montant}}</td>
 						{# <td class="col-md-1">
-							<form method="post" action="{{ path('supprimer_fraishorsforfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
+							<form method="post" action="{{ path('supprimer_fraishorsforfait', {'idFicheFrais': fraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
 								<input type="hidden" name="supprimer_fraishorsforfait_token" value="{{ csrf_token('delete' ~ fraisHorsForfait.id) }}">
 								<button class="btn btn-primary btn-sm">Supprimer</button>
 							</form>

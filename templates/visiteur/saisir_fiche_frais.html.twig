@@ -42,9 +42,9 @@
 		</table>
 	</div>
 
-	{{form_start(formFraisForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
+	{{form_start(formFicheFrais, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
 	)}}
-	{% for ligneFraisForfait in formFraisForfait.lignefraisforfaits %}
+	{% for ligneFraisForfait in formFicheFrais.lignefraisforfaits %}
 		<div class="col-md-3">
 			<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
 			{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
@@ -52,9 +52,9 @@
 		</div>
 	{% endfor %}
 	<div class="col-12">
-		{{form_widget(formFraisForfait.valider)}}
+		{{form_widget(formFicheFrais.valider)}}
 	</div>
-	{{form_end(formFraisForfait)}}
+	{{form_end(formFicheFrais)}}
 	<br/>
 
 	<h3>Frais hors forfait</h3>

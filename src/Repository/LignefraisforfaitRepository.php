@@ -48,7 +48,7 @@ class LignefraisforfaitRepository extends ServiceEntityRepository
     }
     */
 
-    public function findByFichefrais($idvisiteur, $fichefrais)
+    public function findByFichefrais($fichefrais)
     {
         $dql = 'SELECT Lff
                 FROM App:Lignefraisforfait Lff
@@ -56,15 +56,11 @@ class LignefraisforfaitRepository extends ServiceEntityRepository
                 WITH Fichefrais = Lff.ficheFrais
                 JOIN App:Fraisforfait Fraisforfait
                 WITH Fraisforfait = Lff.fraisForfait
-                WHERE Fichefrais.idvisiteur = :idvisiteur
-                AND Fichefrais = :fichefrais
+                WHERE Fichefrais = :fichefrais
                 ORDER BY Lff.id ASC';
 
         $query = $this->_em->createQuery($dql);
-        $query->setParameters([
-            'idvisiteur' => $idvisiteur,
-            'fichefrais' => $fichefrais
-        ]);
+        $query->setParameter('fichefrais', $fichefrais);
 
         return $query->getResult();
     }

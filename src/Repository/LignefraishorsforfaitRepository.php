@@ -48,21 +48,17 @@ class LignefraishorsforfaitRepository extends ServiceEntityRepository
     }
     */
 
-    public function findByFichefrais($idvisiteur, $fichefrais)
+    public function findByFichefrais($fichefrais)
     {
         $dql = 'SELECT Lfhf
                 FROM App:Lignefraishorsforfait Lfhf
                 JOIN App:Fichefrais Fichefrais
                 WITH Fichefrais = Lfhf.idfichefrais
-                WHERE Fichefrais.idvisiteur = :idvisiteur
-                AND Fichefrais = :fichefrais
-                ORDER BY Lfhf.date ASC';
+                WHERE Fichefrais = :fichefrais
+                ORDER BY Lfhf.date DESC, Lfhf.montant ASC';
 
         $query = $this->_em->createQuery($dql);
-        $query->setParameters([
-            'idvisiteur' => $idvisiteur,
-            'fichefrais' => $fichefrais
-        ]);
+        $query->setParameter('fichefrais', $fichefrais);
 
         return $query->getResult();
     }

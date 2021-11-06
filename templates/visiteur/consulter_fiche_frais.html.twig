@@ -27,7 +27,7 @@
 						{% if uneFicheFrais == ficheFraisCourante %}
 							<td><a href="{{path('saisir_fiche_frais')}}">Saisir</a></td>
 						{% else %}
-							<td><a href="{{path('consulter_detail_fiche_frais', {'id': uneFicheFrais.id})}}">Consulter</a></td>
+							<td><a href="{{path('consulter_detail_fiche_frais', {'idFicheFrais': uneFicheFrais.id})}}">Consulter</a></td>
 						{% endif %}
 					</tr>
 				{% endfor %}

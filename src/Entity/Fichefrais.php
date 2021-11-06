@@ -82,6 +82,10 @@ class Fichefrais
     public function __construct()
     {
         $this->lignefraisforfaits = new ArrayCollection();
+        $this->lignefraisforfaits->add(new Lignefraisforfait());
+        $this->lignefraisforfaits->add(new Lignefraisforfait());
+        $this->lignefraisforfaits->add(new Lignefraisforfait());
+        $this->lignefraisforfaits->add(new Lignefraisforfait());
         $this->setMois(new \DateTime());
     }
 

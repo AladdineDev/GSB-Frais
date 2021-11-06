@@ -3,13 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Visiteur;
 use App\Entity\Fichefrais;
 use App\Entity\Fraisforfait;
 use App\Form\FichefraisType;
-use App\Form\FraisforfaitType;
 use App\Entity\Lignefraisforfait;
-use App\Form\LignefraisforfaitType;
 use App\Entity\Lignefraishorsforfait;
 use App\Form\LignefraishorsforfaitType;
 use App\Repository\FichefraisRepository;
@@ -30,41 +27,29 @@ class VisiteurController extends AbstractController
 
     public function saisirFicheFrais(Request $request, EntityManagerInterface $em): Response
     {
-        $idvisiteur = $this->getUser();
+        $visiteur = $this->getUser();
 
-        $visiteur = $em->getRepository(Visiteur::class)->find($idvisiteur);
+        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
+        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
-        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
-        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
-        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
+
+        if (!$ficheFrais) {
+            $ficheFrais = $this->creerFichefrais($ficheFrais, $fraisForfaits, $visiteur);
+            $ligneFraisForfaits = $ficheFrais->getLignefraisforfaits();
+        }
 
         $ficheFraisInstance = new Fichefrais();
-        $formFichefrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
-        $formFichefrais->handleRequest($request);
-
-        $ligneFraisForfaitInstance = new Lignefraisforfait();
-        $formLigneFraisForfait = $this->createForm(LignefraisforfaitType::class, $ligneFraisForfaitInstance);
-        $formLigneFraisForfait->handleRequest($request);
+        $formFicheFrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
+        $formFicheFrais->handleRequest($request);
 
         $fraisHorsForfaitInstance = new Lignefraishorsforfait();
         $formFraisHorsForfait = $this->createForm(LignefraishorsforfaitType::class, $fraisHorsForfaitInstance);
         $formFraisHorsForfait->handleRequest($request);
 
-        $fraisForfaitInstance = new Fraisforfait();
-        $formFraisForfait = $this->createForm(FraisforfaitType::class, $fraisForfaitInstance);
-        $formFraisForfait->handleRequest($request);
-
-        if (!$ficheFrais) {
-            $ficheFrais = $this->creerFichefrais($ficheFrais, $visiteur);
-        }
-
-        if (!$ligneFraisForfaits) {
-            $ligneFraisForfaits = $this->creerLignefraisforfaits($ligneFraisForfaits, $ficheFrais, $fraisForfaits);
-        }
-
-        if ($formFraisForfait->isSubmitted() && $formFraisForfait->isValid()) {
+        if ($formFicheFrais->isSubmitted() && $formFicheFrais->isValid()) {
             $i = 0;
-            foreach ($formFraisForfait->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
+            foreach ($formFicheFrais->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
                 $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
                 $em->persist($ligneFraisForfaits[$i]);
                 $i++;
@@ -86,10 +71,8 @@ class VisiteurController extends AbstractController
 
         return $this->render('visiteur/saisir_fiche_frais.html.twig', [
             'controller_name' => 'VisiteurController',
-            'formFichefrais' => $formFichefrais->createView(),
-            'formLigneFraisForfait' => $formLigneFraisForfait->createView(),
             'formFraisHorsForfait' => $formFraisHorsForfait->createView(),
-            'formFraisForfait' => $formFraisForfait->createView(),
+            'formFicheFrais' => $formFicheFrais->createView(),
             'ficheFrais' => $ficheFrais,
             'ligneFraisForfaits' => $ligneFraisForfaits,
             'fraisHorsForfaits' => $fraisHorsForfaits,
@@ -99,10 +82,10 @@ class VisiteurController extends AbstractController
 
     public function consulterFichesFrais(FichefraisRepository $ficheFraisRepository, EntityManagerInterface $em): Response
     {
-        $idvisiteur = $this->getUser();
+        $visiteur = $this->getUser();
 
-        $fichesFrais = $ficheFraisRepository->findFichesfrais($idvisiteur);
-        $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($idvisiteur);
+        $fichesFrais = $ficheFraisRepository->findFichesfrais($visiteur);
+        $ficheFraisCourante = $ficheFraisRepository->findFichefraisCourante($visiteur);
 
         return $this->render('visiteur/consulter_fiche_frais.html.twig', [
             'controller_name' => 'VisiteurController',
@@ -111,50 +94,33 @@ class VisiteurController extends AbstractController
         ]);
     }
 
-    public function consulterDetailFicheFrais(int $id, Request $request, EntityManagerInterface $em): Response
+    public function consulterDetailFicheFrais(int $idFicheFrais, Request $request, EntityManagerInterface $em): Response
     {
-        $idvisiteur = $this->getUser();
+        $visiteur = $this->getUser();
 
-        $visiteur = $em->getRepository(Visiteur::class)->find($idvisiteur);
+        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefrais($idFicheFrais);
+        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
-        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefrais($id, $idvisiteur);
-        $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
-        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($idvisiteur, $ficheFrais);
 
-        $ficheFraisInstance = new Fichefrais();
-        $formFichefrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
-        $formFichefrais->handleRequest($request);
+        // $ficheFraisInstance = new Fichefrais();
+        // $formFicheFrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
+        // $formFicheFrais->handleRequest($request);
 
-        $ligneFraisForfaitInstance = new Lignefraisforfait();
-        $formLigneFraisForfait = $this->createForm(LignefraisforfaitType::class, $ligneFraisForfaitInstance);
-        $formLigneFraisForfait->handleRequest($request);
+        // $fraisHorsForfaitInstance = new Lignefraishorsforfait();
+        // $formFraisHorsForfait = $this->createForm(LignefraishorsforfaitType::class, $fraisHorsForfaitInstance);
+        // $formFraisHorsForfait->handleRequest($request);
 
-        $fraisHorsForfaitInstance = new Lignefraishorsforfait();
-        $formFraisHorsForfait = $this->createForm(LignefraishorsforfaitType::class, $fraisHorsForfaitInstance);
-        $formFraisHorsForfait->handleRequest($request);
-
-        $fraisForfaitInstance = new Fraisforfait();
-        $formFraisForfait = $this->createForm(FraisforfaitType::class, $fraisForfaitInstance);
-        $formFraisForfait->handleRequest($request);
-
-        if (!$ficheFrais) {
-            $ficheFrais = $this->creerFichefrais($ficheFrais, $visiteur);
-        }
-
-        if (!$ligneFraisForfaits /* || $ligneFraisForfaits[0]->getFicheFrais() != $ficheFrais */) {
-            $ligneFraisForfaits = $this->creerLignefraisforfaits($ligneFraisForfaits, $ficheFrais, $fraisForfaits);
-        }
-
-        // if ($formFraisForfait->isSubmitted() && $formFraisForfait->isValid()) {
+        // if ($formFicheFrais->isSubmitted() && $formFicheFrais->isValid()) {
         //     $i = 0;
-        //     foreach ($formFraisForfait->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
+        //     foreach ($formFicheFrais->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
         //         $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
         //         $em->persist($ligneFraisForfaits[$i]);
         //         $i++;
         //     }
         //     $em->flush();
 
-        //     return $this->redirectToRoute('consulter_detail_fiche_frais', compact('id'));
+        //     return $this->redirectToRoute('consulter_detail_fiche_frais', compact('idFicheFrais'));
         // }
 
         // if ($formFraisHorsForfait->isSubmitted() && $formFraisHorsForfait->isValid()) {
@@ -164,46 +130,37 @@ class VisiteurController extends AbstractController
         //     $em->persist($formFraisHorsForfait->getData());
         //     $em->flush();
 
-        //     return $this->redirectToRoute('consulter_detail_fiche_frais', compact('id'));
+        //     return $this->redirectToRoute('consulter_detail_fiche_frais', compact('idFicheFrais'));
         // }
 
         return $this->render('visiteur/consulter_detail_fiche_frais.html.twig', [
             'controller_name' => 'VisiteurController',
-            'formFichefrais' => $formFichefrais->createView(),
-            'formLigneFraisForfait' => $formLigneFraisForfait->createView(),
-            'formFraisHorsForfait' => $formFraisHorsForfait->createView(),
-            'formFraisForfait' => $formFraisForfait->createView(),
+            // 'formFraisHorsForfait' => $formFraisHorsForfait->createView(),
+            // 'formFicheFrais' => $formFicheFrais->createView(),
             'ficheFrais' => $ficheFrais,
             'ligneFraisForfaits' => $ligneFraisForfaits,
             'fraisHorsForfaits' => $fraisHorsForfaits,
-            'fraisForfaits' => $fraisForfaits,
-            'id' => $id
+            'fraisForfaits' => $fraisForfaits
         ]);
     }
+    //     return $this->redirectToRoute('consulter_detail_fiche_frais', compact('id'));
 
-    private function creerLignefraisforfaits($ligneFraisForfaits, $ficheFrais, $fraisForfaits)
-    {
-        $em = $this->getDoctrine()->getManager();
-        for ($i = 0; $i < 4; $i++) {
-            // dd($ligneFraisForfaits);
-            array_push($ligneFraisForfaits, new Lignefraisforfait);
-            $ligneFraisForfaits[$i]->setFicheFrais($ficheFrais);
-            $ligneFraisForfaits[$i]->setFraisForfait($fraisForfaits[$i]);
-            $ligneFraisForfaits[$i]->setQuantite(0);
-            $em->persist($ligneFraisForfaits[$i]);
-        }
-        $em->flush();
-
-        return $ligneFraisForfaits;
-    }
-
-    private function creerFichefrais($ficheFrais, $visiteur)
+    private function creerFichefrais($ficheFrais, $fraisForfaits, $visiteur)
     {
         $em = $this->getDoctrine()->getManager();
         $ficheFrais = new ficheFrais();
         $ficheFrais->setIdvisiteur($visiteur);
         $ficheFrais->setIdetat($em->getRepository(Etat::class)->find('CR'));
         $em->persist($ficheFrais);
+
+        $i = 0;
+        foreach ($ficheFrais->getLignefraisforfaits() as $ligneFraisForfait) {
+            $ligneFraisForfait->setFicheFrais($ficheFrais);
+            $ligneFraisForfait->setFraisForfait($fraisForfaits[$i]);
+            $ligneFraisForfait->setQuantite(0);
+            $em->persist($ligneFraisForfait);
+            $i++;
+        }
         $em->flush();
 
         return $ficheFrais;

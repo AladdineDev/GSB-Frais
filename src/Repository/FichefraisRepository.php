@@ -49,16 +49,16 @@ class FichefraisRepository extends ServiceEntityRepository
     }
     */
 
-    public function findFichefraisCourante($idvisiteur)
+    public function findFichefraisCourante($visiteur)
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :idvisiteur
+                WHERE Fichefrais.idvisiteur = :visiteur
                 AND Fichefrais.mois BETWEEN :moisDebut AND :moisFin';
 
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
-            'idvisiteur' => $idvisiteur,
+            'visiteur' => $visiteur,
             'moisDebut' => (new DateTime())->format('Y-m-01'),
             'moisFin' => (new DateTime())->format('Y-m-t')
         ]);
@@ -66,17 +66,17 @@ class FichefraisRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function findFichesfrais($idvisiteur)
+    public function findFichesfrais($visiteur)
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :idvisiteur
+                WHERE Fichefrais.idvisiteur = :visiteur
                 AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
                 ORDER BY Fichefrais.mois DESC';
 
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
-            'idvisiteur' => $idvisiteur,
+            'visiteur' => $visiteur,
             'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
             'dernierMois' => (new DateTime())->format('Y-m-t')
         ]);
@@ -84,20 +84,18 @@ class FichefraisRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findFichefrais($id, $idvisiteur)
+    public function findFichefrais($idFicheFrais)
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :idvisiteur
-                AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
-                AND Fichefrais.id = :id';
+                WHERE Fichefrais.id = :idFicheFrais
+                AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois';
 
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
-            'idvisiteur' => $idvisiteur,
+            'idFicheFrais' => $idFicheFrais,
             'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->format('Y-m-t'),
-            'id' => $id
+            'dernierMois' => (new DateTime())->format('Y-m-t')
         ]);
 
         return $query->getOneOrNullResult();

@@ -51,10 +51,6 @@ class Fraisforfait
     public function __construct()
     {
         $this->lignefraisforfaits = new ArrayCollection();
-        $this->lignefraisforfaits->set('ETP', new Lignefraisforfait());
-        $this->lignefraisforfaits->set('KM', new Lignefraisforfait());
-        $this->lignefraisforfaits->set('NUI', new Lignefraisforfait());
-        $this->lignefraisforfaits->set('REP', new Lignefraisforfait());
     }
 
     /**

@@ -32,7 +32,7 @@ consulter_fiches_frais:
    controller: App\Controller\VisiteurController::consulterFichesFrais
 
 consulter_detail_fiche_frais:
-   path: /visiteur/consulter_detail_fiche_frais/{id}
+   path: /visiteur/consulter_detail_fiche_frais/{idFicheFrais}
    controller: App\Controller\VisiteurController::consulterDetailFicheFrais
 
 comptable:
