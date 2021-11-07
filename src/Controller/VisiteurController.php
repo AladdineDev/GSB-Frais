@@ -35,7 +35,7 @@ class VisiteurController extends AbstractController
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
 
         if (!$ficheFrais) {
-            $ficheFrais = $this->creerFichefrais($ficheFrais, $fraisForfaits, $visiteur);
+            $ficheFrais = $this->creerFichefrais($visiteur, $fraisForfaits);
             $ligneFraisForfaits = $ficheFrais->getLignefraisforfaits();
         }
 
@@ -96,7 +96,16 @@ class VisiteurController extends AbstractController
 
     public function consulterDetailFicheFrais(int $idFicheFrais, EntityManagerInterface $em): Response
     {
+        $visiteur = $this->getUser();
+
         $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefrais($idFicheFrais);
+        $fichesFrais = $em->getRepository(Fichefrais::class)->findFichesfrais($visiteur);
+        $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
+
+        if ($ficheFrais == $ficheFraisCourante || !in_array($ficheFrais, $fichesFrais)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
         $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
@@ -137,7 +146,7 @@ class VisiteurController extends AbstractController
         return $this->redirectToRoute('saisir_fiche_frais', [], Response::HTTP_SEE_OTHER);
     }
 
-    private function creerFichefrais($ficheFrais, $fraisForfaits, $visiteur)
+    private function creerFichefrais($visiteur, $fraisForfaits)
     {
         $em = $this->getDoctrine()->getManager();
         $ficheFrais = new ficheFrais();
