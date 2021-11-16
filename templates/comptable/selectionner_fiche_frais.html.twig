@@ -1,0 +1,51 @@
+{% extends 'comptable/index.html.twig' %}
+
+{% block title %}Suivi fiche frais
+{% endblock %}
+
+{% block contenuPage %}
+	<h1>Sélection de la fiche de frais</h1>
+	<h3>Sélection du visiteur</h3>
+	{{form_start(formVisiteur)}}
+	{{form_row(formVisiteur.nom)}}
+	{{form_end(formVisiteur)}}
+	<br>
+
+	{% if fichesFraisSaisies is defined %}
+		<h3>Fiches frais du visiteur</h3>
+
+		<div class="table-responsive">
+			<table class="table table-bordered table-active table-hover table-striped table-responsive">
+				<thead class="thead-dark"></thead>
+				<tr class="table-secondary">
+					<th>Mois</th>
+					<th>Nombre de justificatifs</th>
+					<th>Montant validé</th>
+					<th>Date de modification</th>
+					<th>Situation</th>
+					<th>Action</th>
+				</tr>
+				<tbody>
+					{% for ficheFraisSaisies in fichesFraisSaisies %}
+						<tr>
+							<td>{{ficheFraisSaisies.mois | date('m/Y')}}</td>
+							<td>{{ficheFraisSaisies.nbJustificatifs}}</td>
+							<td>{{ficheFraisSaisies.montantValide}}</td>
+							<td>{{ficheFraisSaisies.dateModif | date('d/m/Y')}}</td>
+							<td>{{ficheFraisSaisies.idetat.libelle}}</td>
+							<td>
+								<a href="{{path('administrer_fiche_frais', {'idFicheFrais': ficheFraisSaisies.id})}}">Consulter</a>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<br/>
+	{% else %}
+		{% if formVisiteur.vars.value.nom %}
+			<h3>Pas de fiche de frais pour ce visiteur</h3>
+			{% else %}
+		{% endif %}
+	{% endif %}
+{% endblock %}

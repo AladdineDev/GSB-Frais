@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Lignefraishorsforfait
  *
- * @ORM\Table(name="LigneFraisHorsForfait", indexes={@ORM\Index(name="idFicheFrais", columns={"idFicheFrais"})})
+ * @ORM\Table(name="LigneFraisHorsForfait", indexes={@ORM\Index(name="idFicheFrais", columns={"idFicheFrais"}), @ORM\Index(name="idStatut", columns={"idStatut"})})
  * @ORM\Entity(repositoryClass="App\Repository\LignefraishorsforfaitRepository")
  */
 class Lignefraishorsforfait
@@ -65,6 +65,16 @@ class Lignefraishorsforfait
      * @Assert\Positive(message = "Valeur numérique positive attendue")
      */
     private $montant;
+
+    /**
+     * @var Statut
+     *
+     * @ORM\ManyToOne(targetEntity="Statut")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idStatut", referencedColumnName="id")
+     * })
+     */
+    private $idstatut;
 
     /**
      * @var Fichefrais
@@ -142,6 +152,18 @@ class Lignefraishorsforfait
     public function setMontant(?string $montant): self
     {
         $this->montant = $montant;
+
+        return $this;
+    }
+
+    public function getIdstatut(): ?Statut
+    {
+        return $this->idstatut;
+    }
+
+    public function setIdstatut(?Statut $idstatut): self
+    {
+        $this->idstatut = $idstatut;
 
         return $this;
     }

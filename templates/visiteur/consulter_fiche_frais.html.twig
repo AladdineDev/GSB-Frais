@@ -9,12 +9,12 @@
 		<table class="table table-bordered table-active table-hover table-striped table-responsive">
 			<thead class="thead-dark"></thead>
 			<tr class="table-secondary">
-				<th>mois</th>
-				<th>nbJustificatifs</th>
-				<th>montantValide</th>
-				<th>dateModif</th>
-				<th>idEtat</th>
-				<th>Action</th>
+					<th>Mois</th>
+					<th>Nombre de justificatifs</th>
+					<th>Montant validé</th>
+					<th>Date de modification</th>
+					<th>Situation</th>
+					<th>Action</th>
 			</tr>
 			<tbody>
 				{% for uneFicheFrais in fichesFrais %}
@@ -23,7 +23,7 @@
 						<td>{{uneFicheFrais.nbJustificatifs}}</td>
 						<td>{{uneFicheFrais.montantValide}}</td>
 						<td>{{uneFicheFrais.dateModif | date('d/m/Y')}}</td>
-						<td>{{uneFicheFrais.idetat.id}}</td>
+						<td>{{uneFicheFrais.idetat.libelle}}</td>
 						{% if uneFicheFrais == ficheFraisCourante %}
 							<td><a href="{{path('saisir_fiche_frais')}}">Saisir</a></td>
 						{% else %}

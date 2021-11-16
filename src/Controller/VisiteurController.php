@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Statut;
 use App\Entity\Fichefrais;
 use App\Entity\Fraisforfait;
 use App\Form\FichefraisType;
@@ -35,7 +36,7 @@ class VisiteurController extends AbstractController
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
 
         if (!$ficheFrais) {
-            $ficheFrais = $this->creerFichefrais($visiteur, $fraisForfaits);
+            $ficheFrais = $this->creerFichefrais($visiteur);
             $ligneFraisForfaits = $ficheFrais->getLignefraisforfaits();
         }
 
@@ -60,6 +61,8 @@ class VisiteurController extends AbstractController
         }
 
         if ($formFraisHorsForfait->isSubmitted() && $formFraisHorsForfait->isValid()) {
+            $statutAttente = $em->getRepository(Statut::class)->find('ATT');
+            $fraisHorsForfaitInstance->setIdstatut($statutAttente);
             $fraisHorsForfaitInstance->setIdvisiteur($ficheFrais->getIdvisiteur()->getId());
             $fraisHorsForfaitInstance->setMois($ficheFrais->getMois());
             $fraisHorsForfaitInstance->setIdfichefrais($ficheFrais);
@@ -138,7 +141,6 @@ class VisiteurController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete' . $lignefraishorsforfait->getId(), $request->request->get('supprimer_fraishorsforfait_token'))) {
-
             $em->remove($lignefraishorsforfait);
             $em->flush();
         }
@@ -146,9 +148,18 @@ class VisiteurController extends AbstractController
         return $this->redirectToRoute('saisir_fiche_frais', [], Response::HTTP_SEE_OTHER);
     }
 
-    private function creerFichefrais($visiteur, $fraisForfaits)
+    private function creerFichefrais($visiteur)
     {
         $em = $this->getDoctrine()->getManager();
+
+        $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
+        $derniereFicheFrais = $em->getRepository(Fichefrais::class)->findOneBy(array('idvisiteur' => $visiteur), array('mois' => 'DESC'));
+
+        if ($derniereFicheFrais) {
+            $etatCloturee = $em->getRepository(Etat::class)->find('CL');
+            $derniereFicheFrais->setIdetat($etatCloturee);
+        }
+
         $ficheFrais = new ficheFrais();
         $ficheFrais->setIdvisiteur($visiteur);
         $ficheFrais->setIdetat($em->getRepository(Etat::class)->find('CR'));

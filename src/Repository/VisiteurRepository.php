@@ -64,4 +64,13 @@ class VisiteurRepository extends ServiceEntityRepository implements PasswordUpgr
         ;
     }
     */
+
+    public function findVisiteursNoms()
+    {
+        $dql = 'SELECT v.nom
+                FROM App:Visiteur v';
+
+        $query = $this->_em->createQuery($dql);
+        return $query->getResult();
+    }
 }

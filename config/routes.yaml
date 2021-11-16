@@ -38,12 +38,19 @@ consulter_detail_fiche_frais:
 comptable:
    path: /comptable
    controller: App\Controller\ComptableController::index
+   
+selectionner_fiche_frais:
+   path: /comptable/selectionner_fiche_frais
+   controller: App\Controller\ComptableController::selectionnerFicheFrais
+
+administrer_fiche_frais:
+   path: /comptable/administrer_fiche_frais/{idFicheFrais}
+   controller: App\Controller\ComptableController::administrerFicheFrais
+
+modifier_statut_frais_hors_forfait:
+   path: /comptable/modifier_statut_frais_hors_forfait/{id}
+   controller: App\Controller\ComptableController::modifierStatutFraisHorsForfait
 
 valider_fiche_frais:
-   path: /comptable/valider_fiche_frais
+   path: /comptable/valider_fiche_frais/{id}
    controller: App\Controller\ComptableController::validerFicheFrais
-   
-suivre_fiche_frais:
-   path: /comptable/suivre_fiche_frais
-   controller: App\Controller\ComptableController::SuivreFicheFrais
-

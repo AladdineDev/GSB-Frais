@@ -316,3 +316,11 @@ VALUES (
         'fb2os'
     );
 -- --------------------------------------------------------
+--
+-- Contenu de la table `Statut`
+--
+INSERT INTO `Statut` (`id`, `libelle`)
+VALUES ('ATT', 'En attente'),
+    ('REF', 'Refusé'),
+    ('VAL', 'Validé');
+-- --------------------------------------------------------
