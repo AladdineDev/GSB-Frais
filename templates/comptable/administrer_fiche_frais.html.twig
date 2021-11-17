@@ -4,28 +4,22 @@
 {% endblock %}
 
 {% block contenuPage %}
-	<div class="row g-3">
-		{% for message in app.session.flashbag.get('fraisHorsForfaitEnAttente') %}
-			<div class="alert alert-danger" role="alert">
-				{{message}}
-			</div>
-		{% endfor %}
-		{% for message in app.session.flashbag.get('ficheFraisValide') %}
-			<div class="alert alert-success" role="alert">
-				{{message}}
-			</div>
-		{% endfor %}
-		<h1>Administration fiche de frais</h1>
-		<div class="col-md-5">
-
-			<h3>Période d'engagement</h3>
-			<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
+	{% for message in app.session.flashbag.get('fraisHorsForfaitEnAttente') %}
+		<div class="alert alert-danger" role="alert">
+			{{message}}
 		</div>
-		<h4>Visiteur :
-			{{ficheFrais.idvisiteur.nom ~ ' ' ~ ficheFrais.idvisiteur.prenom}}</h4>
-		<br/>
-	</div>
-
+	{% endfor %}
+	{% for message in app.session.flashbag.get('ficheFraisValide') %}
+		<div class="alert alert-success" role="alert">
+			{{message}}
+		</div>
+	{% endfor %}
+	<h1>Administration fiche de frais</h1>
+	<hr>
+	<h3>Période d'engagement</h3>
+	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
+	<h4>{{ficheFrais.idvisiteur.nom ~ ' ' ~ ficheFrais.idvisiteur.prenom}}</h4>
+	<hr/>
 
 	<h3>Frais au forfait</h3>
 	<div class="table-responsive">
@@ -42,7 +36,7 @@
 				<tr>
 					<td>Montant</td>
 					{% for fraisForfait in fraisForfaits %}
-						<td>{{fraisForfait.montant}}</td>
+						<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
 					{% endfor %}
 				</tr>
 				<tr>
@@ -54,7 +48,7 @@
 				<tr>
 					<td>Total</td>
 					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td>{{ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant}}</td>
+						<td>{{(ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant)|format_currency('EUR')}}</td>
 					{% endfor %}
 				</tr>
 			</tbody>
@@ -96,7 +90,7 @@
 								:
 							</b>
 							{{fraisHorsForfait.libelle}}</td>
-						<td class="col-md-2 align-middle">{{fraisHorsForfait.montant}}</td>
+						<td class="col-md-2 align-middle">{{fraisHorsForfait.montant|format_currency('EUR')}}</td>
 						<td class="col-md-2 align-middle">{{fraisHorsForfait.idstatut.libelle}}</td>
 						<td class="col-md-1" align="center">
 							<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">
@@ -127,7 +121,7 @@
 	<div class="d-grid">
 		<form method="post" action="{{ path('valider_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez valider cette fiche de frais.\nSouhaitez-vous continuer ?');">
 			<input type="hidden" name="valider_fiche_frais_token" value="{{ csrf_token('validate' ~ ficheFrais.id) }}">
-			<button class="btn btn-primary btn-sm">Valider fiche frais</button>
+			<button class="btn btn-primary btn">Valider fiche frais</button>
 		</form>
 	</div>
 	<br/>

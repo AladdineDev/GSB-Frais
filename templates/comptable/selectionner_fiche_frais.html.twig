@@ -5,13 +5,14 @@
 
 {% block contenuPage %}
 	<h1>Sélection de la fiche de frais</h1>
+	<hr>
 	<h3>Sélection du visiteur</h3>
 	{{form_start(formVisiteur)}}
 	{{form_row(formVisiteur.nom)}}
 	{{form_end(formVisiteur)}}
-	<br>
 
 	{% if fichesFraisSaisies is defined %}
+	<hr>
 		<h3>Fiches frais du visiteur</h3>
 
 		<div class="table-responsive">
@@ -30,7 +31,7 @@
 						<tr>
 							<td>{{ficheFraisSaisies.mois | date('m/Y')}}</td>
 							<td>{{ficheFraisSaisies.nbJustificatifs}}</td>
-							<td>{{ficheFraisSaisies.montantValide}}</td>
+							<td>{{ficheFraisSaisies.montantValide|format_currency('EUR')}}</td>
 							<td>{{ficheFraisSaisies.dateModif | date('d/m/Y')}}</td>
 							<td>{{ficheFraisSaisies.idetat.libelle}}</td>
 							<td>

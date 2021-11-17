@@ -5,10 +5,11 @@
 
 {% block contenuPage %}
 
-	<h1>Saisie</h1>
+	<h1>Saisie de la fiche de frais</h1>
+	<hr>
 	<h3>Période d'engagement</h3>
 	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
-	<br/>
+	<hr/>
 
 	<h3>Frais au forfait</h3>
 	<div class="table-responsive">
@@ -24,7 +25,7 @@
 				<tr>
 					<td>Montant</td>
 					{% for fraisForfait in fraisForfaits %}
-						<td>{{fraisForfait.montant}}</td>
+						<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
 					{% endfor %}
 				</tr>
 				<tr>
@@ -36,7 +37,7 @@
 				<tr>
 					<td>Total</td>
 					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td>{{ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant}}</td>
+						<td>{{(ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant)|format_currency('EUR')}}</td>
 					{% endfor %}
 				</tr>
 			</tbody>
@@ -63,7 +64,7 @@
 		<table class="table table-bordered table-active table-hover table-striped">
 			<thead class="thead-dark"></thead>
 			<tr class="table-secondary">
-				<th>Date</th>
+				<th class="text-center">Date</th>
 				<th>Libelle</th>
 				<th>Montant</th>
 				<th>Action</th>
@@ -71,9 +72,9 @@
 			<tbody>
 				{% for fraisHorsForfait in fraisHorsForfaits %}
 					<tr>
-						<td class="align-middle">{{fraisHorsForfait.date | date('d/m/Y')}}</td>
+						<td class="col-md-1 align-middle">{{fraisHorsForfait.date | date('d/m/Y')}}</td>
 						<td class="align-middle">{{fraisHorsForfait.libelle}}</td>
-						<td class="align-middle">{{fraisHorsForfait.montant}}</td>
+						<td class="col-md-2 align-middle">{{fraisHorsForfait.montant|format_currency('EUR')}}</td>
 						<td class="col-md-1">
 							<form method="post" action="{{ path('supprimer_fraishorsforfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
 								<input type="hidden" name="supprimer_fraishorsforfait_token" value="{{ csrf_token('delete' ~ fraisHorsForfait.id) }}">

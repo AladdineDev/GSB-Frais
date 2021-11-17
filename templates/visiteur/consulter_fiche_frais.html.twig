@@ -21,7 +21,7 @@
 					<tr>
 						<td>{{uneFicheFrais.mois | date('m/Y')}}</td>
 						<td>{{uneFicheFrais.nbJustificatifs}}</td>
-						<td>{{uneFicheFrais.montantValide}}</td>
+						<td>{{uneFicheFrais.montantValide|format_currency('EUR')}}</td>
 						<td>{{uneFicheFrais.dateModif | date('d/m/Y')}}</td>
 						<td>{{uneFicheFrais.idetat.libelle}}</td>
 						{% if uneFicheFrais == ficheFraisCourante %}

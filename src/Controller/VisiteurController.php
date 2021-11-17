@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class VisiteurController extends AbstractController
+
 {
     public function index(): Response
     {
@@ -64,8 +65,12 @@ class VisiteurController extends AbstractController
             $statutAttente = $em->getRepository(Statut::class)->find('ATT');
             $fraisHorsForfaitInstance->setIdstatut($statutAttente);
             $fraisHorsForfaitInstance->setIdvisiteur($ficheFrais->getIdvisiteur()->getId());
-            $fraisHorsForfaitInstance->setMois($ficheFrais->getMois());
             $fraisHorsForfaitInstance->setIdfichefrais($ficheFrais);
+            if ((new \DateTime('now'))->format('d') >= 10) {
+                $fraisHorsForfaitInstance = $this->reporterFraisHorsForfait($fraisHorsForfaitInstance);
+            } else {
+                $fraisHorsForfaitInstance->setMois($ficheFrais->getMois());
+            }
             $em->persist($formFraisHorsForfait->getData());
             $em->flush();
 
@@ -83,7 +88,7 @@ class VisiteurController extends AbstractController
         ]);
     }
 
-    public function consulterFichesFrais(FichefraisRepository $ficheFraisRepository, EntityManagerInterface $em): Response
+    public function consulterFichesFrais(FichefraisRepository $ficheFraisRepository): Response
     {
         $visiteur = $this->getUser();
 
@@ -176,5 +181,46 @@ class VisiteurController extends AbstractController
         $em->flush();
 
         return $ficheFrais;
+    }
+
+    private function reporterFraisHorsForfait($fraisHorsForfait)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $visiteur = $this->getUser();
+
+        $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
+        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisFuture($visiteur);
+        // dd($ficheFrais);
+        if (!$ficheFrais) {
+            $ficheFrais = new ficheFrais();
+        }
+
+        $ficheFrais->setIdvisiteur($this->getUser());
+        $ficheFrais->setIdetat($em->getRepository(Etat::class)->find('CR'));
+        $ficheFrais->setMois((new \DateTime())->modify('+1 month'));
+        $fraisHorsForfait->setMois((new \DateTime())->modify('+1 month'));
+        $em->persist($ficheFrais);
+
+        $i = 0;
+        foreach ($ficheFrais->getLignefraisforfaits() as $ligneFraisForfait) {
+            $ligneFraisForfait->setFicheFrais($ficheFrais);
+            $ligneFraisForfait->setFraisForfait($fraisForfaits[$i]);
+            $ligneFraisForfait->setQuantite(0);
+            $em->persist($ligneFraisForfait);
+            $i++;
+        }
+
+        $statutAttente = $em->getRepository(Statut::class)->find('ATT');
+        $fraisHorsForfait->setIdstatut($statutAttente);
+        $fraisHorsForfait->setIdvisiteur($ficheFrais->getIdvisiteur()->getId());
+        $fraisHorsForfait->setIdfichefrais($ficheFrais);
+
+        $fraisHorsForfait->setMois((new \DateTime())->modify('+1 month'));
+        $em->persist($fraisHorsForfait);
+
+        $em->flush();
+
+        return $fraisHorsForfait;
     }
 }

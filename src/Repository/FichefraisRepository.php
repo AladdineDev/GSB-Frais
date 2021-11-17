@@ -78,7 +78,7 @@ class FichefraisRepository extends ServiceEntityRepository
         $query->setParameters([
             'visiteur' => $visiteur,
             'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->format('Y-m-t')
+            'dernierMois' => (new DateTime())->modify('+1 month')->format('Y-m-t')
         ]);
 
         return $query->getResult();
@@ -113,7 +113,25 @@ class FichefraisRepository extends ServiceEntityRepository
         $query->setParameters([
             'idFicheFrais' => $idFicheFrais,
             'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->format('Y-m-t')
+            'dernierMois' => (new DateTime())->modify('+1 month')->format('Y-m-t')
+        ]);
+
+        return $query->getOneOrNullResult();
+    }
+
+    public function findFichefraisFuture($visiteur)
+    {
+        $dql = 'SELECT Fichefrais
+                FROM App:Fichefrais Fichefrais
+                WHERE Fichefrais.idvisiteur = :visiteur
+                AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
+                ORDER BY Fichefrais.mois DESC';
+
+        $query = $this->_em->createQuery($dql);
+        $query->setParameters([
+            'visiteur' => $visiteur,
+            'premierMois' => (new DateTime())->modify('+1 month')->format('Y-m-01'),
+            'dernierMois' => (new DateTime())->modify('+1 month')->format('Y-m-t')
         ]);
 
         return $query->getOneOrNullResult();

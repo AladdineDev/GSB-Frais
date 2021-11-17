@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LignefraishorsforfaitType extends AbstractType
@@ -20,7 +20,7 @@ class LignefraishorsforfaitType extends AbstractType
                 'widget' => 'choice',
                 'years' => range(date('Y') - 1, date('Y'))
             ])
-            ->add('montant', NumberType::class, [
+            ->add('montant', MoneyType::class, [
                 'attr' => [
                     'placeholder' => 0,
                 ]
