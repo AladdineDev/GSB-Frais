@@ -24,9 +24,9 @@ class Statut
     /**
      * @var string|null
      *
-     * @ORM\Column(name="libelle", type="string", length=30, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="libelle", type="string", length=30, nullable=false)
      */
-    private $libelle = 'NULL';
+    private $libelle;
 
     public function getId(): ?string
     {

@@ -32,14 +32,14 @@ class Lignefraishorsforfait
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="mois", type="date", nullable=false, options={"default"="0000-00-00"})
+     * @ORM\Column(name="mois", type="date", nullable=false)
      */
     private $mois;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="libelle", type="string", length=100, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="libelle", type="string", length=100, nullable=false, options={"default"="NULL"})
      * @Assert\NotBlank(message = "Le champ libelle doit être renseigné")
      */
     private $libelle;
@@ -47,7 +47,7 @@ class Lignefraishorsforfait
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="date", nullable=true, options={"default"="0000-00-00"})
+     * @ORM\Column(name="date", type="date", nullable=false)
      * @Assert\NotBlank(message = "Le champ date doit être renseigné")
      * @Assert\Range(
      *      min = "-1 years",
@@ -60,7 +60,7 @@ class Lignefraishorsforfait
     /**
      * @var float
      *
-     * @ORM\Column(name="montant", type="decimal", precision=10, scale=2, nullable=true, options={"default"=0.0})
+     * @ORM\Column(name="montant", type="decimal", precision=10, scale=2, nullable=false, options={"default"=0.0})
      * @Assert\NotBlank(message = "Le champ montant doit être renseigné")
      * @Assert\Positive(message = "Valeur numérique positive attendue")
      */
@@ -71,7 +71,7 @@ class Lignefraishorsforfait
      *
      * @ORM\ManyToOne(targetEntity="Statut")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idStatut", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idStatut", referencedColumnName="id", nullable=false)
      * })
      */
     private $idstatut;

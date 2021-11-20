@@ -47,4 +47,9 @@ class StatutRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAllAsc()
+    {
+        return $this->findBy(array(), array('id' => 'ASC'));
+    }
 }

@@ -28,14 +28,14 @@ class Fraisforfait
     /**
      * @var string|null
      *
-     * @ORM\Column(name="libelle", type="string", length=20, nullable=true, options={"default"="NULL","fixed"=true})
+     * @ORM\Column(name="libelle", type="string", length=20, nullable=false, options={"fixed"=true})
      */
-    private $libelle = 'NULL';
+    private $libelle;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="montant", type="decimal", precision=5, scale=2, nullable=true, options={"default"=0.0})
+     * @ORM\Column(name="montant", type="decimal", precision=5, scale=2, nullable=false, options={"default"=0.0})
      */
     private $montant = 0.0;
 

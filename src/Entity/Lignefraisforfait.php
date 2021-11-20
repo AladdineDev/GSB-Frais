@@ -26,12 +26,14 @@ class Lignefraisforfait
     private $quantite;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Fichefrais::class, inversedBy="lignefraisforfaits")
+     * @ORM\ManyToOne(targetEntity=Fichefrais::class, inversedBy="lignefraisforfaits", cascade={"persist"})
+     * @ORM\JoinColumn(name="idFicheFrais", referencedColumnName="id", nullable=false)
      */
     private $ficheFrais;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Fraisforfait::class, inversedBy="lignefraisforfaits")
+     * @ORM\ManyToOne(targetEntity=Fraisforfait::class, inversedBy="lignefraisforfaits", cascade={"persist"})
+     * @ORM\JoinColumn(name="idFraisForfait", referencedColumnName="id", nullable=false)
      */
     private $fraisForfait;
 

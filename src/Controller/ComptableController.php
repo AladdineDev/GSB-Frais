@@ -93,10 +93,10 @@ class ComptableController extends AbstractController
         if ($this->isCsrfTokenValid('edit' . $lignefraishorsforfait->getId(), $request->request->get('modifier_statut_frais_hors_forfait_token'))) {
             $statutRefuse = $em->getRepository(Statut::class)->find('REF');
             $statutValide = $em->getRepository(Statut::class)->find('VAL');
-            if ($lignefraishorsforfait->getIdstatut() != $statutRefuse) {
-                $lignefraishorsforfait->setIdstatut($statutRefuse);
-            } else {
+            if ($request->request->get('nouveau_statut') == 'VAL') {
                 $lignefraishorsforfait->setIdstatut($statutValide);
+            } else {
+                $lignefraishorsforfait->setIdstatut($statutRefuse);
             }
             $em->persist($lignefraishorsforfait);
             $em->flush();

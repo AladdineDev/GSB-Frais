@@ -30,7 +30,8 @@ INSERT INTO `Visiteur` (
         `adresse`,
         `cp`,
         `ville`,
-        `dateEmbauche`
+        `dateEmbauche`,
+        `roles`
     )
 VALUES (
         'a131',
@@ -41,7 +42,8 @@ VALUES (
         '8 rue des Charmes',
         '46000',
         'Cahors',
-        '2005-12-21'
+        '2005-12-21',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'a17',
@@ -52,7 +54,8 @@ VALUES (
         '1 rue Petit',
         '46200',
         'Lalbenque',
-        '1998-11-23'
+        '1998-11-23',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'a55',
@@ -63,7 +66,8 @@ VALUES (
         '1 rue Peranud',
         '46250',
         'Montcuq',
-        '1995-01-12'
+        '1995-01-12',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'a93',
@@ -74,7 +78,8 @@ VALUES (
         '22 rue des Ternes',
         '46123',
         'Gramat',
-        '2000-05-01'
+        '2000-05-01',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b13',
@@ -85,7 +90,8 @@ VALUES (
         '11 allée des Cerises',
         '46512',
         'Bessines',
-        '1992-07-09'
+        '1992-07-09',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b16',
@@ -96,7 +102,8 @@ VALUES (
         '1 Avenue gambetta',
         '46000',
         'Cahors',
-        '1998-05-11'
+        '1998-05-11',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b19',
@@ -107,7 +114,8 @@ VALUES (
         '10 rue des Perles',
         '93100',
         'Montreuil',
-        '1987-10-21'
+        '1987-10-21',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b25',
@@ -118,7 +126,8 @@ VALUES (
         '23 rue Manin',
         '75019',
         'paris',
-        '2010-12-05'
+        '2010-12-05',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b28',
@@ -129,7 +138,8 @@ VALUES (
         '114 rue Blanche',
         '75017',
         'Paris',
-        '2009-11-12'
+        '2009-11-12',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b34',
@@ -140,7 +150,8 @@ VALUES (
         '123 avenue de la République',
         '75011',
         'Paris',
-        '2008-09-23'
+        '2008-09-23',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b4',
@@ -151,7 +162,8 @@ VALUES (
         '100 rue Petit',
         '75019',
         'Paris',
-        '2005-11-12'
+        '2005-11-12',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b50',
@@ -162,7 +174,8 @@ VALUES (
         '12 allée des Anges',
         '93230',
         'Romainville',
-        '2003-08-11'
+        '2003-08-11',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'b59',
@@ -172,8 +185,9 @@ VALUES (
         '2hoh9',
         '36 rue Des Roches',
         '93100',
-        'Monteuil',
-        '2001-11-18'
+        'Montreuil',
+        '2001-11-18',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'd13',
@@ -184,7 +198,8 @@ VALUES (
         '134 allée des Joncs',
         '44000',
         'Nantes',
-        '2000-05-11'
+        '2000-05-11',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'd51',
@@ -195,7 +210,8 @@ VALUES (
         '2 Bld Jourdain',
         '44000',
         'Nantes',
-        '2001-04-17'
+        '2001-04-17',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'e22',
@@ -206,7 +222,8 @@ VALUES (
         '14 Place d Arc',
         '45000',
         'Orléans',
-        '2005-11-12'
+        '2005-11-12',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'e24',
@@ -217,7 +234,8 @@ VALUES (
         '16 avenue des Cèdres',
         '23200',
         'Guéret',
-        '2001-02-05'
+        '2001-02-05',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'e39',
@@ -228,7 +246,8 @@ VALUES (
         '18 rue de l église',
         '23120',
         'GrandBourg',
-        '2000-08-01'
+        '2000-08-01',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'e49',
@@ -239,7 +258,8 @@ VALUES (
         '19 rue de la tour',
         '23100',
         'La souteraine',
-        '1987-10-10'
+        '1987-10-10',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'e5',
@@ -250,7 +270,8 @@ VALUES (
         '25 place de la gare',
         '23200',
         'Gueret',
-        '1995-09-01'
+        '1995-09-01',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'e52',
@@ -261,7 +282,8 @@ VALUES (
         '3 Grand Place',
         '13015',
         'Marseille',
-        '1999-11-01'
+        '1999-11-01',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'f21',
@@ -272,7 +294,8 @@ VALUES (
         '10 avenue du Prado',
         '13002',
         'Marseille',
-        '2001-11-10'
+        '2001-11-10',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'f39',
@@ -283,7 +306,8 @@ VALUES (
         '4 route de la mer',
         '13012',
         'Allauh',
-        '1998-10-01'
+        '1998-10-01',
+        '["ROLE_VISITEUR"]'
     ),
     (
         'f4',
@@ -294,26 +318,29 @@ VALUES (
         '30 avenue de la mer',
         '13025',
         'Berre',
-        '1985-11-01'
+        '1985-11-01',
+        '["ROLE_VISITEUR"]'
     );
 -- --------------------------------------------------------
 --
 -- Contenu de la table `Comptable`
 --
-INSERT INTO `Comptable` (`id`, `nom`, `prenom`, `login`, `mdp`)
+INSERT INTO `Comptable` (`id`, `nom`, `prenom`, `login`, `mdp`, `roles`)
 VALUES (
         'g110',
         'Blanc',
         'Skyler',
         'sblanc',
-        'hsbrg'
+        'hsbrg',
+        '["ROLE_COMPTABLE"]'
     ),
     (
         'g77',
         'Zucker',
         'Marcus',
         'mzucker',
-        'fb2os'
+        'fb2os',
+        '["ROLE_COMPTABLE"]'
     );
 -- --------------------------------------------------------
 --

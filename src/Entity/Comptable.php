@@ -26,21 +26,21 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=30)
+     * @ORM\Column(name="nom", type="string", length=30, nullable=false)
      */
     private $nom;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prenom", type="string", length=30)
+     * @ORM\Column(name="prenom", type="string", length=30, nullable=false)
      */
     private $prenom;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="login", type="string", length=20, unique=true)
+     * @ORM\Column(name="login", type="string", length=20, nullable=false, unique=true)
      */
     private $login;
 
@@ -54,7 +54,7 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      *
-     * @ORM\Column(name="mdp", type="string", length=255)
+     * @ORM\Column(name="mdp", type="string", length=255, nullable=false)
      */
     private $mdp;
 

@@ -17,7 +17,7 @@
 	<h1>Administration fiche de frais</h1>
 	<hr>
 	<h3>Période d'engagement</h3>
-	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
+	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM yyyy") | capitalize}}</h4>
 	<h4>{{ficheFrais.idvisiteur.nom ~ ' ' ~ ficheFrais.idvisiteur.prenom}}</h4>
 	<hr/>
 
@@ -96,16 +96,16 @@
 							<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">
 								<input type="hidden" name="modifier_statut_frais_hors_forfait_token" value="{{ csrf_token('edit' ~ fraisHorsForfait.id) }}">
 								{% if fraisHorsForfait.idstatut.id == 'REF' %}
-									<button class="btn btn-success btn-sm">Valider</button>
+									<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL">Valider</button>
 								{% elseif fraisHorsForfait.idstatut.id == 'VAL' %}
-									<button class="btn btn-danger btn-sm">Refuser</button>
+									<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF">Refuser</button>
 								{% else %}
 									<div class="btn-group" role="group">
 										<div class="col-md-6 px-1">
-											<button class="btn btn-success btn-sm">Valider</button>
+											<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL">Valider</button>
 										</div>
 										<div class="col-md-6 px-1">
-											<button class="btn btn-danger btn-sm">Refuser</button>
+											<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF">Refuser</button>
 										</div>
 									</div>
 								{% endif %}

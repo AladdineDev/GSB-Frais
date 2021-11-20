@@ -26,7 +26,7 @@ class Fichefrais
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="mois", type="date", nullable=false, options={"default"="0000-00-00"})
+     * @ORM\Column(name="mois", type="date", nullable=false)
      */
     private $mois;
 
@@ -47,7 +47,7 @@ class Fichefrais
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateModif", type="date", nullable=true, options={"default"="0000-00-00"})
+     * @ORM\Column(name="dateModif", type="date", nullable=true)
      */
     private $datemodif;
 
@@ -56,7 +56,7 @@ class Fichefrais
      *
      * @ORM\ManyToOne(targetEntity="Etat")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idEtat", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idEtat", referencedColumnName="id", nullable=false)
      * })
      */
     private $idetat;
@@ -66,7 +66,7 @@ class Fichefrais
      * 
      * @ORM\ManyToOne(targetEntity="Visiteur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id", nullable=false)
      * })
      */
     private $idvisiteur;
