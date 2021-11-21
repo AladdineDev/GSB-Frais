@@ -56,7 +56,7 @@ class Fichefrais
      *
      * @ORM\ManyToOne(targetEntity="Etat")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idEtat", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="idEtat", referencedColumnName="id")
      * })
      */
     private $idetat;
@@ -66,7 +66,7 @@ class Fichefrais
      * 
      * @ORM\ManyToOne(targetEntity="Visiteur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
      * })
      */
     private $idvisiteur;

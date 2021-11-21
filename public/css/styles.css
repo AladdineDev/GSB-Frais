@@ -1,0 +1,24 @@
+@media only screen and (max-width: 878px) {
+    .sidebar{
+        -ms-flex-negative: 0;
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 100%;
+            padding-right: calc(var(--bs-gutter-x) * .5);
+            padding-left: calc(var(--bs-gutter-x) * .5);
+            margin-top: var(--bs-gutter-y);
+            box-sizing: border-box;
+            --bs-gutter-x: 1rem;
+            --bs-gutter-x: 1.5rem;
+            --bs-gutter-y: 0;
+    }
+    .flex-sm-column {
+        flex-direction: unset !important;
+    }
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+    position: absolute;
+    right:0;
+    left:auto;
+}

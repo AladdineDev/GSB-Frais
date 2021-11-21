@@ -36,11 +36,17 @@ class AppFixtures extends Fixture
 
         foreach ($comptables as $comptable) {
             $this->hasherMdp($comptable);
+
+            $randomPhoto = 'https://randomuser.me/api/portraits/men/' . $faker->numberBetween(0, 99) . '.jpg';
+            $comptable->setPhoto($randomPhoto);
         }
 
         foreach ($visiteurs as  $visiteur) {
 
             $this->hasherMdp($visiteur);
+
+            $randomPhoto = 'https://randomuser.me/api/portraits/men/' . $faker->numberBetween(0, 99) . '.jpg';
+            $visiteur->setPhoto($randomPhoto);
 
             $nbFicheFrais = $faker->numberBetween(0, 15);
             $nbMoisSansFicheFrais = $faker->numberBetween(0, 2);

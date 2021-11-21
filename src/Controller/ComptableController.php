@@ -129,4 +129,19 @@ class ComptableController extends AbstractController
         }
         return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $fichefrais->getId()]);
     }
+
+    public function rembouserFicheFrais(Request $request, Fichefrais $fichefrais)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if ($this->isCsrfTokenValid('refund' . $fichefrais->getId(), $request->request->get('rembourser_fiche_frais_token'))) {
+            $etatRembourse = $em->getRepository(Etat::class)->find('RB');
+            $fichefrais->setIdetat($etatRembourse);
+            $fichefrais->setDatemodif(new DateTime('now'));
+            $em->persist($fichefrais);
+            $em->flush();
+            $this->addFlash('ficheFraisRembourse', 'Vous avez bien indiqué le remboursement de cette fiche de frais !');
+        }
+        return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $fichefrais->getId()]);
+    }
 }

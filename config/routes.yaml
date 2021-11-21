@@ -54,3 +54,7 @@ modifier_statut_frais_hors_forfait:
 valider_fiche_frais:
    path: /comptable/valider_fiche_frais/{id}
    controller: App\Controller\ComptableController::validerFicheFrais
+   
+rembourser_fiche_frais:
+   path: /comptable/rembourser_fiche_frais/{id}
+   controller: App\Controller\ComptableController::rembouserFicheFrais

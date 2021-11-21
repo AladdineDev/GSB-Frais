@@ -58,6 +58,13 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $mdp;
 
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="photo", type="string", length=255, nullable=true)
+     */
+    private $photo;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -107,6 +114,18 @@ class Comptable implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMdp(string $mdp): self
     {
         $this->mdp = $mdp;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }

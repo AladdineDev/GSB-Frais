@@ -14,6 +14,11 @@
 			{{message}}
 		</div>
 	{% endfor %}
+		{% for message in app.session.flashbag.get('ficheFraisRembourse') %}
+		<div class="alert alert-success" role="alert">
+			{{message}}
+		</div>
+	{% endfor %}
 	<h1>Administration fiche de frais</h1>
 	<hr>
 	<h3>Période d'engagement</h3>
@@ -118,11 +123,25 @@
 	</div>
 	<br/>
 
+{% if ficheFrais.idetat.id == 'CL' %}
 	<div class="d-grid">
 		<form method="post" action="{{ path('valider_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez valider cette fiche de frais.\nSouhaitez-vous continuer ?');">
 			<input type="hidden" name="valider_fiche_frais_token" value="{{ csrf_token('validate' ~ ficheFrais.id) }}">
 			<button class="btn btn-primary btn">Valider fiche frais</button>
 		</form>
 	</div>
+{% endif %}
+{% if ficheFrais.idetat.id == 'VA' %}
+	<div class="d-grid">
+		<form method="post" action="{{ path('rembourser_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez indiquer le remboursement cette fiche de frais.\nSouhaitez-vous continuer ?');">
+			<input type="hidden" name="rembourser_fiche_frais_token" value="{{ csrf_token('refund' ~ ficheFrais.id) }}">
+			<button class="btn btn-primary btn">Fiche frais remboursée</button>
+		</form>
+	</div>
+{% endif %}
+{% if ficheFrais.idetat.id == 'RB' %}
+<h4>La fiche frais a été remboursée</h4>
+{% endif %}
+
 	<br/>
 {% endblock %}
