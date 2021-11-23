@@ -64,6 +64,10 @@ class ComptableController extends AbstractController
         $formFicheFrais->handleRequest($request);
 
         if ($formFicheFrais->isSubmitted() && $formFicheFrais->isValid()) {
+            $etatCloture = $em->getRepository(Etat::class)->find('CL');
+            if ($ficheFrais->getIdetat() != $etatCloture) {
+                throw $this->createAccessDeniedException();
+            }
             $i = 0;
             foreach ($formFicheFrais->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
                 $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
@@ -71,6 +75,7 @@ class ComptableController extends AbstractController
                 $i++;
             }
             $em->flush();
+            $this->addFlash('ligneFraisForfaitsValidee', 'Les frais forfaitisés ont bien été actualisés.');
 
             return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $idFicheFrais]);
         }
@@ -91,12 +96,18 @@ class ComptableController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         if ($this->isCsrfTokenValid('edit' . $lignefraishorsforfait->getId(), $request->request->get('modifier_statut_frais_hors_forfait_token'))) {
+            $etatCloture = $em->getRepository(Etat::class)->find('CL');
+            if ($lignefraishorsforfait->getIdfichefrais()->getIdetat() != $etatCloture) {
+                throw $this->createAccessDeniedException();
+            }
             $statutRefuse = $em->getRepository(Statut::class)->find('REF');
             $statutValide = $em->getRepository(Statut::class)->find('VAL');
             if ($request->request->get('nouveau_statut') == 'VAL') {
                 $lignefraishorsforfait->setIdstatut($statutValide);
+                $this->addFlash('fraisHorsForfaitValide', 'Le frais hors forfait a bien été validé.');
             } else {
                 $lignefraishorsforfait->setIdstatut($statutRefuse);
+                $this->addFlash('fraisHorsForfaitRefuse', 'Le frais hors forfait a bien été refusé.');
             }
             $em->persist($lignefraishorsforfait);
             $em->flush();

@@ -12,7 +12,7 @@
 	{{form_end(formVisiteur)}}
 
 	{% if fichesFraisSaisies is defined %}
-	<hr>
+		<hr>
 		<h3>Fiches frais du visiteur</h3>
 
 		<div class="table-responsive">
@@ -45,7 +45,10 @@
 		<br/>
 	{% else %}
 		{% if formVisiteur.vars.value.nom %}
-			<h3>Pas de fiche de frais pour ce visiteur</h3>
+			<hr>
+			<div class="alert alert-info">
+				<h4 class="alert-heading">Aucune fiche de frais pour ce visiteur</h4>
+			</div>
 			{% else %}
 		{% endif %}
 	{% endif %}

@@ -33,6 +33,7 @@ class VisiteurController extends AbstractController
 
         $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
         $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+        $ficheFraisFuture = $em->getRepository(Fichefrais::class)->findFichefraisFuture($visiteur);
         $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
 
@@ -57,6 +58,7 @@ class VisiteurController extends AbstractController
                 $i++;
             }
             $em->flush();
+            $this->addFlash('ligneFraisForfaitsValidee', 'Les frais forfaitisés ont bien été actualisés.');
 
             return $this->redirectToRoute('saisir_fiche_frais');
         }
@@ -68,8 +70,10 @@ class VisiteurController extends AbstractController
             $fraisHorsForfaitInstance->setIdfichefrais($ficheFrais);
             if ((new \DateTime('now'))->format('d') >= 10) {
                 $fraisHorsForfaitInstance = $this->reporterFraisHorsForfait($fraisHorsForfaitInstance);
+                $this->addFlash('fraisHorsForfaitReporte', 'Le frais hors forfait a été reporté au mois prochain.');
             } else {
                 $fraisHorsForfaitInstance->setMois($ficheFrais->getMois());
+                $this->addFlash('fraisHorsForfaitAjoute', 'Le frais hors forfait a bien été ajouté.');
             }
             $em->persist($formFraisHorsForfait->getData());
             $em->flush();
@@ -82,6 +86,7 @@ class VisiteurController extends AbstractController
             'formFraisHorsForfait' => $formFraisHorsForfait->createView(),
             'formFicheFrais' => $formFicheFrais->createView(),
             'ficheFrais' => $ficheFrais,
+            'ficheFraisFuture' => $ficheFraisFuture,
             'ligneFraisForfaits' => $ligneFraisForfaits,
             'fraisHorsForfaits' => $fraisHorsForfaits,
             'fraisForfaits' => $fraisForfaits
@@ -102,13 +107,14 @@ class VisiteurController extends AbstractController
         ]);
     }
 
-    public function consulterDetailFicheFrais(int $idFicheFrais, EntityManagerInterface $em): Response
+    public function consulterDetailFicheFrais(int $idFicheFrais, EntityManagerInterface $em, Request $request): Response
     {
         $visiteur = $this->getUser();
 
         $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefrais($idFicheFrais);
         $fichesFrais = $em->getRepository(Fichefrais::class)->findFichesfrais($visiteur);
         $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
+        $ficheFraisFuture = $em->getRepository(Fichefrais::class)->findFichefraisFuture($visiteur);
 
         if ($ficheFrais == $ficheFraisCourante || !in_array($ficheFrais, $fichesFrais)) {
             throw $this->createAccessDeniedException();
@@ -120,15 +126,22 @@ class VisiteurController extends AbstractController
 
         $ficheFraisInstance = new Fichefrais();
         $formFicheFrais = $this->createForm(FichefraisType::class, $ficheFraisInstance);
+        $formFicheFrais->handleRequest($request);
 
         $fraisHorsForfaitInstance = new Lignefraishorsforfait();
         $formFraisHorsForfait = $this->createForm(LignefraishorsforfaitType::class, $fraisHorsForfaitInstance);
+        $formFraisHorsForfait->handleRequest($request);
+
+        if ($formFicheFrais->isSubmitted() || $formFraisHorsForfait->isSubmitted()) {
+            throw $this->createAccessDeniedException();
+        }
 
         return $this->render('visiteur/consulter_detail_fiche_frais.html.twig', [
             'controller_name' => 'VisiteurController',
             'formFraisHorsForfait' => $formFraisHorsForfait->createView(),
             'formFicheFrais' => $formFicheFrais->createView(),
             'ficheFrais' => $ficheFrais,
+            'ficheFraisFuture' => $ficheFraisFuture,
             'ligneFraisForfaits' => $ligneFraisForfaits,
             'fraisHorsForfaits' => $fraisHorsForfaits,
             'fraisForfaits' => $fraisForfaits
@@ -140,17 +153,28 @@ class VisiteurController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $visiteur = $this->getUser();
         $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
+        $ficheFraisFuture = $em->getRepository(Fichefrais::class)->findFichefraisFuture($visiteur);
 
-        if ($lignefraishorsforfait->getMois() != $ficheFraisCourante->getMois()) {
+        if (
+            $lignefraishorsforfait->getMois() != $ficheFraisCourante->getMois() &&
+            $lignefraishorsforfait->getMois() != $ficheFraisFuture->getMois()
+        ) {
             throw $this->createAccessDeniedException();
         }
 
         if ($this->isCsrfTokenValid('delete' . $lignefraishorsforfait->getId(), $request->request->get('supprimer_fraishorsforfait_token'))) {
             $em->remove($lignefraishorsforfait);
             $em->flush();
+            $this->addFlash('fraisHorsForfaitSupprime', 'Le frais hors forfait a bien été supprimé.');
         }
 
-        return $this->redirectToRoute('saisir_fiche_frais', [], Response::HTTP_SEE_OTHER);
+        if ($request->attributes->get('lignefraishorsforfait')->getIdfichefrais() == $ficheFraisFuture) {
+            return $this->redirectToRoute('consulter_detail_fiche_frais', [
+                'idFicheFrais' => $ficheFraisFuture->getId()
+            ]);
+        }
+
+        return $this->redirectToRoute('saisir_fiche_frais');
     }
 
     private function creerFichefrais($visiteur)

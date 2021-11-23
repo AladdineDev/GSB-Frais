@@ -3,22 +3,24 @@
 {% block title %}Administration fiche frais
 {% endblock %}
 
+{% block flashMessages %}
+	{% for messages in app.flashes(['ligneFraisForfaitsValidee', 'fraisHorsForfaitValide', 'fraisHorsForfaitRefuse', 'ficheFraisValide', 'ficheFraisRembourse'])%}
+		{% for message in messages %}
+			<div class="alert alert-dismissible alert-success">
+				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				{{message}}
+			</div>
+		{% endfor %}
+	{% endfor %}
+	{% for message in app.flashes('fraisHorsForfaitEnAttente')%}
+		<div class="alert alert-dismissible alert-danger">
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			{{message}}
+		</div>
+	{% endfor %}
+{% endblock %}
+
 {% block contenuPage %}
-	{% for message in app.session.flashbag.get('fraisHorsForfaitEnAttente') %}
-		<div class="alert alert-danger" role="alert">
-			{{message}}
-		</div>
-	{% endfor %}
-	{% for message in app.session.flashbag.get('ficheFraisValide') %}
-		<div class="alert alert-success" role="alert">
-			{{message}}
-		</div>
-	{% endfor %}
-		{% for message in app.session.flashbag.get('ficheFraisRembourse') %}
-		<div class="alert alert-success" role="alert">
-			{{message}}
-		</div>
-	{% endfor %}
 	<h1>Administration fiche de frais</h1>
 	<hr>
 	<h3>Période d'engagement</h3>
@@ -59,89 +61,109 @@
 			</tbody>
 		</table>
 	</div>
-
-	{{form_start(formFicheFrais, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
-	)}}
-	{% for ligneFraisForfait in formFicheFrais.lignefraisforfaits %}
-		<div class="col-md-3">
-			<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
-			{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
-			{{form_errors(ligneFraisForfait.quantite)}}
+	{% if ficheFrais.idetat.id != 'CL' %}
+		<fieldset disabled="disabled">
+		{% endif %}
+		{{form_start(formFicheFrais, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
+		)}}
+		{% for ligneFraisForfait in formFicheFrais.lignefraisforfaits %}
+			<div class="col-md-3">
+				<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
+				{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
+				{{form_errors(ligneFraisForfait.quantite)}}
+			</div>
+		{% endfor %}
+		<div class="col-12">
+			{{form_widget(formFicheFrais.valider)}}
 		</div>
-	{% endfor %}
-	<div class="col-12">
-		{{form_widget(formFicheFrais.valider)}}
-	</div>
-	{{form_end(formFicheFrais)}}
+		{{form_end(formFicheFrais)}}
+		{% if ficheFrais.idetat.id != 'CL' %}
+		</fieldset>
+	{% endif %}
 	<br/>
 
 	<h3>Frais hors forfait</h3>
-	<div class="table-responsive">
-		<table class="table table-bordered table-active table-hover table-striped">
-			<thead class="thead-dark"></thead>
-			<tr class="table-secondary">
-				<th class="text-center">Date</th>
-				<th>Libelle</th>
-				<th>Montant</th>
-				<th>Statut</th>
-				<th class="text-center">Action</th>
-			</tr>
-			<tbody>
-				{% for fraisHorsForfait in fraisHorsForfaits %}
-					<tr>
-						<td class="col-md-1 align-middle">{{fraisHorsForfait.date | date('d/m/Y')}}</td>
-						<td class="col-md-6 align-middle">
-							<b>{{fraisHorsForfait.idstatut.libelle | upper}}
-								:
-							</b>
-							{{fraisHorsForfait.libelle}}</td>
-						<td class="col-md-2 align-middle">{{fraisHorsForfait.montant|format_currency('EUR')}}</td>
-						<td class="col-md-2 align-middle">{{fraisHorsForfait.idstatut.libelle}}</td>
-						<td class="col-md-1" align="center">
-							<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">
-								<input type="hidden" name="modifier_statut_frais_hors_forfait_token" value="{{ csrf_token('edit' ~ fraisHorsForfait.id) }}">
-								{% if fraisHorsForfait.idstatut.id == 'REF' %}
-									<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL">Valider</button>
-								{% elseif fraisHorsForfait.idstatut.id == 'VAL' %}
-									<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF">Refuser</button>
-								{% else %}
-									<div class="btn-group" role="group">
-										<div class="col-md-6 px-1">
+	{% if fraisHorsForfaits == null %}
+		<div class="alert alert-info">
+			<h4 class="alert-heading">Aucun frais hors forfait pour ce mois</h4>
+		</div>
+	{% else %}
+		<div class="table-responsive">
+			<table class="table table-bordered table-active table-hover table-striped">
+				<thead class="thead-dark"></thead>
+				<tr class="table-secondary">
+					<th class="text-center">Date</th>
+					<th>Libelle</th>
+					<th>Montant</th>
+					<th>Statut</th>
+					<th class="text-center">Action</th>
+				</tr>
+				<tbody>
+					{% for fraisHorsForfait in fraisHorsForfaits %}
+						<tr>
+							<td class="col-md-1 align-middle">{{fraisHorsForfait.date | date('d/m/Y')}}</td>
+							<td class="col-md-6 align-middle">
+								<b>{{fraisHorsForfait.idstatut.libelle | upper}}
+									:
+								</b>
+								{{fraisHorsForfait.libelle}}</td>
+							<td class="col-md-2 align-middle">{{fraisHorsForfait.montant|format_currency('EUR')}}</td>
+							<td class="col-md-2 align-middle">{{fraisHorsForfait.idstatut.libelle}}</td>
+							<td class="col-md-1" align="center">
+								{% if ficheFrais.idetat.id != 'CL' %}
+									<fieldset disabled="disabled">
+									{% endif %}
+									<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">
+										<input type="hidden" name="modifier_statut_frais_hors_forfait_token" value="{{ csrf_token('edit' ~ fraisHorsForfait.id) }}">
+										{% if fraisHorsForfait.idstatut.id == 'REF' %}
 											<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL">Valider</button>
-										</div>
-										<div class="col-md-6 px-1">
+										{% elseif fraisHorsForfait.idstatut.id == 'VAL' %}
 											<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF">Refuser</button>
-										</div>
-									</div>
+										{% else %}
+											<div class="btn-group" role="group">
+												<div class="col-md-6 px-1">
+													<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL">Valider</button>
+												</div>
+												<div class="col-md-6 px-1">
+													<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF">Refuser</button>
+												</div>
+											</div>
+										{% endif %}
+									</form>
+									{% if ficheFrais.idetat.id != 'CL' %}
+									</fieldset>
 								{% endif %}
-							</form>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	<br/>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+	<hr/>
 
-{% if ficheFrais.idetat.id == 'CL' %}
-	<div class="d-grid">
-		<form method="post" action="{{ path('valider_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez valider cette fiche de frais.\nSouhaitez-vous continuer ?');">
-			<input type="hidden" name="valider_fiche_frais_token" value="{{ csrf_token('validate' ~ ficheFrais.id) }}">
-			<button class="btn btn-primary btn">Valider fiche frais</button>
-		</form>
-	</div>
-{% endif %}
-{% if ficheFrais.idetat.id == 'VA' %}
-	<div class="d-grid">
-		<form method="post" action="{{ path('rembourser_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez indiquer le remboursement cette fiche de frais.\nSouhaitez-vous continuer ?');">
-			<input type="hidden" name="rembourser_fiche_frais_token" value="{{ csrf_token('refund' ~ ficheFrais.id) }}">
-			<button class="btn btn-primary btn">Fiche frais remboursée</button>
-		</form>
-	</div>
-{% endif %}
-{% if ficheFrais.idetat.id == 'RB' %}
-<h4>La fiche frais a été remboursée</h4>
-{% endif %}
+	{% if ficheFrais.idetat.id == 'CL' %}
+		<div class="d-grid">
+			<form method="post" action="{{ path('valider_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez valider cette fiche de frais.\nSouhaitez-vous continuer ?');">
+				<input type="hidden" name="valider_fiche_frais_token" value="{{ csrf_token('validate' ~ ficheFrais.id) }}">
+				<button class="btn btn-primary btn">Valider fiche frais</button>
+			</form>
+		</div>
+		<br/>
+	{% endif %}
+	{% if ficheFrais.idetat.id == 'VA' %}
+		<div class="d-grid">
+			<form method="post" action="{{ path('rembourser_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez indiquer le remboursement cette fiche de frais.\nSouhaitez-vous continuer ?');">
+				<input type="hidden" name="rembourser_fiche_frais_token" value="{{ csrf_token('refund' ~ ficheFrais.id) }}">
+				<button class="btn btn-primary btn">Fiche frais remboursée</button>
+			</form>
+		</div>
+		<br/>
+	{% endif %}
+	{% if ficheFrais.idetat.id == 'RB' %}
+		<div class="alert alert-info">
+			<h4 class="alert-heading">La fiche de frais a été remboursée</h4>
+		</div>
+	{% endif %}
 
-	<br/>
 {% endblock %}
