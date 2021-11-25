@@ -4,7 +4,15 @@
 
 {% block contenuPage %}
 	<h1>Consultation des fiches de frais</h1>
-	<br/>
+	<hr>
+	
+	{% if fichesFrais == null %}
+		<div class="alert alert-info">
+			<h4 class="alert-heading">Aucune fiche de frais</h4>
+			<p class="mb-0"><a href="{{path('saisir_fiche_frais')}}" class="alert-link">Ouvrir une nouvelle fiche de frais</a></p>
+			
+		</div>
+	{% else %}
 	<div class="table-responsive">
 		<table class="table table-bordered table-active table-hover table-striped table-responsive">
 			<thead class="thead-dark"></thead>
@@ -35,4 +43,5 @@
 		</table>
 	</div>
 	<br/>
+	{% endif %}
 {% endblock %}

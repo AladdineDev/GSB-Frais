@@ -72,7 +72,7 @@ class Fichefrais
     private $idvisiteur;
 
     /**
-     * @ORM\OneToMany(targetEntity=Lignefraisforfait::class, mappedBy="ficheFrais")
+     * @ORM\OneToMany(targetEntity=Lignefraisforfait::class, mappedBy="ficheFrais", cascade={"persist"})
      */
     private $lignefraisforfaits;
 

@@ -71,6 +71,10 @@ class ComptableController extends AbstractController
             $i = 0;
             foreach ($formFicheFrais->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
                 $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
+                $ficheFrais->setMontantvalide(
+                    $ficheFrais->getMontantvalide() + $ligneFraisForfaits[$i]->getQuantite() * $ligneFraisForfaits[$i]->getFraisForfait()->getMontant()
+                );
+                $em->persist($ficheFrais);
                 $em->persist($ligneFraisForfaits[$i]);
                 $i++;
             }
@@ -103,6 +107,8 @@ class ComptableController extends AbstractController
             $statutRefuse = $em->getRepository(Statut::class)->find('REF');
             $statutValide = $em->getRepository(Statut::class)->find('VAL');
             if ($request->request->get('nouveau_statut') == 'VAL') {
+                $ficheFrais = $lignefraishorsforfait->getIdfichefrais();
+                $ficheFrais->setMontantvalide($ficheFrais->getMontantvalide() + $lignefraishorsforfait->getMontant());
                 $lignefraishorsforfait->setIdstatut($statutValide);
                 $this->addFlash('fraisHorsForfaitValide', 'Le frais hors forfait a bien été validé.');
             } else {

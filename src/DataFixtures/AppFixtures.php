@@ -67,6 +67,13 @@ class AppFixtures extends Fixture
                         $ficheFrais->setIdetat($this->em->getRepository(Etat::class)->find('CL'));
                     } else {
                         $ficheFrais->setIdetat($this->em->getRepository(Etat::class)->find('VA'));
+                        $ligneFraisForfaits = $ficheFrais->getLignefraisforfaits();
+                        foreach ($ligneFraisForfaits as $ligneFraisForfait) {
+                            $ficheFrais->setMontantvalide(
+                                $ficheFrais->getMontantvalide() + $ligneFraisForfait->getQuantite() * $ligneFraisForfait->getFraisForfait()->getMontant()
+                            );
+                            $manager->persist($ligneFraisForfait);
+                        }
                     }
                     $ficheFrais->setDatemodif($faker->dateTimeBetween(
                         $faker->dateTimeThisMonth('now')->modify('-' . $i . ' month'),
@@ -74,6 +81,13 @@ class AppFixtures extends Fixture
                     )->modify('+1 month'));
                 } else {
                     $ficheFrais->setIdetat($this->em->getRepository(Etat::class)->find('RB'));
+                    $ligneFraisForfaits = $ficheFrais->getLignefraisforfaits();
+                    foreach ($ligneFraisForfaits as $ligneFraisForfait) {
+                        $ficheFrais->setMontantvalide(
+                            $ficheFrais->getMontantvalide() + $ligneFraisForfait->getQuantite() * $ligneFraisForfait->getFraisForfait()->getMontant()
+                        );
+                        $manager->persist($ligneFraisForfait);
+                    }
                     $ficheFrais->setDatemodif($faker->dateTimeBetween(
                         $ficheFrais->getMois(),
                         'now -' . $i . ' month'
@@ -91,15 +105,19 @@ class AppFixtures extends Fixture
                     $fraisHorsForfait->setLibelle($faker->randomElement($this->getLibelleFraisHorsForfait()));
 
                     $statuts = $this->em->getRepository(Statut::class)->findAllAsc();
-                    $statutValide = $this->em->getRepository(Etat::class)->find('VA');
-                    $statutRembourse = $this->em->getRepository(Etat::class)->find('RB');
+                    $EtatValide = $this->em->getRepository(Etat::class)->find('VA');
+                    $EtatRembourse = $this->em->getRepository(Etat::class)->find('RB');
+                    $EtatCree = $this->em->getRepository(Etat::class)->find('CR');
 
-                    if ($ficheFrais->getIdetat() == $statutValide || $ficheFrais->getIdetat() == $statutRembourse) {
+                    if ($ficheFrais->getIdetat() == $EtatValide || $ficheFrais->getIdetat() == $EtatRembourse) {
                         array_shift($statuts);
                     }
                     $fraisHorsForfait->setIdstatut($faker->randomElement($statuts));
 
-                    if ($fraisHorsForfait->getIdstatut() == $this->em->getRepository(Statut::class)->find('VAL')) {
+                    if (
+                        $fraisHorsForfait->getIdstatut() == $this->em->getRepository(Statut::class)->find('VAL') &&
+                        ($ficheFrais->getIdetat() != $EtatCree)
+                    ) {
                         $ficheFrais->setMontantvalide($ficheFrais->getMontantvalide() + $fraisHorsForfait->getMontant());
                         $ficheFrais->setNbjustificatifs($ficheFrais->getNbjustificatifs() + 1);
                     }
@@ -123,7 +141,6 @@ class AppFixtures extends Fixture
             $ligneFraisForfait->setFicheFrais($ficheFrais);
             $ligneFraisForfait->setFraisForfait($fraisForfaits[$i]);
             $ligneFraisForfait->setQuantite($faker->numberBetween(0, 30));
-            $this->em->persist($ligneFraisForfait);
             $i++;
         }
         $this->em->flush();

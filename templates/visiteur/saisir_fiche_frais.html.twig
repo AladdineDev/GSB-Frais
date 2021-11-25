@@ -13,7 +13,7 @@
 		{% endfor %}
 	{% endfor %}
 	{% for message in app.flashes('fraisHorsForfaitReporte') %}
-			<div class="alert alert-dismissible alert-warning">
+			<div class="alert alert-dismissible" style="background-color:orange">
 				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 				{{message}} <a href="{{path('consulter_detail_fiche_frais', {'idFicheFrais': ficheFraisFuture.id})}}" class="alert-link">Voir</a>
 			</div>
@@ -40,7 +40,7 @@
 			</tr>
 			<tbody>
 				<tr>
-					<td>Montant</td>
+					<td>Montant Unitaire</td>
 					{% for fraisForfait in fraisForfaits %}
 						<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
 					{% endfor %}

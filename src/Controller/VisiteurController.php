@@ -215,7 +215,7 @@ class VisiteurController extends AbstractController
 
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
         $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisFuture($visiteur);
-        // dd($ficheFrais);
+
         if (!$ficheFrais) {
             $ficheFrais = new ficheFrais();
         }
