@@ -75,7 +75,7 @@
 		<fieldset disabled="disabled">
 		{% endif %}
 
-		{{form_start(formFicheFrais, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
+		{{form_start(formFicheFrais, {'attr': {'class': "row g-3"}}
 		)}}
 		{% for ligneFraisForfait in formFicheFrais.ligneFraisForfaits %}
 			<div class="col-md-3">
@@ -85,9 +85,27 @@
 			</div>
 		{% endfor %}
 		<div class="col-12">
-			<button class="btn btn-primary">Valider
-				<i class="fas fa-check"></i>
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValider"><i class="fas fa-check"></i> Valider
 			</button>
+			<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" style="display: none;" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Valider les frais forfaitisés</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+								<span aria-hidden="true"></span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+							<button type="submit" class="btn btn-primary">Confirmer</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		{{form_end(formFicheFrais)}}
 
@@ -159,16 +177,56 @@
 	<hr/>
 
 	{% if ficheFrais.idEtat.id == 'CL' %}
-		<form method="post" action="{{ path('valider_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez valider cette fiche de frais.\nSouhaitez-vous continuer ?');">
+		<form method="post" action="{{ path('valider_fiche_frais', {'id': ficheFrais.id}) }}">
 			<input type="hidden" name="valider_fiche_frais_token" value="{{ csrf_token('validate' ~ ficheFrais.id) }}">
-			<button class="btn btn-primary btn">Valider fiche frais</button>
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValiderFicheFrais">Valider fiche frais</button>
+			<div class="modal" id="modalValiderFicheFrais" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" style="display: none;" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Valider la fiche de frais</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+								<span aria-hidden="true"></span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>Vous allez valider cette fiche de frais.</p>
+							<p>Souhaitez-vous continuer ?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+							<button type="submit" class="btn btn-primary">Confirmer</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 		<br/>
 	{% endif %}
 	{% if ficheFrais.idEtat.id == 'VA' %}
-		<form method="post" action="{{ path('rembourser_fiche_frais', {'id': ficheFrais.id}) }}" onsubmit="return confirm('Vous allez indiquer le remboursement de cette fiche de frais.\nSouhaitez-vous continuer ?');">
+		<form method="post" action="{{ path('rembourser_fiche_frais', {'id': ficheFrais.id}) }}">
 			<input type="hidden" name="rembourser_fiche_frais_token" value="{{ csrf_token('refund' ~ ficheFrais.id) }}">
-			<button class="btn btn-primary btn">Indiquer remboursement</button>
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRembourserFicheFrais">Indiquer remboursement</button>
+			<div class="modal" id="modalRembourserFicheFrais" tabindex="-1" aria-labelledby="modalRembourserFicheFraisLabel" style="display: none;" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Indiquer le remboursement de la fiche de frais</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+								<span aria-hidden="true"></span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>Vous allez indiquer le remboursement de cette fiche de frais.</p>
+							<p>Souhaitez-vous continuer ?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+							<button type="submit" class="btn btn-primary">Confirmer</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 		<br/>
 	{% endif %}
