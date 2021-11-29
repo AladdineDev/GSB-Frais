@@ -35,21 +35,21 @@ class Fichefrais
      *
      * @ORM\Column(name="nbJustificatifs", type="integer", nullable=true, options={"default"="0"})
      */
-    private $nbjustificatifs = 0;
+    private $nbJustificatifs = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="montantValide", type="decimal", precision=10, scale=2, nullable=true, options={"default"=0.0})
      */
-    private $montantvalide = 0.0;
+    private $montantValide = 0.0;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="dateModif", type="date", nullable=true)
      */
-    private $datemodif;
+    private $dateModif;
 
     /**
      * @var Etat
@@ -59,7 +59,7 @@ class Fichefrais
      *   @ORM\JoinColumn(name="idEtat", referencedColumnName="id")
      * })
      */
-    private $idetat;
+    private $idEtat;
 
     /**
      * @var Visiteur
@@ -69,23 +69,23 @@ class Fichefrais
      *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
      * })
      */
-    private $idvisiteur;
+    private $idVisiteur;
 
     /**
      * @ORM\OneToMany(targetEntity=Lignefraisforfait::class, mappedBy="ficheFrais", cascade={"persist"})
      */
-    private $lignefraisforfaits;
+    private $ligneFraisForfaits;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->lignefraisforfaits = new ArrayCollection();
-        $this->lignefraisforfaits->add(new Lignefraisforfait());
-        $this->lignefraisforfaits->add(new Lignefraisforfait());
-        $this->lignefraisforfaits->add(new Lignefraisforfait());
-        $this->lignefraisforfaits->add(new Lignefraisforfait());
+        $this->ligneFraisForfaits = new ArrayCollection();
+        $this->ligneFraisForfaits->add(new Lignefraisforfait());
+        $this->ligneFraisForfaits->add(new Lignefraisforfait());
+        $this->ligneFraisForfaits->add(new Lignefraisforfait());
+        $this->ligneFraisForfaits->add(new Lignefraisforfait());
         $this->setMois(new \DateTime());
     }
 
@@ -94,13 +94,13 @@ class Fichefrais
      */
     public function getLignefraisforfaits(): Collection
     {
-        return $this->lignefraisforfaits;
+        return $this->ligneFraisForfaits;
     }
 
     public function addLignefraisforfait(Lignefraisforfait $lignefraisforfait): self
     {
-        if (!$this->lignefraisforfaits->contains($lignefraisforfait)) {
-            $this->lignefraisforfaits[] = $lignefraisforfait;
+        if (!$this->ligneFraisForfaits->contains($lignefraisforfait)) {
+            $this->ligneFraisForfaits[] = $lignefraisforfait;
             $lignefraisforfait->setFicheFrais($this);
         }
 
@@ -109,7 +109,7 @@ class Fichefrais
 
     public function removeLignefraisforfait(Lignefraisforfait $lignefraisforfait): self
     {
-        if ($this->lignefraisforfaits->removeElement($lignefraisforfait)) {
+        if ($this->ligneFraisForfaits->removeElement($lignefraisforfait)) {
             // set the owning side to null (unless already changed)
             if ($lignefraisforfait->getFicheFrais() === $this) {
                 $lignefraisforfait->setFicheFrais(null);
@@ -136,62 +136,62 @@ class Fichefrais
         return $this;
     }
 
-    public function getNbjustificatifs(): ?int
+    public function getNbJustificatifs(): ?int
     {
-        return $this->nbjustificatifs;
+        return $this->nbJustificatifs;
     }
 
-    public function setNbjustificatifs(?int $nbjustificatifs): self
+    public function setNbJustificatifs(?int $nbJustificatifs): self
     {
-        $this->nbjustificatifs = $nbjustificatifs;
+        $this->nbJustificatifs = $nbJustificatifs;
 
         return $this;
     }
 
-    public function getMontantvalide(): ?string
+    public function getMontantValide(): ?string
     {
-        return $this->montantvalide;
+        return $this->montantValide;
     }
 
-    public function setMontantvalide(?string $montantvalide): self
+    public function setMontantValide(?string $montantValide): self
     {
-        $this->montantvalide = $montantvalide;
+        $this->montantValide = $montantValide;
 
         return $this;
     }
 
-    public function getDatemodif(): ?\DateTimeInterface
+    public function getDateModif(): ?\DateTimeInterface
     {
-        return $this->datemodif;
+        return $this->dateModif;
     }
 
-    public function setDatemodif(?\DateTimeInterface $datemodif): self
+    public function setDateModif(?\DateTimeInterface $dateModif): self
     {
-        $this->datemodif = $datemodif;
+        $this->dateModif = $dateModif;
 
         return $this;
     }
 
-    public function getIdetat(): ?Etat
+    public function getIdEtat(): ?Etat
     {
-        return $this->idetat;
+        return $this->idEtat;
     }
 
-    public function setIdetat(?Etat $idetat): self
+    public function setIdEtat(?Etat $idEtat): self
     {
-        $this->idetat = $idetat;
+        $this->idEtat = $idEtat;
 
         return $this;
     }
 
-    public function getIdvisiteur(): ?Visiteur
+    public function getIdVisiteur(): ?Visiteur
     {
-        return $this->idvisiteur;
+        return $this->idVisiteur;
     }
 
-    public function setIdvisiteur(?Visiteur $idvisiteur): self
+    public function setIdVisiteur(?Visiteur $idVisiteur): self
     {
-        $this->idvisiteur = $idvisiteur;
+        $this->idVisiteur = $idVisiteur;
 
         return $this;
     }

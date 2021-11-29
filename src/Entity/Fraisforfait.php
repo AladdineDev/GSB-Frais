@@ -43,14 +43,14 @@ class Fraisforfait
      * @ORM\OneToMany(targetEntity=Lignefraisforfait::class, mappedBy="fraisForfait")
      * @Assert\Valid
      */
-    private $lignefraisforfaits;
+    private $ligneFraisForfaits;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->lignefraisforfaits = new ArrayCollection();
+        $this->ligneFraisForfaits = new ArrayCollection();
     }
 
     /**
@@ -58,13 +58,13 @@ class Fraisforfait
      */
     public function getLignefraisforfaits(): Collection
     {
-        return $this->lignefraisforfaits;
+        return $this->ligneFraisForfaits;
     }
 
     public function addLignefraisforfait(Lignefraisforfait $lignefraisforfait): self
     {
-        if (!$this->lignefraisforfaits->contains($lignefraisforfait)) {
-            $this->lignefraisforfaits[] = $lignefraisforfait;
+        if (!$this->ligneFraisForfaits->contains($lignefraisforfait)) {
+            $this->ligneFraisForfaits[] = $lignefraisforfait;
             $lignefraisforfait->setFraisForfait($this);
         }
 
@@ -73,7 +73,7 @@ class Fraisforfait
 
     public function removeLignefraisforfait(Lignefraisforfait $lignefraisforfait): self
     {
-        if ($this->lignefraisforfaits->removeElement($lignefraisforfait)) {
+        if ($this->ligneFraisForfaits->removeElement($lignefraisforfait)) {
             // set the owning side to null (unless already changed)
             if ($lignefraisforfait->getFraisForfait() === $this) {
                 $lignefraisforfait->setFraisForfait(null);

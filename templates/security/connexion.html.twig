@@ -30,7 +30,7 @@
 						<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 					</div>
 				{% endif %}
-				{% for message in app.session.flashbag.get('deconnexionOk') %}
+				{% for message in app.flashes('deconnexionOk') %}
 					<div class="alert alert-success mt-3 mb-1" role="alert">
 						{{message}}
 					</div>

@@ -23,8 +23,8 @@ saisir_fiche_frais:
    path: /visiteur/saisir_fiche_frais
    controller: App\Controller\VisiteurController::saisirFicheFrais
 
-supprimer_fraishorsforfait:
-   path: /visiteur/saisir_fiche_frais/supprimer_fraishorsforfait/{id}
+supprimer_frais_hors_forfait:
+   path: /visiteur/saisir_fiche_frais/supprimer_frais_hors_forfait/{id}
    controller: App\Controller\VisiteurController::supprimerFraisHorsForfait
 
 consulter_fiches_frais:

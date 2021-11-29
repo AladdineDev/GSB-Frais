@@ -17,8 +17,9 @@ class VisiteurType extends AbstractType
         $builder
             ->add('nom', EntityType::class, [
                 'class' => Visiteur::class,
-                'query_builder' => function (VisiteurRepository $vr) {
-                    return $vr->createQueryBuilder('v')
+                'placeholder' => '-- Veuillez sélectionner un visiteur --',
+                'query_builder' => function (VisiteurRepository $visiteurRepository) {
+                    return $visiteurRepository->createQueryBuilder('v')
                         ->addOrderBy('v.nom', 'ASC')
                         ->addOrderBy('v.prenom', 'ASC');
                 }

@@ -16,10 +16,6 @@ framework:
     #fragments: true
     php_errors:
         log: true
-    
-    # profiler:
-    #     enabled: false
-    #     collect: false
 
 when@test:
     framework:

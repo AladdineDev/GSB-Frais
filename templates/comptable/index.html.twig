@@ -38,9 +38,6 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{path('selectionner_fiche_frais')}}">Valider fiche de frais</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Suivre le paiement fiche de frais</a>
-							</li>
 						</ul>
 					</div>
 				</div>
@@ -54,7 +51,7 @@
 							<div class="example-wrapper">
 
 								{% block contenuPage %}
-									{% for message in app.session.flashbag.get('connexionOk') %}
+									{% for message in app.flashes('connexionOk') %}
 										<div class="alert alert-primary" role="alert">
 											{{message}}
 										</div>

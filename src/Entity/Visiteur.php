@@ -84,7 +84,7 @@ class Visiteur implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @ORM\Column(name="dateEmbauche", type="date")
      */
-    private $dateembauche;
+    private $dateEmbauche;
 
     /**
      * @var string|null
@@ -181,14 +181,14 @@ class Visiteur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDateembauche(): ?\DateTimeInterface
+    public function getDateEmbauche(): ?\DateTimeInterface
     {
-        return $this->dateembauche;
+        return $this->dateEmbauche;
     }
 
-    public function setDateembauche(\DateTimeInterface $dateembauche): self
+    public function setDateEmbauche(\DateTimeInterface $dateEmbauche): self
     {
-        $this->dateembauche = $dateembauche;
+        $this->dateEmbauche = $dateEmbauche;
 
         return $this;
     }

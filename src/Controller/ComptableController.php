@@ -27,7 +27,7 @@ class ComptableController extends AbstractController
         ]);
     }
 
-    public function selectionnerFicheFrais(Request $request, FichefraisRepository $fichefraisRepository): Response
+    public function selectionnerFicheFrais(FichefraisRepository $ficheFraisRepository, Request $request): Response
     {
         $visiteurInstance = new Visiteur();
         $formVisiteur = $this->createForm(VisiteurType::class, $visiteurInstance);
@@ -35,7 +35,7 @@ class ComptableController extends AbstractController
 
         if ($formVisiteur->isSubmitted() && $formVisiteur->isValid()) {
             $visiteur = $formVisiteur->get('nom')->getData();
-            $fichesFraisSaisies = $fichefraisRepository->findFichesfraisSaisies($visiteur);
+            $fichesFraisSaisies = $ficheFraisRepository->findFichesfraisSaisies($visiteur);
 
             if ($fichesFraisSaisies) {
                 return $this->render('comptable/selectionner_fiche_frais.html.twig', [
@@ -54,7 +54,7 @@ class ComptableController extends AbstractController
     public function administrerFicheFrais(int $idFicheFrais, Request $request, EntityManagerInterface $em): Response
     {
         $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefrais($idFicheFrais);
-        $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+        $ligneFraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
         $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
         $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
         $statuts = $em->getRepository(Statut::class)->findAll();
@@ -65,16 +65,12 @@ class ComptableController extends AbstractController
 
         if ($formFicheFrais->isSubmitted() && $formFicheFrais->isValid()) {
             $etatCloture = $em->getRepository(Etat::class)->find('CL');
-            if ($ficheFrais->getIdetat() != $etatCloture) {
+            if ($ficheFrais->getIdEtat() != $etatCloture) {
                 throw $this->createAccessDeniedException();
             }
             $i = 0;
             foreach ($formFicheFrais->getData()->getLignefraisforfaits() as $ligneFraisForfaitInput) {
                 $ligneFraisForfaits[$i]->setQuantite($ligneFraisForfaitInput->getQuantite());
-                $ficheFrais->setMontantvalide(
-                    $ficheFrais->getMontantvalide() + $ligneFraisForfaits[$i]->getQuantite() * $ligneFraisForfaits[$i]->getFraisForfait()->getMontant()
-                );
-                $em->persist($ficheFrais);
                 $em->persist($ligneFraisForfaits[$i]);
                 $i++;
             }
@@ -89,76 +85,82 @@ class ComptableController extends AbstractController
             'formFicheFrais' => $formFicheFrais->createView(),
             'ficheFrais' => $ficheFrais,
             'ligneFraisForfaits' => $ligneFraisForfaits,
-            'fraisHorsForfaits' => $fraisHorsForfaits,
+            'ligneFraisHorsForfaits' => $ligneFraisHorsForfaits,
             'fraisForfaits' => $fraisForfaits,
             'statuts' => $statuts
         ]);
     }
 
-    public function modifierStatutFraisHorsForfait(Request $request, Lignefraishorsforfait $lignefraishorsforfait)
+    public function modifierStatutFraisHorsForfait(Lignefraishorsforfait $ligneFraisHorsForfait, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->isCsrfTokenValid('edit' . $lignefraishorsforfait->getId(), $request->request->get('modifier_statut_frais_hors_forfait_token'))) {
+        if ($this->isCsrfTokenValid('edit' . $ligneFraisHorsForfait->getId(), $request->request->get('modifier_statut_frais_hors_forfait_token'))) {
             $etatCloture = $em->getRepository(Etat::class)->find('CL');
-            if ($lignefraishorsforfait->getIdfichefrais()->getIdetat() != $etatCloture) {
+            if ($ligneFraisHorsForfait->getIdFicheFrais()->getIdEtat() != $etatCloture) {
                 throw $this->createAccessDeniedException();
             }
             $statutRefuse = $em->getRepository(Statut::class)->find('REF');
             $statutValide = $em->getRepository(Statut::class)->find('VAL');
             if ($request->request->get('nouveau_statut') == 'VAL') {
-                $ficheFrais = $lignefraishorsforfait->getIdfichefrais();
-                $ficheFrais->setMontantvalide($ficheFrais->getMontantvalide() + $lignefraishorsforfait->getMontant());
-                $lignefraishorsforfait->setIdstatut($statutValide);
-                $this->addFlash('fraisHorsForfaitValide', 'Le frais hors forfait a bien été validé.');
+                $ficheFrais = $ligneFraisHorsForfait->getIdFicheFrais();
+                $ficheFrais->setMontantValide($ficheFrais->getMontantValide() + $ligneFraisHorsForfait->getMontant());
+                $ligneFraisHorsForfait->setIdStatut($statutValide);
+                $this->addFlash('ligneFraisHorsForfaitValide', 'Le frais hors forfait a bien été validé.');
             } else {
-                $lignefraishorsforfait->setIdstatut($statutRefuse);
-                $this->addFlash('fraisHorsForfaitRefuse', 'Le frais hors forfait a bien été refusé.');
+                $ligneFraisHorsForfait->setIdStatut($statutRefuse);
+                $this->addFlash('ligneFraisHorsForfaitRefuse', 'Le frais hors forfait a bien été refusé.');
             }
-            $em->persist($lignefraishorsforfait);
+            $em->persist($ligneFraisHorsForfait);
             $em->flush();
         }
-        return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $lignefraishorsforfait->getIdficheFrais()->getId()]);
+        return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ligneFraisHorsForfait->getIdficheFrais()->getId()]);
     }
 
-    public function validerFicheFrais(Request $request, Fichefrais $fichefrais)
+    public function validerFicheFrais(Fichefrais $ficheFrais, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->isCsrfTokenValid('validate' . $fichefrais->getId(), $request->request->get('valider_fiche_frais_token'))) {
-            $fraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($fichefrais);
-            foreach ($fraisHorsForfaits as $fraisHorsForfait) {
-                if ($fraisHorsForfait->getIdstatut()->getId() == 'ATT') {
+        if ($this->isCsrfTokenValid('validate' . $ficheFrais->getId(), $request->request->get('valider_fiche_frais_token'))) {
+            $ligneFraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+            foreach ($ligneFraisHorsForfaits as $ligneFraisHorsForfait) {
+                if ($ligneFraisHorsForfait->getIdstatut()->getId() == 'ATT') {
                     $this->addFlash(
-                        'fraisHorsForfaitEnAttente',
+                        'ligneFraisHorsForfaitEnAttente',
                         'Tous les frais hors forfaits n\'ont pas été traités !
                          Veuillez traiter ceux toujours en attente.'
                     );
-                    return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $fichefrais->getId()]);
+                    return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);
                 }
             }
+            $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
+            foreach ($ligneFraisForfaits as $ligneFraisForfait) {
+                $ficheFrais->setMontantValide(
+                    $ficheFrais->getMontantValide() + $ligneFraisForfait->getQuantite() * $ligneFraisForfait->getFraisForfait()->getMontant()
+                );
+            }
             $etatValide = $em->getRepository(Etat::class)->find('VA');
-            $fichefrais->setIdetat($etatValide);
-            $fichefrais->setDatemodif(new DateTime('now'));
-            $em->persist($fichefrais);
+            $ficheFrais->setIdEtat($etatValide);
+            $ficheFrais->setDateModif(new DateTime('now'));
+            $em->persist($ficheFrais);
             $em->flush();
             $this->addFlash('ficheFraisValide', 'La fiche de frais a bien été validée !');
         }
-        return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $fichefrais->getId()]);
+        return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);
     }
 
-    public function rembouserFicheFrais(Request $request, Fichefrais $fichefrais)
+    public function rembouserFicheFrais(Fichefrais $ficheFrais, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($this->isCsrfTokenValid('refund' . $fichefrais->getId(), $request->request->get('rembourser_fiche_frais_token'))) {
+        if ($this->isCsrfTokenValid('refund' . $ficheFrais->getId(), $request->request->get('rembourser_fiche_frais_token'))) {
             $etatRembourse = $em->getRepository(Etat::class)->find('RB');
-            $fichefrais->setIdetat($etatRembourse);
-            $fichefrais->setDatemodif(new DateTime('now'));
-            $em->persist($fichefrais);
+            $ficheFrais->setIdEtat($etatRembourse);
+            $ficheFrais->setDateModif(new DateTime('now'));
+            $em->persist($ficheFrais);
             $em->flush();
             $this->addFlash('ficheFraisRembourse', 'Vous avez bien indiqué le remboursement de cette fiche de frais !');
         }
-        return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $fichefrais->getId()]);
+        return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);
     }
 }

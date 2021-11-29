@@ -20,7 +20,7 @@
 				<thead class="thead-dark"></thead>
 				<tr class="table-secondary">
 					<th>Mois</th>
-					<th>Nombre de justificatifs</th>
+					{# <th>Nombre de justificatifs</th> #}
 					<th>Montant validé</th>
 					<th>Date de modification</th>
 					<th>Situation</th>
@@ -30,10 +30,10 @@
 					{% for ficheFraisSaisies in fichesFraisSaisies %}
 						<tr>
 							<td>{{ficheFraisSaisies.mois | date('m/Y')}}</td>
-							<td>{{ficheFraisSaisies.nbJustificatifs}}</td>
+							{# <td>{{ficheFraisSaisies.nbJustificatifs}}</td> #}
 							<td>{{ficheFraisSaisies.montantValide|format_currency('EUR')}}</td>
 							<td>{{ficheFraisSaisies.dateModif | date('d/m/Y')}}</td>
-							<td>{{ficheFraisSaisies.idetat.libelle}}</td>
+							<td>{{ficheFraisSaisies.idEtat.libelle}}</td>
 							<td>
 								<a href="{{path('administrer_fiche_frais', {'idFicheFrais': ficheFraisSaisies.id})}}">Consulter</a>
 							</td>
@@ -46,7 +46,7 @@
 	{% else %}
 		{% if formVisiteur.vars.value.nom %}
 			<hr>
-			<div class="alert alert-info">
+			<div class="alert alert-primary">
 				<h4 class="alert-heading">Aucune fiche de frais pour ce visiteur</h4>
 			</div>
 			{% else %}

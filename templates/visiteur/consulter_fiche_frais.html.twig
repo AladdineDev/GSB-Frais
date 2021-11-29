@@ -7,7 +7,7 @@
 	<hr>
 	
 	{% if fichesFrais == null %}
-		<div class="alert alert-info">
+		<div class="alert alert-primary">
 			<h4 class="alert-heading">Aucune fiche de frais</h4>
 			<p class="mb-0"><a href="{{path('saisir_fiche_frais')}}" class="alert-link">Ouvrir une nouvelle fiche de frais</a></p>
 			
@@ -18,7 +18,7 @@
 			<thead class="thead-dark"></thead>
 			<tr class="table-secondary">
 					<th>Mois</th>
-					<th>Nombre de justificatifs</th>
+					{# <th>Nombre de justificatifs</th> #}
 					<th>Montant validé</th>
 					<th>Date de modification</th>
 					<th>Situation</th>
@@ -28,10 +28,10 @@
 				{% for uneFicheFrais in fichesFrais %}
 					<tr>
 						<td>{{uneFicheFrais.mois | date('m/Y')}}</td>
-						<td>{{uneFicheFrais.nbJustificatifs}}</td>
+						{# <td>{{uneFicheFrais.nbJustificatifs}}</td> #}
 						<td>{{uneFicheFrais.montantValide|format_currency('EUR')}}</td>
 						<td>{{uneFicheFrais.dateModif | date('d/m/Y')}}</td>
-						<td>{{uneFicheFrais.idetat.libelle}}</td>
+						<td>{{uneFicheFrais.idEtat.libelle}}</td>
 						{% if uneFicheFrais == ficheFraisCourante %}
 							<td><a href="{{path('saisir_fiche_frais')}}">Saisir</a></td>
 						{% else %}

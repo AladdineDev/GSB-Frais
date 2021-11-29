@@ -14,7 +14,7 @@ class DeconnexionListener
         $this->flashBag = $flashBag;
     }
 
-    public function onLogout(LogoutEvent $event): void
+    public function onLogout(): void
     {
         $this->flashBag->add('deconnexionOk', 'Vous avez bien été déconnecté.');
     }

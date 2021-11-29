@@ -24,8 +24,7 @@ class LignefraishorsforfaitType extends AbstractType
                 'attr' => [
                     'placeholder' => 0,
                 ]
-            ])
-            ->add('ajouter', SubmitType::class);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block flashMessages %}
-	{% for message in app.flashes('fraisHorsForfaitSupprime') %}
+	{% for message in app.flashes('ligneFraisHorsForfaitSupprime') %}
 		<div class="alert alert-dismissible alert-success">
 			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 			{{message}}
@@ -32,7 +32,7 @@
 			</tr>
 			<tbody>
 				<tr>
-					<td>Montant Unitaire</td>
+					<td>Montants Unitaires</td>
 					{% for fraisForfait in fraisForfaits %}
 						<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
 					{% endfor %}
@@ -44,33 +44,47 @@
 					{% endfor %}
 				</tr>
 				<tr>
-					<td>Total</td>
+					<td>Montants totaux</td>
 					{% for ligneFraisForfait in ligneFraisForfaits %}
 						<td>{{(ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant)|format_currency('EUR')}}</td>
 					{% endfor %}
 				</tr>
+				<tr>
+					<td>Total</td>
+					<td colspan="4" class="text-center" style="background-color:#384759">
+						{% set totalFraisForfaits = 0 %}
+						{% for ligneFraisForfait in ligneFraisForfaits %}
+							{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
+						{% endfor %}
+						{{totalFraisForfaits|format_currency('EUR')}}
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
+
 	<fieldset disabled="disabled">
 		{{form_start(formFicheFrais, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?');"}}
 		)}}
-		{% for ligneFraisForfait in formFicheFrais.lignefraisforfaits %}
+		{% for ligneFraisForfait in formFicheFrais.ligneFraisForfaits %}
 			<div class="col-md-3">
 				<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
 				{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
 			</div>
 		{% endfor %}
 		<div class="col-12">
-			{{form_widget(formFicheFrais.valider)}}
+			<button class="btn btn-primary">Valider
+				<i class="fas fa-check"></i>
+			</button>
 		</div>
 		{{form_end(formFicheFrais)}}
 	</fieldset>
+
 	<br/>
 
 	<h3>Frais hors forfait</h3>
-	{% if fraisHorsForfaits == null %}
-		<div class="alert alert-info">
+	{% if ligneFraisHorsForfaits == null %}
+		<div class="alert alert-primary">
 			<h4 class="alert-heading">Aucun frais hors forfait pour ce mois</h4>
 		</div>
 	{% else %}
@@ -85,26 +99,26 @@
 					<th class="text-center">Action</th>
 				</tr>
 				<tbody>
-					{% for fraisHorsForfait in fraisHorsForfaits %}
+					{% for ligneFraisHorsForfait in ligneFraisHorsForfaits %}
 						<tr>
-							<td class="col-md-1 align-middle">{{fraisHorsForfait.date | date('d/m/Y')}}</td>
+							<td class="col-md-1 align-middle">{{ligneFraisHorsForfait.date | date('d/m/Y')}}</td>
 							<td class="col-md-6 align-middle">
-								<b>{{fraisHorsForfait.idstatut.libelle | upper}}
+								<b>{{ligneFraisHorsForfait.idStatut.libelle | upper}}
 									:
 								</b>
-								{{fraisHorsForfait.libelle}}</td>
-							<td class="col-md-2 align-middle">{{fraisHorsForfait.montant|format_currency('EUR')}}</td>
-							<td class="col-md-2 align-middle">{{fraisHorsForfait.idstatut.libelle}}</td>
+								{{ligneFraisHorsForfait.libelle}}</td>
+							<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.montant|format_currency('EUR')}}</td>
+							<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.idStatut.libelle}}</td>
 
 							<td class="col-md-1">
-								{% if fraisHorsForfait.idfichefrais != ficheFraisFuture %}
+								{% if ligneFraisHorsForfait.idFicheFrais != ficheFraisProchaine %}
 									<fieldset disabled="disabled">
 									{% endif %}
-									<form method="post" action="{{ path('supprimer_fraishorsforfait', {'id': fraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
-										<input type="hidden" name="supprimer_fraishorsforfait_token" value="{{ csrf_token('delete' ~ fraisHorsForfait.id) }}">
+									<form method="post" action="{{ path('supprimer_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne de frais non forfaitisé ?');">
+										<input type="hidden" name="supprimer_frais_hors_forfait_token" value="{{ csrf_token('delete' ~ ligneFraisHorsForfait.id) }}">
 										<button class="btn btn-danger btn-sm">Supprimer</button>
 									</form>
-									{% if fraisHorsForfait.idfichefrais != ficheFraisFuture %}
+									{% if ligneFraisHorsForfait.idFicheFrais != ficheFraisProchaine %}
 									</fieldset>
 								{% endif %}
 							</td>
@@ -116,32 +130,34 @@
 	{% endif %}
 
 	<fieldset disabled="disabled">
-		{{form_start(formFraisHorsForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous ajouter un nouveau frais non forfaitisé ?');"}})}}
+		{{form_start(formLigneFraisHorsForfait, {'attr': {'class': "row g-3", 'onsubmit': "return confirm('Souhaitez-vous ajouter un nouveau frais non forfaitisé ?');"}})}}
 		<div class="col-md-4">
-			<label for="fraisHorsForfait" class="form-label">Date</label>
+			<label for="ligneFraisHorsForfait" class="form-label">Date</label>
 			<div class="input-group">
-				{{form_widget(formFraisHorsForfait.date.day, {'attr': {'style': "background-color: #ebebeb;opacity: 1;"}})}}
-				{{form_widget(formFraisHorsForfait.date.month, {'attr': {'style': "background-color: #ebebeb;opacity: 1;"}})}}
-				{{form_widget(formFraisHorsForfait.date.year, {'attr': {'style': "background-color: #ebebeb;opacity: 1;"}})}}
+				{{form_widget(formLigneFraisHorsForfait.date.day, {'attr': {'style': "background-color: #ebebeb;opacity: 1;"}})}}
+				{{form_widget(formLigneFraisHorsForfait.date.month, {'attr': {'style': "background-color: #ebebeb;opacity: 1;"}})}}
+				{{form_widget(formLigneFraisHorsForfait.date.year, {'attr': {'style': "background-color: #ebebeb;opacity: 1;"}})}}
 			</div>
 		</div>
 		<div class="col-md-4">
-			<label for="fraisHorsForfait" class="form-label">Libelle</label>
-			{{form_widget(formFraisHorsForfait.libelle)}}
+			<label for="ligneFraisHorsForfait" class="form-label">Libelle</label>
+			{{form_widget(formLigneFraisHorsForfait.libelle)}}
 		</div>
 		<div class="col-md-4">
-			<label for="fraisHorsForfait" class="form-label">Montant</label>
+			<label for="ligneFraisHorsForfait" class="form-label">Montant</label>
 			<div class="input-group">
-				{{form_widget(formFraisHorsForfait.montant)}}
+				{{form_widget(formLigneFraisHorsForfait.montant)}}
 				<span class="input-group-text bg-primary">
 					€</span>
-				{{form_errors(formFraisHorsForfait.montant)}}
+				{{form_errors(formLigneFraisHorsForfait.montant)}}
 			</div>
 		</div>
 		<div class="col-12">
-			{{form_widget(formFraisHorsForfait.ajouter)}}
+			<button class="btn btn-primary">Ajouter
+				<i class="fas fa-plus"></i>
+			</button>
 		</div>
-		{{form_end(formFraisHorsForfait)}}
+		{{form_end(formLigneFraisHorsForfait)}}
 	</fieldset>
 	<br/>
 

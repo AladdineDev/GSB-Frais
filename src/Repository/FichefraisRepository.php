@@ -53,7 +53,7 @@ class FichefraisRepository extends ServiceEntityRepository
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :visiteur
+                WHERE Fichefrais.idVisiteur = :visiteur
                 AND Fichefrais.mois BETWEEN :moisDebut AND :moisFin';
 
         $query = $this->_em->createQuery($dql);
@@ -70,7 +70,7 @@ class FichefraisRepository extends ServiceEntityRepository
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :visiteur
+                WHERE Fichefrais.idVisiteur = :visiteur
                 AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
                 ORDER BY Fichefrais.mois DESC';
 
@@ -88,7 +88,7 @@ class FichefraisRepository extends ServiceEntityRepository
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :visiteur
+                WHERE Fichefrais.idVisiteur = :visiteur
                 AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
                 ORDER BY Fichefrais.mois DESC';
 
@@ -119,11 +119,11 @@ class FichefraisRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function findFichefraisFuture($visiteur)
+    public function findFichefraisProchaine($visiteur)
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :visiteur
+                WHERE Fichefrais.idVisiteur = :visiteur
                 AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
                 ORDER BY Fichefrais.mois DESC';
 
@@ -141,7 +141,7 @@ class FichefraisRepository extends ServiceEntityRepository
     {
         $dql = 'SELECT Fichefrais
                 FROM App:Fichefrais Fichefrais
-                WHERE Fichefrais.idvisiteur = :visiteur
+                WHERE Fichefrais.idVisiteur = :visiteur
                 AND Fichefrais.mois BETWEEN :premierMois AND :dernierMois
                 ORDER BY Fichefrais.mois DESC';
 

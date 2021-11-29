@@ -54,7 +54,7 @@
 								<div class="example-wrapper">
 
 									{% block contenuPage %}
-										{% for message in app.session.flashbag.get('connexionOk') %}
+										{% for message in app.flashes('connexionOk') %}
 											<div class="alert alert-primary" role="alert">
 												{{message}}
 											</div>

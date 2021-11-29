@@ -27,7 +27,7 @@ class Lignefraishorsforfait
      *
      * @ORM\Column(name="idVisiteur", type="string", length=4, nullable=false, options={"fixed"=true})
      */
-    private $idvisiteur;
+    private $idVisiteur;
 
     /**
      * @var \DateTime
@@ -74,7 +74,7 @@ class Lignefraishorsforfait
      *   @ORM\JoinColumn(name="idStatut", referencedColumnName="id", nullable=false)
      * })
      */
-    private $idstatut;
+    private $idStatut;
 
     /**
      * @var Fichefrais
@@ -84,7 +84,7 @@ class Lignefraishorsforfait
      *   @ORM\JoinColumn(name="idFicheFrais", referencedColumnName="id", nullable=false)
      * })
      */
-    private $idfichefrais;
+    private $idFicheFrais;
 
     public function __construct()
     {
@@ -96,14 +96,14 @@ class Lignefraishorsforfait
         return $this->id;
     }
 
-    public function getIdvisiteur(): ?string
+    public function getIdVisiteur(): ?string
     {
-        return $this->idvisiteur;
+        return $this->idVisiteur;
     }
 
-    public function setIdvisiteur(string $idvisiteur): self
+    public function setIdVisiteur(string $idVisiteur): self
     {
-        $this->idvisiteur = $idvisiteur;
+        $this->idVisiteur = $idVisiteur;
 
         return $this;
     }
@@ -156,26 +156,26 @@ class Lignefraishorsforfait
         return $this;
     }
 
-    public function getIdstatut(): ?Statut
+    public function getIdStatut(): ?Statut
     {
-        return $this->idstatut;
+        return $this->idStatut;
     }
 
-    public function setIdstatut(?Statut $idstatut): self
+    public function setIdStatut(?Statut $idStatut): self
     {
-        $this->idstatut = $idstatut;
+        $this->idStatut = $idStatut;
 
         return $this;
     }
 
-    public function getIdfichefrais(): ?Fichefrais
+    public function getIdFicheFrais(): ?Fichefrais
     {
-        return $this->idfichefrais;
+        return $this->idFicheFrais;
     }
 
-    public function setIdfichefrais(?Fichefrais $idfichefrais): self
+    public function setIdFicheFrais(?Fichefrais $idFicheFrais): self
     {
-        $this->idfichefrais = $idfichefrais;
+        $this->idFicheFrais = $idFicheFrais;
 
         return $this;
     }
