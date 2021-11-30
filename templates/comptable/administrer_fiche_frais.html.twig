@@ -131,7 +131,9 @@
 					<th class="text-center">Action</th>
 				</tr>
 				<tbody>
+					{% set numModalModifierStatut = 0 %}
 					{% for ligneFraisHorsForfait in ligneFraisHorsForfaits %}
+						{% set numModalModifierStatut = numModalModifierStatut + 1 %}
 						<tr>
 							<td class="col-md-1 align-middle">{{ligneFraisHorsForfait.date | date('d/m/Y')}}</td>
 							<td class="col-md-6 align-middle">
@@ -146,23 +148,53 @@
 									<fieldset disabled="disabled">
 									{% endif %}
 
-									<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}" onsubmit="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">
+									<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}">
 										<input type="hidden" name="modifier_statut_frais_hors_forfait_token" value="{{ csrf_token('edit' ~ ligneFraisHorsForfait.id) }}">
 										{% if ligneFraisHorsForfait.idStatut.id == 'REF' %}
-											<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL">Valider</button>
+											<button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalModifierStatut{{numModalModifierStatut}}" name="nouveau_statut" value="VAL">Valider</button>
 										{% elseif ligneFraisHorsForfait.idStatut.id == 'VAL' %}
-											<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF">Refuser</button>
+											<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalModifierStatut{{numModalModifierStatut}}" name="nouveau_statut" value="REF">Refuser</button>
 										{% else %}
 											<div class="btn-group" role="group">
 												<div class="col-md-6 px-1">
-													<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL">Valider</button>
+													<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL" onclick="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">Valider</button>
 												</div>
 												<div class="col-md-6 px-1">
-													<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF">Refuser</button>
+													<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF" onclick="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">Refuser</button>
 												</div>
 											</div>
 										{% endif %}
+										<div class="modal" id="modalModifierStatut{{numModalModifierStatut}}" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" style="display: none;" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title">Modifier le statut du frais hors forfait</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+															<span aria-hidden="true"></span>
+														</button>
+													</div>
+													<div class="modal-body">
+														<p>Vous allez modifier le statut de ce frais non forfaitisés</p>
+														<p>Souhaitez-vous continuer ?</p>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+														<button type="submit" class="btn btn-primary" name="confirmation_statut{{numModalModifierStatut}}">Confirmer</button>
+													</div>
+												</div>
+											</div>
+										</div>
 									</form>
+									<script>
+									var btns = document.getElementsByName('nouveau_statut');
+									var btnConfirmation = document.getElementsByName('confirmation_statut' + {{numModalModifierStatut}})[0];
+									btns.forEach(btn => {
+										btn.addEventListener("click", updateBtn(btn));
+									});
+									function updateBtn(btn){
+										btnConfirmation.setAttribute('value', btn.value);
+									}
+									</script>
 
 									{% if ficheFrais.idEtat.id != 'CL' %}
 									</fieldset>

@@ -102,7 +102,9 @@ class ComptableController extends AbstractController
             }
             $statutRefuse = $em->getRepository(Statut::class)->find('REF');
             $statutValide = $em->getRepository(Statut::class)->find('VAL');
-            if ($request->request->get('nouveau_statut') == 'VAL') {
+            $requestToArray = $request->request->all();
+            $confirmationStatut = array_pop($requestToArray);
+            if ($confirmationStatut == 'VAL') {
                 $ficheFrais = $ligneFraisHorsForfait->getIdFicheFrais();
                 $ficheFrais->setMontantValide($ficheFrais->getMontantValide() + $ligneFraisHorsForfait->getMontant());
                 $ligneFraisHorsForfait->setIdStatut($statutValide);
