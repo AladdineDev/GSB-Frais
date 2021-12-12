@@ -180,7 +180,9 @@ class AppFixtures extends Fixture
             "formation aux techniques commerciales",
             "abonnement à un logiciel de rédaction de comptes-rendus",
             "accident de la route",
-            "participation à une conférence privée sur la pharmacovigilance"
+            "participation à une conférence privée sur la pharmacovigilance",
+            "organisation de cocktail",
+            "réunion d'information"
         );
     }
 }

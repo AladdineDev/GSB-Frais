@@ -64,8 +64,8 @@ class ComptableController extends AbstractController
         $formFicheFrais->handleRequest($request);
 
         if ($formFicheFrais->isSubmitted() && $formFicheFrais->isValid()) {
-            $etatCloture = $em->getRepository(Etat::class)->find('CL');
-            if ($ficheFrais->getIdEtat() != $etatCloture) {
+            $etatCloturee = $em->getRepository(Etat::class)->find('CL');
+            if ($ficheFrais->getIdEtat() != $etatCloturee) {
                 throw $this->createAccessDeniedException();
             }
             $i = 0;
@@ -96,8 +96,8 @@ class ComptableController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         if ($this->isCsrfTokenValid('edit' . $ligneFraisHorsForfait->getId(), $request->request->get('modifier_statut_frais_hors_forfait_token'))) {
-            $etatCloture = $em->getRepository(Etat::class)->find('CL');
-            if ($ligneFraisHorsForfait->getIdFicheFrais()->getIdEtat() != $etatCloture) {
+            $etatCloturee = $em->getRepository(Etat::class)->find('CL');
+            if ($ligneFraisHorsForfait->getIdFicheFrais()->getIdEtat() != $etatCloturee) {
                 throw $this->createAccessDeniedException();
             }
             $statutRefuse = $em->getRepository(Statut::class)->find('REF');
@@ -146,7 +146,7 @@ class ComptableController extends AbstractController
             $ficheFrais->setDateModif(new DateTime('now'));
             $em->persist($ficheFrais);
             $em->flush();
-            $this->addFlash('ficheFraisValide', 'La fiche de frais a bien été validée !');
+            $this->addFlash('ficheFraisValide', 'La fiche de frais a bien été validée.');
         }
         return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);
     }
@@ -161,7 +161,7 @@ class ComptableController extends AbstractController
             $ficheFrais->setDateModif(new DateTime('now'));
             $em->persist($ficheFrais);
             $em->flush();
-            $this->addFlash('ficheFraisRembourse', 'Vous avez bien indiqué le remboursement de cette fiche de frais !');
+            $this->addFlash('ficheFraisRembourse', 'Vous avez bien indiqué le remboursement de cette fiche de frais.');
         }
         return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);
     }

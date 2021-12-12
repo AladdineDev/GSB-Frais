@@ -60,7 +60,7 @@
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td colspan="4" class="text-center" style="background-color:#384759">
+					<td colspan="4" class="text-center text-info">
 						{% set totalFraisForfaits = 0 %}
 						{% for ligneFraisForfait in ligneFraisForfaits %}
 							{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
@@ -87,7 +87,7 @@
 		<div class="col-12">
 			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValider"><i class="fas fa-check"></i> Valider
 			</button>
-			<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" style="display: none;" aria-hidden="true">
+			<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -164,7 +164,7 @@
 												</div>
 											</div>
 										{% endif %}
-										<div class="modal" id="modalModifierStatut{{numModalModifierStatut}}" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" style="display: none;" aria-hidden="true">
+										<div class="modal" id="modalModifierStatut{{numModalModifierStatut}}" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" aria-hidden="true">
 											<div class="modal-dialog modal-dialog-centered">
 												<div class="modal-content">
 													<div class="modal-header">
@@ -211,8 +211,10 @@
 	{% if ficheFrais.idEtat.id == 'CL' %}
 		<form method="post" action="{{ path('valider_fiche_frais', {'id': ficheFrais.id}) }}">
 			<input type="hidden" name="valider_fiche_frais_token" value="{{ csrf_token('validate' ~ ficheFrais.id) }}">
+			<div class="d-grid">
 			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValiderFicheFrais">Valider fiche frais</button>
-			<div class="modal" id="modalValiderFicheFrais" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" style="display: none;" aria-hidden="true">
+			</div>
+			<div class="modal" id="modalValiderFicheFrais" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -238,8 +240,10 @@
 	{% if ficheFrais.idEtat.id == 'VA' %}
 		<form method="post" action="{{ path('rembourser_fiche_frais', {'id': ficheFrais.id}) }}">
 			<input type="hidden" name="rembourser_fiche_frais_token" value="{{ csrf_token('refund' ~ ficheFrais.id) }}">
+			<div class="d-grid">
 			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRembourserFicheFrais">Indiquer remboursement</button>
-			<div class="modal" id="modalRembourserFicheFrais" tabindex="-1" aria-labelledby="modalRembourserFicheFraisLabel" style="display: none;" aria-hidden="true">
+			</div>
+			<div class="modal" id="modalRembourserFicheFrais" tabindex="-1" aria-labelledby="modalRembourserFicheFraisLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 						<div class="modal-header">

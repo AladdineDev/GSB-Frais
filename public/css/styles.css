@@ -22,3 +22,12 @@
     right:0;
     left:auto;
 }
+
+.alert-warning-custom{
+    background-color: orange;
+}
+
+.total-ff{
+    background-color: orange;
+    color: lawngreen;
+}

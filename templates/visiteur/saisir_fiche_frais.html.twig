@@ -13,7 +13,7 @@
 		{% endfor %}
 	{% endfor %}
 	{% for message in app.flashes('ligneFraisHorsForfaitReporte') %}
-		<div class="alert alert-dismissible" style="background-color:orange">
+		<div class="alert alert-dismissible alert-warning-custom">
 			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 			{{message}}
 			<a href="{{path('consulter_detail_fiche_frais', {'idFicheFrais': ficheFraisProchaine.id})}}" class="alert-link">Voir</a>
@@ -60,7 +60,7 @@
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td colspan="4" class="text-center" style="background-color:#384759">
+					<td colspan="4" class="text-center text-info">
 						{% set totalFraisForfaits = 0 %}
 						{% for ligneFraisForfait in ligneFraisForfaits %}
 							{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
@@ -84,7 +84,7 @@
 	<div class="col-12">
 		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValider"><i class="fas fa-check"></i> Valider
 		</button>
-		<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" style="display: none;" aria-hidden="true">
+		<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -135,7 +135,7 @@
 								<form method="post" action="{{ path('supprimer_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}">
 									<input type="hidden" name="supprimer_frais_hors_forfait_token" value="{{ csrf_token('delete' ~ ligneFraisHorsForfait.id) }}">
 									<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalSupprimer{{numModalSupprimer}}">Supprimer</button>
-									<div class="modal" id="modalSupprimer{{numModalSupprimer}}" tabindex="-1" aria-labelledby="modalSupprimerLabel" style="display: none;" aria-hidden="true">
+									<div class="modal" id="modalSupprimer{{numModalSupprimer}}" tabindex="-1" aria-labelledby="modalSupprimerLabel" aria-hidden="true">
 										<div class="modal-dialog modal-dialog-centered">
 											<div class="modal-content">
 												<div class="modal-header">
@@ -186,7 +186,7 @@
 	<div class="col-12">
 		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjouter"><i class="fas fa-plus"></i> Ajouter
 		</button>
-		<div class="modal" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" style="display: none;" aria-hidden="true">
+		<div class="modal" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
