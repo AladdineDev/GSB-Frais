@@ -3,7 +3,7 @@
 {% block title %}Saisie fiche frais
 {% endblock %}
 
-{% block flashMessages %}
+{% block flash_messages %}
 	{% for messages in app.flashes(['ligneFraisForfaitsValidee', 'ligneFraisHorsForfaitAjoute', 'ligneFraisHorsForfaitSupprime']) %}
 		{% for message in messages %}
 			<div class="alert alert-dismissible alert-success">
@@ -21,15 +21,14 @@
 	{% endfor %}
 {% endblock %}
 
-{% block contenuPage %}
+{% block page_content %}
 
 	<h1>Saisie de la fiche de frais</h1>
 	<hr>
-	<h3>Période d'engagement</h3>
 	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
 	<hr/>
 
-	<h3>Frais au forfait</h3>
+	<h3>Frais forfaitisés</h3>
 	<div class="table-responsive">
 		<table class="table table-bordered table-active table-hover table-striped table-responsive">
 			<thead class="thead-dark"></thead>
@@ -49,7 +48,7 @@
 				<tr>
 					<td>Quantité</td>
 					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td>{{ligneFraisForfait.quantite }}</td>
+						<td class="text-info">{{ligneFraisForfait.quantite }}</td>
 					{% endfor %}
 				</tr>
 				<tr>
@@ -60,7 +59,7 @@
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td colspan="4" class="text-center text-info">
+					<td colspan="4" class="text-center">
 						{% set totalFraisForfaits = 0 %}
 						{% for ligneFraisForfait in ligneFraisForfaits %}
 							{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}

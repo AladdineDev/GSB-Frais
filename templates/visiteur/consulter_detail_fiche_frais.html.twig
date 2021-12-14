@@ -3,7 +3,7 @@
 {% block title %}Consultation fiche frais
 {% endblock %}
 
-{% block flashMessages %}
+{% block flash_messages %}
 	{% for message in app.flashes('ligneFraisHorsForfaitSupprime') %}
 		<div class="alert alert-dismissible alert-success">
 			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -12,15 +12,14 @@
 	{% endfor %}
 {% endblock %}
 
-{% block contenuPage %}
+{% block page_content %}
 
 	<h1>Consultation de la fiche de frais</h1>
-	<hr>
-	<h3>Période d'engagement</h3>
+	<hr>	
 	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
 	<hr/>
 
-	<h3>Frais au forfait</h3>
+	<h3>Frais forfaitisés</h3>
 	<div class="table-responsive">
 		<table class="table table-bordered table-active table-hover table-striped table-responsive">
 			<thead class="thead-dark"></thead>
@@ -40,7 +39,7 @@
 				<tr>
 					<td>Quantité</td>
 					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td>{{ligneFraisForfait.quantite }}</td>
+						<td class="text-info">{{ligneFraisForfait.quantite }}</td>
 					{% endfor %}
 				</tr>
 				<tr>
@@ -51,7 +50,7 @@
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td colspan="4" class="text-center text-info">
+					<td colspan="4" class="text-center">
 						{% set totalFraisForfaits = 0 %}
 						{% for ligneFraisForfait in ligneFraisForfaits %}
 							{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
@@ -113,7 +112,6 @@
 					<th class="text-center">Date</th>
 					<th>Libelle</th>
 					<th>Montant</th>
-					<th>Statut</th>
 					<th class="text-center">Action</th>
 				</tr>
 				<tbody>
@@ -122,13 +120,19 @@
 					{% set numModalSupprimer = numModalSupprimer + 1 %}
 						<tr>
 							<td class="col-md-1 align-middle">{{ligneFraisHorsForfait.date | date('d/m/Y')}}</td>
-							<td class="col-md-6 align-middle">
-								<b>{{ligneFraisHorsForfait.idStatut.libelle | upper}}
+							<td class="col-md-8 align-middle">
+								<b>
+							{% if ligneFraisHorsForfait.idStatut.id == 'REF' %}
+								<text class="col-md-2 align-middle text-danger">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
+							{% elseif ligneFraisHorsForfait.idStatut.id == 'VAL' %}
+								<text class="col-md-2 align-middle text-success">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
+							{% else %}
+								<text class="col-md-2 align-middle text-warning">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
+							{% endif %}
 									:
 								</b>
 								{{ligneFraisHorsForfait.libelle}}</td>
 							<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.montant|format_currency('EUR')}}</td>
-							<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.idStatut.libelle}}</td>
 
 							<td class="col-md-1">
 								{% if ligneFraisHorsForfait.idFicheFrais != ficheFraisProchaine %}

@@ -328,9 +328,9 @@ VALUES (
 INSERT INTO `Comptable` (`id`, `nom`, `prenom`, `login`, `mdp`, `roles`)
 VALUES (
         'g110',
-        'Blanc',
+        'Blue',
         'Skyler',
-        'sblanc',
+        'sblue',
         'hsbrg',
         '["ROLE_COMPTABLE"]'
     ),
@@ -339,7 +339,7 @@ VALUES (
         'Zucker',
         'Marcus',
         'mzucker',
-        'fb2os',
+        'fb2bf',
         '["ROLE_COMPTABLE"]'
     );
 -- --------------------------------------------------------
