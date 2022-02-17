@@ -26,192 +26,200 @@
 	<h4>{{ficheFrais.idVisiteur.nom ~ ' ' ~ ficheFrais.idVisiteur.prenom}}</h4>
 	<hr/>
 
-	<h3>Frais forfaitisés</h3>
-	<div class="table-responsive">
-		<table class="table table-bordered table-active table-hover table-striped table-responsive">
-			<thead class="thead-dark"></thead>
-			<tr class="table-secondary">
-				<th>Frais forfaitisés</th>
-				<th>Forfait Etape</th>
-				<th>Frais Kilométrique</th>
-				<th>Nuitée Hôtel</th>
-				<th>Repas Restaurant</th>
-			</tr>
-			<tbody>
-				<tr>
-					<td>Montants Unitaires</td>
-					{% for fraisForfait in fraisForfaits %}
-						<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
-					{% endfor %}
-				</tr>
-				<tr>
-					<td>Quantité</td>
-					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td class="text-info">{{ligneFraisForfait.quantite }}</td>
-					{% endfor %}
-				</tr>
-				<tr>
-					<td>Montants totaux</td>
-					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td>{{(ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant)|format_currency('EUR')}}</td>
-					{% endfor %}
-				</tr>
-				<tr>
-					<td>Total</td>
-					<td colspan="4" class="text-center">
-						{% set totalFraisForfaits = 0 %}
-						{% for ligneFraisForfait in ligneFraisForfaits %}
-							{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
-						{% endfor %}
-						{{totalFraisForfaits|format_currency('EUR')}}
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	{% if ficheFrais.idEtat.id != 'CL' %}
-		<fieldset disabled="disabled">
-		{% endif %}
-
-		{{form_start(formFicheFrais, {'attr': {'class': "row g-3"}}
-		)}}
-		{% for ligneFraisForfait in formFicheFrais.ligneFraisForfaits %}
-			<div class="col-md-3">
-				<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
-				{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
-				{{form_errors(ligneFraisForfait.quantite)}}
+	<div class="card">
+	<h5 class="card-header">Frais forfaitaire</h5>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered table-active table-hover table-striped table-responsive">
+					<thead class="thead-dark"></thead>
+					<tr class="table-secondary">
+						<th>Frais forfaitisés</th>
+						<th>Forfait Etape</th>
+						<th>Frais Kilométrique</th>
+						<th>Nuitée Hôtel</th>
+						<th>Repas Restaurant</th>
+					</tr>
+					<tbody>
+						<tr>
+							<td>Montants Unitaires</td>
+							{% for fraisForfait in fraisForfaits %}
+								<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>Quantité</td>
+							{% for ligneFraisForfait in ligneFraisForfaits %}
+								<td class="text-info">{{ligneFraisForfait.quantite }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>Montants totaux</td>
+							{% for ligneFraisForfait in ligneFraisForfaits %}
+								<td>{{(ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant)|format_currency('EUR')}}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td colspan="4" class="text-center">
+								{% set totalFraisForfaits = 0 %}
+								{% for ligneFraisForfait in ligneFraisForfaits %}
+									{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
+								{% endfor %}
+								{{totalFraisForfaits|format_currency('EUR')}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
-		{% endfor %}
-		<div class="col-12">
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValider">
-				<i class="fas fa-check"></i>
-				Valider
-			</button>
-			<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Valider les frais forfaitisés</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
-								<span aria-hidden="true"></span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<p>Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?</p>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-							<button type="submit" class="btn btn-primary">Confirmer</button>
+			{% if ficheFrais.idEtat.id != 'CL' %}
+				<fieldset disabled="disabled">
+				{% endif %}
+
+				{{form_start(formFicheFrais, {'attr': {'class': "row g-3"}}
+				)}}
+				{% for ligneFraisForfait in formFicheFrais.ligneFraisForfaits %}
+					<div class="col-md-3">
+						<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
+						{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
+						{{form_errors(ligneFraisForfait.quantite)}}
+					</div>
+				{% endfor %}
+				<div class="col-12">
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValider">
+						<i class="fas fa-check"></i>
+						Valider
+					</button>
+					<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Valider les frais forfaitisés</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+										<span aria-hidden="true"></span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<p>Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+									<button type="submit" class="btn btn-primary">Confirmer</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		{{form_end(formFicheFrais)}}
+				{{form_end(formFicheFrais)}}
 
-		{% if ficheFrais.idEtat.id != 'CL' %}
-		</fieldset>
-	{% endif %}
+				{% if ficheFrais.idEtat.id != 'CL' %}
+				</fieldset>
+			{% endif %}
+		</div>
+	</div>
 	<br/>
 
-	<h3>Frais hors forfait</h3>
-	{% if ligneFraisHorsForfaits == null %}
-		<div class="alert alert-primary">
-			<h4 class="alert-heading">Aucun frais hors forfait pour ce mois</h4>
-		</div>
-	{% else %}
-		<div class="table-responsive">
-			<table class="table table-bordered table-active table-hover table-striped">
-				<thead class="thead-dark"></thead>
-				<tr class="table-secondary">
-					<th class="text-center">Date</th>
-					<th>Libelle</th>
-					<th>Montant</th>
-					<th class="text-center">Action</th>
-				</tr>
-				<tbody>
-					{% set numModalModifierStatut = 0 %}
-					{% for ligneFraisHorsForfait in ligneFraisHorsForfaits %}
-						{% set numModalModifierStatut = numModalModifierStatut + 1 %}
-						<tr>
-							<td class="col-md-1 align-middle">{{ligneFraisHorsForfait.date | date('d/m/Y')}}</td>
-							<td class="col-md-8 align-middle">
-								<b>
-									{% if ligneFraisHorsForfait.idStatut.id == 'REF' %}
-										<text class="col-md-2 align-middle text-danger">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
-									{% elseif ligneFraisHorsForfait.idStatut.id == 'VAL' %}
-										<text class="col-md-2 align-middle text-success">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
-									{% else %}
-										<text class="col-md-2 align-middle text-warning">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
-									{% endif %}
-									:
-								</b>
-								{{ligneFraisHorsForfait.libelle}}
-							</td>
-							<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.montant|format_currency('EUR')}}</td>
-							<td class="col-md-1" align="center">
-								{% if ficheFrais.idEtat.id != 'CL' %}
-									<fieldset disabled="disabled">
-									{% endif %}
-
-									<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}">
-										<input type="hidden" name="modifier_statut_frais_hors_forfait_token" value="{{ csrf_token('edit' ~ ligneFraisHorsForfait.id) }}">
-										{% if ligneFraisHorsForfait.idStatut.id == 'REF' %}
-											<button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalModifierStatut{{numModalModifierStatut}}" name="nouveau_statut" value="VAL">Valider</button>
-										{% elseif ligneFraisHorsForfait.idStatut.id == 'VAL' %}
-											<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalModifierStatut{{numModalModifierStatut}}" name="nouveau_statut" value="REF">Refuser</button>
-										{% else %}
-											<div class="btn-group" role="group">
-												<div class="col-md-6 px-1">
-													<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL" onclick="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">Valider</button>
-												</div>
-												<div class="col-md-6 px-1">
-													<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF" onclick="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">Refuser</button>
-												</div>
-											</div>
-										{% endif %}
-										<div class="modal" id="modalModifierStatut{{numModalModifierStatut}}" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" aria-hidden="true">
-											<div class="modal-dialog modal-dialog-centered">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title">Modifier le statut du frais hors forfait</h5>
-														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
-															<span aria-hidden="true"></span>
-														</button>
-													</div>
-													<div class="modal-body">
-														<p>Vous allez modifier le statut de ce frais non forfaitisés</p>
-														<p>Souhaitez-vous continuer ?</p>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-														<button type="submit" class="btn btn-primary" name="confirmation_statut{{numModalModifierStatut}}">Confirmer</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</form>
-									<script>
-										var btns = document.getElementsByName('nouveau_statut');
-										var btnConfirmation = document.getElementsByName('confirmation_statut' + {{ numModalModifierStatut }})[0];
-										btns.forEach(btn => {
-											btn.addEventListener("click", updateBtn(btn));
-										});
-										function updateBtn(btn) {
-											btnConfirmation.setAttribute('value', btn.value);
-										}
-									</script>
-
-									{% if ficheFrais.idEtat.id != 'CL' %}
-									</fieldset>
-								{% endif %}
-							</td>
+	<div class="card">
+	<h5 class="card-header">Frais hors forfait</h5>
+		<div class="card-body">
+			{% if ligneFraisHorsForfaits == null %}
+				<div class="alert alert-primary">
+					<h4 class="alert-heading">Aucun frais hors forfait pour ce mois</h4>
+				</div>
+			{% else %}
+				<div class="table-responsive">
+					<table class="table table-bordered table-active table-hover table-striped">
+						<thead class="thead-dark"></thead>
+						<tr class="table-secondary">
+							<th class="text-center">Date</th>
+							<th>Libelle</th>
+							<th>Montant</th>
+							<th class="text-center">Action</th>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+						<tbody>
+							{% set numModalModifierStatut = 0 %}
+							{% for ligneFraisHorsForfait in ligneFraisHorsForfaits %}
+								{% set numModalModifierStatut = numModalModifierStatut + 1 %}
+								<tr>
+									<td class="col-md-1 align-middle">{{ligneFraisHorsForfait.date | date('d/m/Y')}}</td>
+									<td class="col-md-8 align-middle">
+										<b>
+											{% if ligneFraisHorsForfait.idStatut.id == 'REF' %}
+												<text class="col-md-2 align-middle text-danger">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
+											{% elseif ligneFraisHorsForfait.idStatut.id == 'VAL' %}
+												<text class="col-md-2 align-middle text-success">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
+											{% else %}
+												<text class="col-md-2 align-middle text-warning">{{ligneFraisHorsForfait.idStatut.libelle | upper}}</text>
+											{% endif %}
+											:
+										</b>
+										{{ligneFraisHorsForfait.libelle}}
+									</td>
+									<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.montant|format_currency('EUR')}}</td>
+									<td class="col-md-1" align="center">
+										{% if ficheFrais.idEtat.id != 'CL' %}
+											<fieldset disabled="disabled">
+											{% endif %}
+
+											<form method="post" action="{{ path('modifier_statut_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}">
+												<input type="hidden" name="modifier_statut_frais_hors_forfait_token" value="{{ csrf_token('edit' ~ ligneFraisHorsForfait.id) }}">
+												{% if ligneFraisHorsForfait.idStatut.id == 'REF' %}
+													<button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalModifierStatut{{numModalModifierStatut}}" name="nouveau_statut" value="VAL">Valider</button>
+												{% elseif ligneFraisHorsForfait.idStatut.id == 'VAL' %}
+													<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalModifierStatut{{numModalModifierStatut}}" name="nouveau_statut" value="REF">Refuser</button>
+												{% else %}
+													<div class="btn-group" role="group">
+														<div class="col-md-6 px-1">
+															<button class="btn btn-success btn-sm" name="nouveau_statut" value="VAL" onclick="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">Valider</button>
+														</div>
+														<div class="col-md-6 px-1">
+															<button class="btn btn-danger btn-sm" name="nouveau_statut" value="REF" onclick="return confirm('Vous allez modifier le statut de ce frais non forfaitisés\nSouhaitez-vous continuer ?');">Refuser</button>
+														</div>
+													</div>
+												{% endif %}
+												<div class="modal" id="modalModifierStatut{{numModalModifierStatut}}" tabindex="-1" aria-labelledby="modalValiderFicheFraisLabel" aria-hidden="true">
+													<div class="modal-dialog modal-dialog-centered">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title">Modifier le statut du frais hors forfait</h5>
+																<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+																	<span aria-hidden="true"></span>
+																</button>
+															</div>
+															<div class="modal-body">
+																<p>Vous allez modifier le statut de ce frais non forfaitisés</p>
+																<p>Souhaitez-vous continuer ?</p>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+																<button type="submit" class="btn btn-primary" name="confirmation_statut{{numModalModifierStatut}}">Confirmer</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
+											<script>
+												var btns = document.getElementsByName('nouveau_statut');
+												var btnConfirmation = document.getElementsByName('confirmation_statut' + {{ numModalModifierStatut }})[0];
+												btns.forEach(btn => {
+													btn.addEventListener("click", updateBtn(btn));
+												});
+												function updateBtn(btn) {
+													btnConfirmation.setAttribute('value', btn.value);
+												}
+											</script>
+
+											{% if ficheFrais.idEtat.id != 'CL' %}
+											</fieldset>
+										{% endif %}
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% endif %}
 		</div>
-	{% endif %}
+	</div>
 	<hr/>
 
 	{% if ficheFrais.idEtat.id == 'CL' %}

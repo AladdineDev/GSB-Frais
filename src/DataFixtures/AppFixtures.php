@@ -105,11 +105,11 @@ class AppFixtures extends Fixture
                     $ligneFraisHorsForfait->setLibelle($faker->randomElement($this->getLibelleFraisHorsForfait()));
 
                     $statuts = $this->em->getRepository(Statut::class)->findAllAsc();
-                    $EtatValide = $this->em->getRepository(Etat::class)->find('VA');
-                    $EtatRembourse = $this->em->getRepository(Etat::class)->find('RB');
+                    $etatValide = $this->em->getRepository(Etat::class)->find('VA');
+                    $etatRembourse = $this->em->getRepository(Etat::class)->find('RB');
                     $EtatCree = $this->em->getRepository(Etat::class)->find('CR');
 
-                    if ($ficheFrais->getIdEtat() == $EtatValide || $ficheFrais->getIdEtat() == $EtatRembourse) {
+                    if ($ficheFrais->getIdEtat() == $etatValide || $ficheFrais->getIdEtat() == $etatRembourse) {
                         array_shift($statuts);
                     }
                     $ligneFraisHorsForfait->setIdStatut($faker->randomElement($statuts));

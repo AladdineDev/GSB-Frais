@@ -28,184 +28,192 @@
 	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM YYYY") | capitalize}}</h4>
 	<hr/>
 
-	<h3>Frais forfaitisés</h3>
-	<div class="table-responsive">
-		<table class="table table-bordered table-active table-hover table-striped table-responsive">
-			<thead class="thead-dark"></thead>
-			<tr class="table-secondary">
-				<th>Frais forfaitisés</th>
-				{% for fraisForfait in fraisForfaits %}
-					<th>{{fraisForfait.libelle}}</th>
-				{% endfor %}
-			</tr>
-			<tbody>
-				<tr>
-					<td>Montants Unitaires</td>
-					{% for fraisForfait in fraisForfaits %}
-						<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
-					{% endfor %}
-				</tr>
-				<tr>
-					<td>Quantité</td>
-					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td class="text-info">{{ligneFraisForfait.quantite }}</td>
-					{% endfor %}
-				</tr>
-				<tr>
-					<td>Montants totaux</td>
-					{% for ligneFraisForfait in ligneFraisForfaits %}
-						<td>{{(ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant)|format_currency('EUR')}}</td>
-					{% endfor %}
-				</tr>
-				<tr>
-					<td>Total</td>
-					<td colspan="4" class="text-center">
-						{% set totalFraisForfaits = 0 %}
-						{% for ligneFraisForfait in ligneFraisForfaits %}
-							{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
+	<div class="card">
+	<h5 class="card-header">Frais forfaitaire</h5>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered table-active table-hover table-striped table-responsive">
+					<thead class="thead-dark"></thead>
+					<tr class="table-secondary">
+						<th>Frais forfaitisés</th>
+						{% for fraisForfait in fraisForfaits %}
+							<th>{{fraisForfait.libelle}}</th>
 						{% endfor %}
-						{{totalFraisForfaits|format_currency('EUR')}}
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	{{form_start(formFicheFrais, {'attr': {'class': "row g-3"}}
-	)}}
-	{% for ligneFraisForfait in formFicheFrais.ligneFraisForfaits %}
-		<div class="col-md-3">
-			<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
-			{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
-			{{form_errors(ligneFraisForfait.quantite)}}
-		</div>
-	{% endfor %}
-	<div class="col-12">
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValider"><i class="fas fa-check"></i> Valider
-		</button>
-		<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Valider les frais forfaitisés</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
-							<span aria-hidden="true"></span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<p>Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-						<button type="submit" class="btn btn-primary">Confirmer</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	{{form_end(formFicheFrais)}}
-	<br/>
-
-	<h3>Frais hors forfait</h3>
-	{% if ligneFraisHorsForfaits == null %}
-		<div class="alert alert-primary">
-			<h4 class="alert-heading">Aucun frais hors forfait pour ce mois</h4>
-			<p class="mb-0">Saisissez de nouveaux frais hors forfaits.</p>
-		</div>
-	{% else %}
-		<div class="table-responsive">
-			<table class="table table-bordered table-active table-hover table-striped">
-				<thead class="thead-dark"></thead>
-				<tr class="table-secondary">
-					<th class="text-center">Date</th>
-					<th>Libelle</th>
-					<th>Montant</th>
-					<th class="text-center">Action</th>
-				</tr>
-				<tbody>
-					{% set numModalSupprimer = 1 %}
-					{% for ligneFraisHorsForfait in ligneFraisHorsForfaits %}
-						{% set numModalSupprimer = numModalSupprimer + 1 %}
+					</tr>
+					<tbody>
 						<tr>
-							<td class="col-md-1 align-middle">{{ligneFraisHorsForfait.date | date('d/m/Y')}}</td>
-							<td class="align-middle">{{ligneFraisHorsForfait.libelle}}</td>
-							<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.montant|format_currency('EUR')}}</td>
-							<td class="col-md-1">
-								<form method="post" action="{{ path('supprimer_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}">
-									<input type="hidden" name="supprimer_frais_hors_forfait_token" value="{{ csrf_token('delete' ~ ligneFraisHorsForfait.id) }}">
-									<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalSupprimer{{numModalSupprimer}}">Supprimer</button>
-									<div class="modal" id="modalSupprimer{{numModalSupprimer}}" tabindex="-1" aria-labelledby="modalSupprimerLabel" aria-hidden="true">
-										<div class="modal-dialog modal-dialog-centered">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title">Supprimer un frais hors forfait</h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
-														<span aria-hidden="true"></span>
-													</button>
-												</div>
-												<div class="modal-body">
-													<p>Souhaitez-vous supprimer ce frais non forfaitisé ?</p>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-													<button class="btn btn-primary">Confirmer</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
+							<td>Montants Unitaires</td>
+							{% for fraisForfait in fraisForfaits %}
+								<td>{{fraisForfait.montant|format_currency('EUR')}}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>Quantité</td>
+							{% for ligneFraisForfait in ligneFraisForfaits %}
+								<td class="text-info">{{ligneFraisForfait.quantite }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>Montants totaux</td>
+							{% for ligneFraisForfait in ligneFraisForfaits %}
+								<td>{{(ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant)|format_currency('EUR')}}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td colspan="4" class="text-center">
+								{% set totalFraisForfaits = 0 %}
+								{% for ligneFraisForfait in ligneFraisForfaits %}
+									{% set totalFraisForfaits = totalFraisForfaits + (ligneFraisForfait.quantite * fraisForfaits[loop.index0].montant) %}
+								{% endfor %}
+								{{totalFraisForfaits|format_currency('EUR')}}
 							</td>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	{% endif %}
+					</tbody>
+				</table>
+			</div>
 
-	{{form_start(formLigneFraisHorsForfait, {'attr': {'class': "row g-3"}})}}
-	<div class="col-md-4">
-		<label for="ligneFraisHorsForfait" class="form-label">Date</label>
-		{{form_widget(formLigneFraisHorsForfait.date)}}
-		{{form_errors(formLigneFraisHorsForfait.date)}}
-	</div>
-	<div class="col-md-4">
-		<label for="ligneFraisHorsForfait" class="form-label">Libelle</label>
-		{{form_widget(formLigneFraisHorsForfait.libelle)}}
-		{{form_errors(formLigneFraisHorsForfait.libelle)}}
-	</div>
-	<div class="col-md-4">
-		<label for="ligneFraisHorsForfait" class="form-label">Montant</label>
-		<div class="input-group">
-			{{form_widget(formLigneFraisHorsForfait.montant)}}
-			<span class="input-group-text bg-primary">
-				€</span>
-			{{form_errors(formLigneFraisHorsForfait.montant)}}
-		</div>
-	</div>
-	<div class="col-12">
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjouter"><i class="fas fa-plus"></i> Ajouter
-		</button>
-		<div class="modal" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Ajouter un frais hors forfait</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
-							<span aria-hidden="true"></span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<p>Souhaitez-vous ajouter un nouveau frais non forfaitisé ?</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-						<button type="submit" class="btn btn-primary">Confirmer</button>
+			{{form_start(formFicheFrais, {'attr': {'class': "row g-3"}}
+			)}}
+			{% for ligneFraisForfait in formFicheFrais.ligneFraisForfaits %}
+				<div class="col-md-3">
+					<label for="fraisForfait" class="form-label">{{fraisForfaits[loop.index0].libelle}}</label>
+					{{form_widget(ligneFraisForfait.quantite, {'attr': {'value': ligneFraisForfaits[loop.index0].quantite }})}}
+					{{form_errors(ligneFraisForfait.quantite)}}
+				</div>
+			{% endfor %}
+			<div class="col-12">
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalValider"><i class="fas fa-check"></i> Valider
+				</button>
+				<div class="modal" id="modalValider" tabindex="-1" aria-labelledby="modalValiderLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Valider les frais forfaitisés</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+									<span aria-hidden="true"></span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p>Souhaitez-vous valider les nouvelles quantités de frais forfaitisés ?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+								<button type="submit" class="btn btn-primary">Confirmer</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
+			{{form_end(formFicheFrais)}}
 		</div>
 	</div>
-	{{form_end(formLigneFraisHorsForfait)}}
+	<br/>
+
+	<div class="card">
+	<h5 class="card-header">Frais hors forfait</h5>
+		<div class="card-body">
+			{% if ligneFraisHorsForfaits == null %}
+				<div class="alert alert-primary">
+					<h4 class="alert-heading">Aucun frais hors forfait pour ce mois</h4>
+					<p class="mb-0">Saisissez de nouveaux frais hors forfaits.</p>
+				</div>
+			{% else %}
+				<div class="table-responsive">
+					<table class="table table-bordered table-active table-hover table-striped">
+						<thead class="thead-dark"></thead>
+						<tr class="table-secondary">
+							<th class="text-center">Date</th>
+							<th>Libelle</th>
+							<th>Montant</th>
+							<th class="text-center">Action</th>
+						</tr>
+						<tbody>
+							{% set numModalSupprimer = 1 %}
+							{% for ligneFraisHorsForfait in ligneFraisHorsForfaits %}
+								{% set numModalSupprimer = numModalSupprimer + 1 %}
+								<tr>
+									<td class="col-md-1 align-middle">{{ligneFraisHorsForfait.date | date('d/m/Y')}}</td>
+									<td class="align-middle">{{ligneFraisHorsForfait.libelle}}</td>
+									<td class="col-md-2 align-middle">{{ligneFraisHorsForfait.montant|format_currency('EUR')}}</td>
+									<td class="col-md-1">
+										<form method="post" action="{{ path('supprimer_frais_hors_forfait', {'id': ligneFraisHorsForfait.id}) }}">
+											<input type="hidden" name="supprimer_frais_hors_forfait_token" value="{{ csrf_token('delete' ~ ligneFraisHorsForfait.id) }}">
+											<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalSupprimer{{numModalSupprimer}}">Supprimer</button>
+											<div class="modal" id="modalSupprimer{{numModalSupprimer}}" tabindex="-1" aria-labelledby="modalSupprimerLabel" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title">Supprimer un frais hors forfait</h5>
+															<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+																<span aria-hidden="true"></span>
+															</button>
+														</div>
+														<div class="modal-body">
+															<p>Souhaitez-vous supprimer ce frais non forfaitisé ?</p>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+															<button class="btn btn-primary">Confirmer</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% endif %}
+
+			{{form_start(formLigneFraisHorsForfait, {'attr': {'class': "row g-3"}})}}
+			<div class="col-md-4">
+				<label for="ligneFraisHorsForfait" class="form-label">Date</label>
+				{{form_widget(formLigneFraisHorsForfait.date)}}
+				{{form_errors(formLigneFraisHorsForfait.date)}}
+			</div>
+			<div class="col-md-4">
+				<label for="ligneFraisHorsForfait" class="form-label">Libelle</label>
+				{{form_widget(formLigneFraisHorsForfait.libelle)}}
+				{{form_errors(formLigneFraisHorsForfait.libelle)}}
+			</div>
+			<div class="col-md-4">
+				<label for="ligneFraisHorsForfait" class="form-label">Montant</label>
+				<div class="input-group">
+					{{form_widget(formLigneFraisHorsForfait.montant)}}
+					<span class="input-group-text bg-primary">
+						€</span>
+					{{form_errors(formLigneFraisHorsForfait.montant)}}
+				</div>
+			</div>
+			<div class="col-12">
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjouter"><i class="fas fa-plus"></i> Ajouter
+				</button>
+				<div class="modal" id="modalAjouter" tabindex="-1" aria-labelledby="modalAjouterLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Ajouter un frais hors forfait</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
+									<span aria-hidden="true"></span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p>Souhaitez-vous ajouter un nouveau frais non forfaitisé ?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+								<button type="submit" class="btn btn-primary">Confirmer</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{form_end(formLigneFraisHorsForfait)}}
+		</div>
+	</div>
 	<br/>
 	
 {% endblock %}
