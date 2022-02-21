@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: mysql:5
+    container_name: gsb_frais_db
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MARIADB_DATABASE=gsbFrais
+      - MARIADB_USER=gsbAdmin
+      - MARIADB_PASSWORD=azerty
+    networks:
+      - dev
+
+  www:
+    build: php
+    user: '1000:1000'
+    container_name: gsb_frais_www
+    ports:
+      - "9973:80"
+    volumes:
+      - ./php/vhosts:/etc/apache2/sites-enabled
+      - ./:/var/www/GSB-Frais
+    restart: always
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  db-data:
