@@ -95,6 +95,9 @@ class ComptableController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
+        $ficheFrais = $ligneFraisHorsForfait->getIdFicheFrais();
+        $ligneFraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+
         if ($this->isCsrfTokenValid('edit' . $ligneFraisHorsForfait->getId(), $request->request->get('modifier_statut_frais_hors_forfait_token'))) {
             $etatCloturee = $em->getRepository(Etat::class)->find('CL');
             if ($ligneFraisHorsForfait->getIdFicheFrais()->getIdEtat() != $etatCloturee) {
@@ -105,14 +108,20 @@ class ComptableController extends AbstractController
             $requestToArray = $request->request->all();
             $confirmationStatut = array_pop($requestToArray);
             if ($confirmationStatut == 'VAL') {
-                $ficheFrais = $ligneFraisHorsForfait->getIdFicheFrais();
-                $ficheFrais->setMontantValide($ficheFrais->getMontantValide() + $ligneFraisHorsForfait->getMontant());
                 $ligneFraisHorsForfait->setIdStatut($statutValide);
                 $this->addFlash('ligneFraisHorsForfaitValide', 'Le frais hors forfait a bien été validé.');
             } else {
                 $ligneFraisHorsForfait->setIdStatut($statutRefuse);
                 $this->addFlash('ligneFraisHorsForfaitRefuse', 'Le frais hors forfait a bien été refusé.');
             }
+            $montantValide = 0;
+            foreach ($ligneFraisHorsForfaits as $uneLigneFraisHorsForfait) {
+                if ($uneLigneFraisHorsForfait->getIdStatut() == $statutValide) {
+                    $montantValide += $uneLigneFraisHorsForfait->getMontant();
+                }
+            }
+            $ficheFrais->setMontantValide($montantValide);
+            $em->persist($ficheFrais);
             $em->persist($ligneFraisHorsForfait);
             $em->flush();
         }

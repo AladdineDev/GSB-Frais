@@ -149,7 +149,9 @@ class VisiteurController extends AbstractController
     public function supprimerFraisHorsForfait(Lignefraishorsforfait $ligneFraisHorsForfait, Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
+
         $visiteur = $this->getUser();
+
         $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
         $ficheFraisProchaine = $em->getRepository(Fichefrais::class)->findFichefraisProchaine($visiteur);
 
