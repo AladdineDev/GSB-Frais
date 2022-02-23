@@ -9,8 +9,8 @@
             "port": 3306,
             "driver": "MariaDB",
             "name": "GSB",
-            "database": "gsbFrais",
-            "username": "gsbAdmin",
+            "database": "gsb_frais",
+            "username": "developpeur",
             "password": "azerty"
         }
     ]

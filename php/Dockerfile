@@ -10,12 +10,12 @@ RUN pecl install apcu && docker-php-ext-enable apcu
 
 WORKDIR /var/www/GSB-Frais
 
-# install composer
+# Installation de composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
-# install symfony
+# Installation de symfony
 RUN wget https://get.symfony.com/cli/installer -O - | bash
 RUN mv $HOME/.symfony/bin/symfony /usr/local/bin/symfony

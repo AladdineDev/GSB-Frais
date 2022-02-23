@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /*
- * Cron doit être mis en place pour l'utilisation de cette classe 
+ * Un planificateur de tâches doit être mis en place pour une utilisation optimale de cette classe
  */
 
 class ClotureFicheFraisCommand extends Command

@@ -9,8 +9,8 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     environment:
-      - MARIADB_DATABASE=gsbFrais
-      - MARIADB_USER=gsbAdmin
+      - MARIADB_DATABASE=gsb_frais
+      - MARIADB_USER=developpeur
       - MARIADB_PASSWORD=azerty
     networks:
       - dev

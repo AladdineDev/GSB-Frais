@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Démarrage du service mysql et création de l'utilisateur "gsbAdmin"
+# Démarrage du service mysql et création de l'utilisateur "developpeur"
 /etc/init.d/mysql start
-mariadb -e "grant all privileges on gsbFrais.* to gsbAdmin@localhost identified by \"azerty\";"
+mariadb -e "grant all privileges on gsb_frais.* to developpeur@localhost identified by \"azerty\";"
 
 # Installation des dépendances
 composer install -n
