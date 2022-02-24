@@ -107,7 +107,7 @@ class AppFixtures extends Fixture
                     $statuts = $this->em->getRepository(Statut::class)->findAllAsc();
                     $etatValide = $this->em->getRepository(Etat::class)->find('VA');
                     $etatRembourse = $this->em->getRepository(Etat::class)->find('RB');
-                    $EtatCree = $this->em->getRepository(Etat::class)->find('CR');
+                    $etatCree = $this->em->getRepository(Etat::class)->find('CR');
 
                     if ($ficheFrais->getIdEtat() == $etatValide || $ficheFrais->getIdEtat() == $etatRembourse) {
                         array_shift($statuts);
@@ -116,7 +116,7 @@ class AppFixtures extends Fixture
 
                     if (
                         $ligneFraisHorsForfait->getIdstatut() == $this->em->getRepository(Statut::class)->find('VAL') &&
-                        ($ficheFrais->getIdEtat() != $EtatCree)
+                        ($ficheFrais->getIdEtat() != $etatCree)
                     ) {
                         $ficheFrais->setMontantValide($ficheFrais->getMontantValide() + $ligneFraisHorsForfait->getMontant());
                         $ficheFrais->setNbJustificatifs($ficheFrais->getNbJustificatifs() + 1);

@@ -18,8 +18,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class VisiteurController extends AbstractController
-
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
     public function index(): Response
     {
         return $this->render('visiteur/index.html.twig', [
@@ -148,12 +153,10 @@ class VisiteurController extends AbstractController
 
     public function supprimerFraisHorsForfait(Lignefraishorsforfait $ligneFraisHorsForfait, Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
         $visiteur = $this->getUser();
 
-        $ficheFraisCourante = $em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
-        $ficheFraisProchaine = $em->getRepository(Fichefrais::class)->findFichefraisProchaine($visiteur);
+        $ficheFraisCourante = $this->em->getRepository(Fichefrais::class)->findFichefraisCourante($visiteur);
+        $ficheFraisProchaine = $this->em->getRepository(Fichefrais::class)->findFichefraisProchaine($visiteur);
 
         if (
             $ligneFraisHorsForfait->getMois() != $ficheFraisCourante->getMois() &&
@@ -163,8 +166,8 @@ class VisiteurController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete' . $ligneFraisHorsForfait->getId(), $request->request->get('supprimer_frais_hors_forfait_token'))) {
-            $em->remove($ligneFraisHorsForfait);
-            $em->flush();
+            $this->em->remove($ligneFraisHorsForfait);
+            $this->em->flush();
             $this->addFlash('ligneFraisHorsForfaitSupprime', 'Le frais hors forfait a bien été supprimé.');
         }
 
@@ -179,71 +182,67 @@ class VisiteurController extends AbstractController
 
     private function creerFichefrais($visiteur)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
-        $derniereFicheFrais = $em->getRepository(Fichefrais::class)->findOneBy(array('idVisiteur' => $visiteur), array('mois' => 'DESC'));
+        $fraisForfaits = $this->em->getRepository(Fraisforfait::class)->findAllAsc();
+        $derniereFicheFrais = $this->em->getRepository(Fichefrais::class)->findOneBy(array('idVisiteur' => $visiteur), array('mois' => 'DESC'));
 
         if ($derniereFicheFrais) {
-            $etatCloturee = $em->getRepository(Etat::class)->find('CL');
+            $etatCloturee = $this->em->getRepository(Etat::class)->find('CL');
             $derniereFicheFrais->setIdEtat($etatCloturee);
         }
 
         $ficheFrais = new ficheFrais();
         $ficheFrais->setIdVisiteur($visiteur);
-        $ficheFrais->setIdEtat($em->getRepository(Etat::class)->find('CR'));
-        $em->persist($ficheFrais);
+        $ficheFrais->setIdEtat($this->em->getRepository(Etat::class)->find('CR'));
+        $this->em->persist($ficheFrais);
 
         $i = 0;
         foreach ($ficheFrais->getLignefraisforfaits() as $ligneFraisForfait) {
             $ligneFraisForfait->setFicheFrais($ficheFrais);
             $ligneFraisForfait->setFraisForfait($fraisForfaits[$i]);
             $ligneFraisForfait->setQuantite(0);
-            $em->persist($ligneFraisForfait);
+            $this->em->persist($ligneFraisForfait);
             $i++;
         }
-        $em->flush();
+        $this->em->flush();
 
         return $ficheFrais;
     }
 
     private function reporterLigneFraisHorsForfait($ligneFraisHorsForfait)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $visiteur = $this->getUser();
 
-        $fraisForfaits = $em->getRepository(Fraisforfait::class)->findAllAsc();
-        $ficheFrais = $em->getRepository(Fichefrais::class)->findFichefraisProchaine($visiteur);
+        $fraisForfaits = $this->em->getRepository(Fraisforfait::class)->findAllAsc();
+        $ficheFrais = $this->em->getRepository(Fichefrais::class)->findFichefraisProchaine($visiteur);
 
         if (!$ficheFrais) {
             $ficheFrais = new ficheFrais();
         }
 
         $ficheFrais->setIdVisiteur($this->getUser());
-        $ficheFrais->setIdEtat($em->getRepository(Etat::class)->find('CR'));
+        $ficheFrais->setIdEtat($this->em->getRepository(Etat::class)->find('CR'));
         $ficheFrais->setMois((new \DateTime())->modify('+1 month'));
         $ligneFraisHorsForfait->setMois((new \DateTime())->modify('+1 month'));
-        $em->persist($ficheFrais);
+        $this->em->persist($ficheFrais);
 
         $i = 0;
         foreach ($ficheFrais->getLignefraisforfaits() as $ligneFraisForfait) {
             $ligneFraisForfait->setFicheFrais($ficheFrais);
             $ligneFraisForfait->setFraisForfait($fraisForfaits[$i]);
             $ligneFraisForfait->setQuantite(0);
-            $em->persist($ligneFraisForfait);
+            $this->em->persist($ligneFraisForfait);
             $i++;
         }
 
-        $statutAttente = $em->getRepository(Statut::class)->find('ATT');
+        $statutAttente = $this->em->getRepository(Statut::class)->find('ATT');
         $ligneFraisHorsForfait->setIdStatut($statutAttente);
         $ligneFraisHorsForfait->setIdVisiteur($ficheFrais->getIdVisiteur()->getId());
         $ligneFraisHorsForfait->setIdFicheFrais($ficheFrais);
 
         $ligneFraisHorsForfait->setMois((new \DateTime())->modify('+1 month'));
-        $em->persist($ligneFraisHorsForfait);
+        $this->em->persist($ligneFraisHorsForfait);
 
-        $em->flush();
+        $this->em->flush();
 
         return $ligneFraisHorsForfait;
     }

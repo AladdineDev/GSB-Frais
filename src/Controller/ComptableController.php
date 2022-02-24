@@ -12,7 +12,6 @@ use App\Form\FichefraisType;
 use App\Entity\Lignefraisforfait;
 use App\Entity\Lignefraishorsforfait;
 use App\Repository\FichefraisRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +19,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ComptableController extends AbstractController
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     public function index(): Response
     {
         return $this->render('comptable/index.html.twig', [
@@ -93,18 +99,16 @@ class ComptableController extends AbstractController
 
     public function modifierStatutFraisHorsForfait(Lignefraishorsforfait $ligneFraisHorsForfait, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $ficheFrais = $ligneFraisHorsForfait->getIdFicheFrais();
-        $ligneFraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+        $ligneFraisHorsForfaits = $this->em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
 
         if ($this->isCsrfTokenValid('edit' . $ligneFraisHorsForfait->getId(), $request->request->get('modifier_statut_frais_hors_forfait_token'))) {
-            $etatCloturee = $em->getRepository(Etat::class)->find('CL');
+            $etatCloturee = $this->em->getRepository(Etat::class)->find('CL');
             if ($ligneFraisHorsForfait->getIdFicheFrais()->getIdEtat() != $etatCloturee) {
                 throw $this->createAccessDeniedException();
             }
-            $statutRefuse = $em->getRepository(Statut::class)->find('REF');
-            $statutValide = $em->getRepository(Statut::class)->find('VAL');
+            $statutRefuse = $this->em->getRepository(Statut::class)->find('REF');
+            $statutValide = $this->em->getRepository(Statut::class)->find('VAL');
             $requestToArray = $request->request->all();
             $confirmationStatut = array_pop($requestToArray);
             if ($confirmationStatut == 'VAL') {
@@ -121,19 +125,17 @@ class ComptableController extends AbstractController
                 }
             }
             $ficheFrais->setMontantValide($montantValide);
-            $em->persist($ficheFrais);
-            $em->persist($ligneFraisHorsForfait);
-            $em->flush();
+            $this->em->persist($ficheFrais);
+            $this->em->persist($ligneFraisHorsForfait);
+            $this->em->flush();
         }
         return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ligneFraisHorsForfait->getIdficheFrais()->getId()]);
     }
 
     public function validerFicheFrais(Fichefrais $ficheFrais, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         if ($this->isCsrfTokenValid('validate' . $ficheFrais->getId(), $request->request->get('valider_fiche_frais_token'))) {
-            $ligneFraisHorsForfaits = $em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
+            $ligneFraisHorsForfaits = $this->em->getRepository(Lignefraishorsforfait::class)->findByFichefrais($ficheFrais);
             foreach ($ligneFraisHorsForfaits as $ligneFraisHorsForfait) {
                 if ($ligneFraisHorsForfait->getIdstatut()->getId() == 'ATT') {
                     $this->addFlash(
@@ -144,17 +146,17 @@ class ComptableController extends AbstractController
                     return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);
                 }
             }
-            $ligneFraisForfaits = $em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
+            $ligneFraisForfaits = $this->em->getRepository(Lignefraisforfait::class)->findByFichefrais($ficheFrais);
             foreach ($ligneFraisForfaits as $ligneFraisForfait) {
                 $ficheFrais->setMontantValide(
                     $ficheFrais->getMontantValide() + $ligneFraisForfait->getQuantite() * $ligneFraisForfait->getFraisForfait()->getMontant()
                 );
             }
-            $etatValide = $em->getRepository(Etat::class)->find('VA');
+            $etatValide = $this->em->getRepository(Etat::class)->find('VA');
             $ficheFrais->setIdEtat($etatValide);
-            $ficheFrais->setDateModif(new DateTime('now'));
-            $em->persist($ficheFrais);
-            $em->flush();
+            $ficheFrais->setDateModif(new \Datetime('now'));
+            $this->em->persist($ficheFrais);
+            $this->em->flush();
             $this->addFlash('ficheFraisValide', 'La fiche de frais a bien été validée.');
         }
         return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);
@@ -162,14 +164,12 @@ class ComptableController extends AbstractController
 
     public function rembouserFicheFrais(Fichefrais $ficheFrais, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         if ($this->isCsrfTokenValid('refund' . $ficheFrais->getId(), $request->request->get('rembourser_fiche_frais_token'))) {
-            $etatRembourse = $em->getRepository(Etat::class)->find('RB');
+            $etatRembourse = $this->em->getRepository(Etat::class)->find('RB');
             $ficheFrais->setIdEtat($etatRembourse);
-            $ficheFrais->setDateModif(new DateTime('now'));
-            $em->persist($ficheFrais);
-            $em->flush();
+            $ficheFrais->setDateModif(new \Datetime('now'));
+            $this->em->persist($ficheFrais);
+            $this->em->flush();
             $this->addFlash('ficheFraisRembourse', 'Vous avez bien indiqué le remboursement de cette fiche de frais.');
         }
         return $this->redirectToRoute('administrer_fiche_frais', ['idFicheFrais' => $ficheFrais->getId()]);

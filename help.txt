@@ -1,5 +1,0 @@
-git clone https://github.com/Aaldn/GSB-Frais /var/www/GSB-Frais
-cd /var/www/GSB-Frais
-
-docker-compose up -d --build
-docker exec -u root gsb_frais_www sh -c "chmod +x script/start.sh && ./script/start.sh"

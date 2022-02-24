@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Fichefrais;
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -59,8 +58,8 @@ class FichefraisRepository extends ServiceEntityRepository
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
             'visiteur' => $visiteur,
-            'moisDebut' => (new DateTime())->format('Y-m-01'),
-            'moisFin' => (new DateTime())->format('Y-m-t')
+            'moisDebut' => (new \DateTime())->format('Y-m-01'),
+            'moisFin' => (new \DateTime())->format('Y-m-t')
         ]);
 
         return $query->getOneOrNullResult();
@@ -77,8 +76,8 @@ class FichefraisRepository extends ServiceEntityRepository
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
             'visiteur' => $visiteur,
-            'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->modify('+1 month')->format('Y-m-t')
+            'premierMois' => (new \DateTime())->modify('-1 year')->format('Y-m-01'),
+            'dernierMois' => (new \DateTime())->modify('+1 month')->format('Y-m-t')
         ]);
 
         return $query->getResult();
@@ -95,8 +94,8 @@ class FichefraisRepository extends ServiceEntityRepository
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
             'visiteur' => $visiteur,
-            'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->modify('-1 month')->format('Y-m-t')
+            'premierMois' => (new \DateTime())->modify('-1 year')->format('Y-m-01'),
+            'dernierMois' => (new \DateTime())->modify('-1 month')->format('Y-m-t')
         ]);
 
         return $query->getResult();
@@ -112,8 +111,8 @@ class FichefraisRepository extends ServiceEntityRepository
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
             'idFicheFrais' => $idFicheFrais,
-            'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->modify('+1 month')->format('Y-m-t')
+            'premierMois' => (new \DateTime())->modify('-1 year')->format('Y-m-01'),
+            'dernierMois' => (new \DateTime())->modify('+1 month')->format('Y-m-t')
         ]);
 
         return $query->getOneOrNullResult();
@@ -130,8 +129,8 @@ class FichefraisRepository extends ServiceEntityRepository
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
             'visiteur' => $visiteur,
-            'premierMois' => (new DateTime())->modify('+1 month')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->modify('+1 month')->format('Y-m-t')
+            'premierMois' => (new \DateTime())->modify('+1 month')->format('Y-m-01'),
+            'dernierMois' => (new \DateTime())->modify('+1 month')->format('Y-m-t')
         ]);
 
         return $query->getOneOrNullResult();
@@ -148,8 +147,8 @@ class FichefraisRepository extends ServiceEntityRepository
         $query = $this->_em->createQuery($dql);
         $query->setParameters([
             'visiteur' => $visiteur,
-            'premierMois' => (new DateTime())->modify('-1 year')->format('Y-m-01'),
-            'dernierMois' => (new DateTime())->format('Y-m-t')
+            'premierMois' => (new \DateTime())->modify('-1 year')->format('Y-m-01'),
+            'dernierMois' => (new \DateTime())->format('Y-m-t')
         ]);
 
         return $query->getResult();
