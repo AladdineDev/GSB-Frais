@@ -3,21 +3,21 @@ version: "3.8"
 services:
 
   db:
-    image: mysql:5
+    image: mariadb:10.3
     container_name: gsb_frais_db
+    command: --default-authentication-plugin=mysql_native_password
+    working_dir: /var/www/GSB-Frais/sql
     restart: always
     volumes:
       - db-data:/var/lib/mysql
+      - ./:/var/www/GSB-Frais
     environment:
-      - MYSQL_DATABASE=gsb_frais
-      - MYSQL_USER=developpeur
-      - MYSQL_PASSWORD=azerty
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     networks:
       - dev
 
   www:
     build: php
-    user: '1000:1000'
     container_name: gsb_frais_www
     ports:
       - "9973:80"

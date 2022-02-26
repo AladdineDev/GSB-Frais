@@ -8,10 +8,10 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MariaDB",
-            "name": "GSB",
+            "name": "GSB-Frais",
             "database": "gsb_frais",
-            "username": "developpeur",
-            "password": "azerty"
+            "username": "root",
+            "password": ""
         }
     ]
 }
