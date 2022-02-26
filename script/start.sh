@@ -8,5 +8,5 @@ docker exec gsb_frais_www sh -c "symfony console doctrine:database:create"
 docker exec gsb_frais_www sh -c "symfony console doctrine:migrations:migrate -n"
 
 # Exécution du script de peuplement de la base de données
-chmod +x script/database.sh
-./script/database.sh
+chmod +x script/fixtures.sh
+./script/fixtures.sh
