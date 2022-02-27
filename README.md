@@ -1,6 +1,6 @@
 <img src="public/images/logo.png" align="right" width="200px"/>
 
-GSB Frais [![Version](https://img.shields.io/badge/version-1.0.0-2fba00.svg?style=flat-square)](#) [![Licence](https://img.shields.io/badge/licence-MIT-2fba00.svg?style=flat-square)](https://github.com/Aaldn/GSB-Frais/blob/master/LICENSE.md)
+GSB Frais [![Version](https://img.shields.io/badge/version-1.0.0-2fba00.svg?style=flat-square)](https://github.com/Aaldn/GSB-Frais#readme) [![Licence](https://img.shields.io/badge/licence-MIT-2fba00.svg?style=flat-square)](https://github.com/Aaldn/GSB-Frais/blob/master/LICENSE.md)
 ========================
 
 GSB Frais – par [@Aaldn](https://github.com/Aaldn)
