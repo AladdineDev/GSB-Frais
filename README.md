@@ -5,11 +5,11 @@ GSB Frais [![Version](https://img.shields.io/badge/version-1.0.0-2fba00.svg?styl
 
 GSB Frais – par [@Aaldn](https://github.com/Aaldn)
 
-[![symfony 5](https://img.shields.io/badge/Symfony-5.4-e5e8e4.svg?style=flat-square&logo=symfony)](https://symfony.com/5) [![composer 2](https://img.shields.io/badge/Composer-2.2-89552c.svg?style=flat-square&logo=composer)](https://getcomposer.org/) [![php 7](https://img.shields.io/badge/PHP-7.3-8892bf.svg?style=flat-square&logo=php)](https://www.php.net/) [![mariadb 5](https://img.shields.io/badge/MariaDB-10.3-c0765a.svg?style=flat-square&logo=mariadb)](https://mariadb.org/) [![apache 2](https://img.shields.io/badge/Apache-2.4-a2205c.svg?style=flat-square&logo=apache)](https://httpd.apache.org/)
+[![Symfony 5](https://img.shields.io/badge/Symfony-5.4-e5e8e4.svg?style=flat-square&logo=symfony)](https://symfony.com/5) [![Composer 2](https://img.shields.io/badge/Composer-2.2-89552c.svg?style=flat-square&logo=composer)](https://getcomposer.org/) [![PHP 7](https://img.shields.io/badge/PHP-7.3-8892bf.svg?style=flat-square&logo=php&logoColor=ffffff)](https://www.php.net/) [![MariaDB 10](https://img.shields.io/badge/MariaDB-10.3-c0765a.svg?style=flat-square&logo=mariadb)](https://mariadb.org/) [![Apache 2](https://img.shields.io/badge/Apache-2.4-a2205c.svg?style=flat-square&logo=apache)](https://httpd.apache.org/)
 
 Application d'enregistrement des frais engagés et de suivi des remboursements.
 
-<img src="img/Comptable.png" width="76.8%"></img> <img src="img/Visiteur.jpg" width="22.2%"></img> 
+<img src="img/Comptable.png" width="76%"></img> <img src="img/Visiteur.jpg" width="22%"></img> 
 
 ### Documentation
 
