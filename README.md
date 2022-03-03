@@ -9,7 +9,7 @@ GSB Frais – par [@Aaldn](https://github.com/Aaldn)
 
 Application d'enregistrement des frais engagés et de suivi des remboursements.
 
-<img src="img/Comptable.png" width="76%"></img> <img src="img/Visiteur.jpg" width="22%"></img> 
+<img src="screenshots/Comptable.png" width="76%"></img> <img src="screenshots/Visiteur.jpg" width="22%"></img> 
 
 ### Documentation
 
@@ -34,11 +34,11 @@ Application d'enregistrement des frais engagés et de suivi des remboursements.
 
 ## Installation
 
-Tout d'abord, clonez ce dépôt puis placez vous au sein du projet :
+Tout d'abord, clonez ce dépôt puis placez-vous au sein du projet :
 
 ```bash
-$ git clone https://github.com/Aaldn/GSB-Frais /var/www/GSB-Frais
-$ cd /var/www/GSB-Frais
+$ git clone https://github.com/Aaldn/GSB-Frais
+$ cd GSB-Frais
 ```
 
 Ensuite, construisez et lancez les conteneurs Docker :
@@ -84,6 +84,7 @@ $ docker exec -it <nom_du_conteneur> bash
 ```
 
 > Vous pouvez personnaliser votre environnement (ports, volumes...) en modifiant le fichier `docker-compose.yml`.
+
 ## Licence
 
 Voir le fichier [LICENSE.md](https://github.com/Aaldn/GSB-Frais/blob/master/LICENSE.md) fourni.
