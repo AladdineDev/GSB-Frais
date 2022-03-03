@@ -1,6 +1,5 @@
 FROM mariadb:10.3
 
-RUN echo "[mysql]" > /etc/mysql/conf.d/custom.cnf && \
-    echo "default-character-set = utf8mb4" >> /etc/mysql/conf.d/custom.cnf
+COPY config/custom.cnf /etc/mysql/conf.d/
 
 WORKDIR /var/www/GSB-Frais/sql
