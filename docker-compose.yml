@@ -27,6 +27,16 @@ services:
     networks:
       - dev
 
+  cron:
+    build: cron
+    container_name: gsb_frais_cron
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/GSB-Frais
+    networks:
+      - dev
+
 networks:
   dev:
 
