@@ -7,7 +7,7 @@ GSB Frais – par [@Aaldn](https://github.com/Aaldn)
 
 [![Symfony 5](https://img.shields.io/badge/Symfony-5.4-e5e8e4.svg?style=flat-square&logo=symfony)](https://symfony.com/5) [![Composer 2](https://img.shields.io/badge/Composer-2.2-89552c.svg?style=flat-square&logo=composer)](https://getcomposer.org/) [![PHP 7](https://img.shields.io/badge/PHP-7.3-8892bf.svg?style=flat-square&logo=php&logoColor=ffffff)](https://www.php.net/) [![MariaDB 10](https://img.shields.io/badge/MariaDB-10.3-c0765a.svg?style=flat-square&logo=mariadb)](https://mariadb.org/) [![Apache 2](https://img.shields.io/badge/Apache-2.4-a2205c.svg?style=flat-square&logo=apache)](https://httpd.apache.org/)
 
-Application d'enregistrement des frais engagés et de suivi des remboursements.
+Application web d'enregistrement des frais engagés et de suivi des remboursements.
 
 <img src="screenshots/Comptable.png" width="76%"></img> <img src="screenshots/Visiteur.jpg" width="22%"></img> 
 
@@ -66,7 +66,7 @@ Voici les services déclarés dans le fichier `docker-compose.yml` :
 
 * `cron` : Le conteneur du planificateur de tâches,
 * `db` : Le conteneur de la base de données MariaDB,
-* `www` : Le conteneur PHP incluant le volume de l'application monté dessus.
+* `www` : Le conteneur PHP incluant le serveur apache.
 
 Les conteneurs en cours d'exécution sont donc les suivants :
 
