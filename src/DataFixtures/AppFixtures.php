@@ -151,9 +151,6 @@ class AppFixtures extends Fixture
     private function creerFraisHorsForfait($ficheFrais)
     {
         $ligneFraisHorsForfait = new Lignefraishorsforfait;
-
-        $ligneFraisHorsForfait->setIdVisiteur($ficheFrais->getIdVisiteur()->getId());
-        $ligneFraisHorsForfait->setMois($ficheFrais->getMois());
         $ligneFraisHorsForfait->setIdFicheFrais($ficheFrais);
 
         return $ligneFraisHorsForfait;

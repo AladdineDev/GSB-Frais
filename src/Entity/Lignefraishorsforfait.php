@@ -23,20 +23,6 @@ class Lignefraishorsforfait
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="idVisiteur", type="string", length=4, nullable=false, options={"fixed"=true})
-     */
-    private $idVisiteur;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="mois", type="date", nullable=false)
-     */
-    private $mois;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="libelle", type="string", length=100, nullable=false, options={"default"="NULL"})
@@ -94,30 +80,6 @@ class Lignefraishorsforfait
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdVisiteur(): ?string
-    {
-        return $this->idVisiteur;
-    }
-
-    public function setIdVisiteur(string $idVisiteur): self
-    {
-        $this->idVisiteur = $idVisiteur;
-
-        return $this;
-    }
-
-    public function getMois(): ?\DateTimeInterface
-    {
-        return $this->mois;
-    }
-
-    public function setMois(\DateTimeInterface $mois): self
-    {
-        $this->mois = $mois;
-
-        return $this;
     }
 
     public function getLibelle(): ?string

@@ -71,13 +71,11 @@ class VisiteurController extends AbstractController
         if ($formLigneFraisHorsForfait->isSubmitted() && $formLigneFraisHorsForfait->isValid()) {
             $statutAttente = $em->getRepository(Statut::class)->find('ATT');
             $ligneFraisHorsForfaitInstance->setIdStatut($statutAttente);
-            $ligneFraisHorsForfaitInstance->setIdVisiteur($ficheFrais->getIdVisiteur()->getId());
             $ligneFraisHorsForfaitInstance->setIdFicheFrais($ficheFrais);
             if ((new \DateTime('now'))->format('d') >= 10) {
                 $ligneFraisHorsForfaitInstance = $this->reporterLigneFraisHorsForfait($ligneFraisHorsForfaitInstance);
                 $this->addFlash('ligneFraisHorsForfaitReporte', 'Le frais hors forfait a été reporté au mois prochain.');
             } else {
-                $ligneFraisHorsForfaitInstance->setMois($ficheFrais->getMois());
                 $this->addFlash('ligneFraisHorsForfaitAjoute', 'Le frais hors forfait a bien été ajouté.');
             }
             $em->persist($formLigneFraisHorsForfait->getData());
@@ -159,8 +157,8 @@ class VisiteurController extends AbstractController
         $ficheFraisProchaine = $this->em->getRepository(Fichefrais::class)->findFichefraisProchaine($visiteur);
 
         if (
-            $ligneFraisHorsForfait->getMois() != $ficheFraisCourante->getMois() &&
-            $ligneFraisHorsForfait->getMois() != $ficheFraisProchaine->getMois()
+            $ligneFraisHorsForfait->getIdFicheFrais()->getMois() != $ficheFraisCourante->getMois() &&
+            $ligneFraisHorsForfait->getIdFicheFrais()->getMois() != $ficheFraisProchaine->getMois()
         ) {
             throw $this->createAccessDeniedException();
         }
@@ -222,7 +220,6 @@ class VisiteurController extends AbstractController
         $ficheFrais->setIdVisiteur($this->getUser());
         $ficheFrais->setIdEtat($this->em->getRepository(Etat::class)->find('CR'));
         $ficheFrais->setMois((new \DateTime())->modify('+1 month'));
-        $ligneFraisHorsForfait->setMois((new \DateTime())->modify('+1 month'));
         $this->em->persist($ficheFrais);
 
         $i = 0;
@@ -236,10 +233,8 @@ class VisiteurController extends AbstractController
 
         $statutAttente = $this->em->getRepository(Statut::class)->find('ATT');
         $ligneFraisHorsForfait->setIdStatut($statutAttente);
-        $ligneFraisHorsForfait->setIdVisiteur($ficheFrais->getIdVisiteur()->getId());
         $ligneFraisHorsForfait->setIdFicheFrais($ficheFrais);
 
-        $ligneFraisHorsForfait->setMois((new \DateTime())->modify('+1 month'));
         $this->em->persist($ligneFraisHorsForfait);
 
         $this->em->flush();
