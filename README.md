@@ -64,17 +64,18 @@ Vous pouvez maintenant accéder à l'application depuis votre navigateur à l'UR
 
 Voici les services déclarés dans le fichier `docker-compose.yml` :
 
-* `db` : Le conteneur de la base de données MariaDB (qui peut être modifié par un autre SGBD),
+* `cron` : Le conteneur du planificateur de tâches,
+* `db` : Le conteneur de la base de données MariaDB,
 * `www` : Le conteneur PHP incluant le volume de l'application monté dessus.
 
 Les conteneurs en cours d'exécution sont donc les suivants :
 
 ```bash
 $ docker-compose ps
-    Name                    Command                State                 Ports
-----------------------------------------------------------------------------------------------------
-gsb_frais_db     docker-entrypoint.sh --def ...   Up            3306/tcp
-gsb_frais_www    docker-php-entrypoint apac ...   Up            0.0.0.0:9973->80/tcp,:::9973->80/tcp
+NAME               COMMAND                    SERVICE     STATUS      PORTS
+gsb_frais_cron     "/bin/sh -c 'cron -f…"     cron        running     
+gsb_frais_db       "docker-entrypoint.s…"     db          running     3306/tcp
+gsb_frais_www      "docker-php-entrypoi…"     www         running     0.0.0.0:9973->80/tcp, :::9973->80/tcp
 ```
 
 La commande suivante vous permet d'entrer dans le shell d'un des conteneurs : 
