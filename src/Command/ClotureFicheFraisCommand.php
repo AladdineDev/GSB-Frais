@@ -9,10 +9,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/*
- * Un planificateur de tâches doit être mis en place pour une utilisation optimale de cette classe
- */
-
 class ClotureFicheFraisCommand extends Command
 {
 

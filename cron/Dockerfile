@@ -8,6 +8,6 @@ RUN chmod 0644 /etc/cron.d/cloturer-fichefrais.sh
 
 RUN crontab /etc/cron.d/cloturer-fichefrais.sh
 
-WORKDIR /var/www/GSB-Frais
+RUN touch /var/log/cron.log
 
-CMD cron -f
+CMD cron -f && tail -f /var/log/cron.log
