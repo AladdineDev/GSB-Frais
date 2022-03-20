@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   db:
-    build: mariadb
+    build: ./docker/mariadb
     container_name: gsb_frais_db
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: always
@@ -16,19 +16,19 @@ services:
       - dev
 
   www:
-    build: php
+    build: ./docker/php
     container_name: gsb_frais_www
     ports:
       - "9973:80"
     volumes:
-      - ./php/vhosts:/etc/apache2/sites-enabled
+      - ./docker/php/vhosts:/etc/apache2/sites-enabled
       - ./:/var/www/GSB-Frais
     restart: always
     networks:
       - dev
 
   cron:
-    build: cron
+    build: ./docker/cron
     container_name: gsb_frais_cron
     depends_on:
       - db
