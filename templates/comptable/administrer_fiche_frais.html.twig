@@ -255,13 +255,13 @@
 		<form method="post" action="{{ path('rembourser_fiche_frais', {'id': ficheFrais.id}) }}">
 			<input type="hidden" name="rembourser_fiche_frais_token" value="{{ csrf_token('refund' ~ ficheFrais.id) }}">
 			<div class="d-grid">
-				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRembourserFicheFrais">Indiquer remboursement</button>
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRembourserFicheFrais">Rembourser fiche frais</button>
 			</div>
 			<div class="modal" id="modalRembourserFicheFrais" tabindex="-1" aria-labelledby="modalRembourserFicheFraisLabel" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">Indiquer le remboursement de la fiche de frais</h5>
+							<h5 class="modal-title">Remboursement de la fiche de frais</h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler">
 								<span aria-hidden="true"></span>
 							</button>
