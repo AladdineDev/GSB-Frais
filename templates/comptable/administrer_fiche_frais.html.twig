@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block page_content %}
-	<h1>Administration de la fiche de frais</h1>
+	<h1>Gestion de la fiche de frais</h1>
 	<hr>
 	<h4>{{ficheFrais.mois | format_datetime(locale='fr',pattern="MMMM yyyy") | capitalize}}</h4>
 	<h4>{{ficheFrais.idVisiteur.nom ~ ' ' ~ ficheFrais.idVisiteur.prenom}}</h4>

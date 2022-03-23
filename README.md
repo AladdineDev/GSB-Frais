@@ -1,6 +1,6 @@
 <img src="public/images/logo.png" align="right" width="200px"/>
 
-GSB Frais [![Version](https://img.shields.io/badge/version-1.0.0-2fba00.svg?style=flat-square)](https://github.com/Aaldn/GSB-Frais#readme) [![Licence](https://img.shields.io/badge/licence-MIT-2fba00.svg?style=flat-square)](https://github.com/Aaldn/GSB-Frais/blob/master/LICENSE.md)
+GSB Frais [![Licence](https://img.shields.io/badge/licence-MIT-2fba00.svg?style=flat-square)](https://github.com/Aaldn/GSB-Frais/blob/master/LICENSE.md)
 ========================
 
 GSB Frais – par [@Aaldn](https://github.com/Aaldn)
@@ -9,7 +9,8 @@ GSB Frais – par [@Aaldn](https://github.com/Aaldn)
 
 Application web d'enregistrement des frais engagés et de suivi des remboursements.
 
-<img src="screenshots/Comptable.png" width="76%"></img> <img src="screenshots/Visiteur.jpg" width="22%"></img> 
+<img src="screenshots/Visiteur1.png" width="76%"></img> <img src="screenshots/Visiteur2.jpg" width="22%"></img>
+<img src="screenshots/Comptable2.png" width="76%"></img> <img src="screenshots/Comptable1.jpg" width="22%"></img>
 
 ### Documentation
 
