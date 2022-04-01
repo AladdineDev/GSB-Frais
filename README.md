@@ -10,7 +10,7 @@ GSB Frais – par [@Aaldn](https://github.com/Aaldn)
 [![PHP 7](https://img.shields.io/badge/PHP-7.3-8892bf.svg?style=flat-square&logo=php&logoColor=ffffff)](https://www.php.net/)
 [![MariaDB 10](https://img.shields.io/badge/MariaDB-10.3-c0765a.svg?style=flat-square&logo=mariadb)](https://mariadb.org/)
 [![Apache 2](https://img.shields.io/badge/Apache-2.4-a2205c.svg?style=flat-square&logo=apache)](https://httpd.apache.org/)
-[![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5-7952b3.svg?style=flat-square&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5.1-7952b3.svg?style=flat-square&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
 
 Application web d'enregistrement des frais engagés et de suivi des remboursements.
 
