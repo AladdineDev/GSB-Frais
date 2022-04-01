@@ -14,7 +14,7 @@ GSB Frais – par [@Aaldn](https://github.com/Aaldn)
 
 Application web d'enregistrement des frais engagés et de suivi des remboursements.
 
-<img src="screenshots/visiteur/0-Second Screenshot README.jpg" width="76%"></img> <img src="screenshots/visiteur/0-Premier Screenshot README.png" width="22%"></img>
+<img src="screenshots/visiteur/0-Second Screenshot README.png" width="76%"></img> <img src="screenshots/visiteur/0-Premier Screenshot README.jpg" width="22%"></img>
 <img src="screenshots/comptable/0-Second Screenshot README.png" width="76%"></img> <img src="screenshots/comptable/0-Premier Screenshot README.jpg" width="22%"></img>
 
 ### Documentation
