@@ -57,7 +57,7 @@ class AppFixtures extends Fixture
                 $ficheFrais->setIdVisiteur($visiteur);
                 $ficheFrais->setMois($faker->dateTimeBetween(
                     (new \DateTime('now'))->modify('-' . $i . ' month')->format('Y-m-01'),
-                    'now -' . $i . ' month'
+                    (new \DateTime('now'))->modify('-' . $i . ' month')->format('Y-m-t')
                 ));
 
                 if ($i == 0) {
@@ -77,7 +77,7 @@ class AppFixtures extends Fixture
                     }
                     $ficheFrais->setDateModif($faker->dateTimeBetween(
                         $faker->dateTimeThisMonth('now')->modify('-' . $i . ' month'),
-                        'now -' . $i . ' month'
+                        (new \DateTime('now'))->modify('-' . $i . ' month')->format('Y-m-t')
                     )->modify('+1 month'));
                 } else {
                     $ficheFrais->setIdEtat($this->em->getRepository(Etat::class)->find('RB'));
@@ -90,7 +90,7 @@ class AppFixtures extends Fixture
                     }
                     $ficheFrais->setDateModif($faker->dateTimeBetween(
                         $ficheFrais->getMois(),
-                        'now -' . $i . ' month'
+                        (new \DateTime('now'))->modify('-' . $i . ' month')->format('Y-m-t')
                     )->modify('+1 month'));
                     $i += $nbMoisSansFicheFrais;
                 }
