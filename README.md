@@ -19,7 +19,7 @@ Application web d'enregistrement des frais engagés et de suivi des remboursemen
 
 ### Documentation
 
-  * [Documentation utilisateur](docs/Documentation-Utilisateur.pdf) _(À venir)_
+  * [Documentation utilisateur](docs/Documentation-Utilisateur.pdf)
   * [Documentation technique](docs/Documentation-Technique.pdf) _(À venir)_
 
 ### Contexte
