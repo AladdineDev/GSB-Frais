@@ -20,15 +20,15 @@ Application web d'enregistrement des frais engagés et de suivi des remboursemen
 ### Documentation
 
   * [Documentation utilisateur](docs/Documentation-Utilisateur.pdf)
-  * [Documentation technique](docs/Documentation-Technique.pdf) _(À venir)_
+  * [Documentation technique](docs/Documentation-Technique.pdf)
 
 ### Contexte
 
-1. [GSB - Contexte](docs/01-GSB-Contexte.pdf)
-2. [GSB - Organisation](docs/02-GSB-Organisation.pdf)
-3. [GSB - Cahier des charges](docs/03-GSB-AppliFrais-Description.pdf)
-4. [GSB - Exemples](docs/04-GSB-AppliFrais-Commentaires.pdf)
-5. [GSB - Architecture de l'existant](docs/05-GSB-Architecture-Application-Existante.pdf)
+1. [GSB - Contexte](docs/contexte/01-GSB-Contexte.pdf)
+2. [GSB - Organisation](docs/contexte/02-GSB-Organisation.pdf)
+3. [GSB - Cahier des charges](docs/contexte/03-GSB-AppliFrais-Description.pdf)
+4. [GSB - Exemples](docs/contexte/04-GSB-AppliFrais-Commentaires.pdf)
+5. [GSB - Architecture de l'existant](docs/contexte/05-GSB-Architecture-Application-Existante.pdf)
 
 ### Prérequis
 
