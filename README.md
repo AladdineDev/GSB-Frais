@@ -1,9 +1,9 @@
 <img src="public/images/logo.png" align="right" width="200px"/>
 
-GSB Frais [![Licence](https://img.shields.io/badge/licence-MIT-2fba00.svg?style=flat-square)](https://github.com/Aaldn/GSB-Frais/blob/master/LICENSE.md)
+GSB Frais [![Licence](https://img.shields.io/badge/licence-MIT-2fba00.svg?style=flat-square)](https://github.com/AladdineDev/GSB-Frais/blob/master/LICENSE.md)
 ========================
 
-GSB Frais – par [@Aaldn](https://github.com/Aaldn)
+GSB Frais – par [@AladdineDev](https://github.com/AladdineDev)
 
 [![Symfony 5](https://img.shields.io/badge/Symfony-5.4-e5e8e4.svg?style=flat-square&logo=symfony)](https://symfony.com/5)
 [![Composer 2](https://img.shields.io/badge/Composer-2.2-89552c.svg?style=flat-square&logo=composer)](https://getcomposer.org/)
@@ -43,7 +43,7 @@ Application web d'enregistrement des frais engagés et de suivi des remboursemen
 Tout d'abord, clonez ce dépôt puis placez-vous au sein du projet :
 
 ```bash
-$ git clone https://github.com/Aaldn/GSB-Frais
+$ git clone https://github.com/AladdineDev/GSB-Frais
 $ cd GSB-Frais
 ```
 
@@ -94,4 +94,4 @@ $ docker exec -it <nom_du_conteneur> bash
 
 ## Licence
 
-Voir le fichier [LICENSE.md](https://github.com/Aaldn/GSB-Frais/blob/master/LICENSE.md) fourni.
+Voir le fichier [LICENSE.md](https://github.com/AladdineDev/GSB-Frais/blob/master/LICENSE.md) fourni.
